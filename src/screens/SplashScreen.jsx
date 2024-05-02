@@ -1,18 +1,20 @@
-// CustomSplashScreen.js
+// SplashScreen.js
 import React, { useEffect } from 'react';
 import { View, Text,StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../redux/store'; 
+import { useNavigation } from '@react-navigation/native';
 
 const SplashScreen = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.loading.isLoading);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       dispatch(setLoading(false));
     }, 3000); 
-
+    
     return () => clearTimeout(timer);
   }, [dispatch]);
 
@@ -24,11 +26,9 @@ const SplashScreen = () => {
     );
   }
 
-  return (
-    <View style={styles.body}>
-        <Text style={styles.textStyle}>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+  navigation.navigate('Login')
+  
+  return null;
 };
 
 export default SplashScreen;
