@@ -1,20 +1,33 @@
 // Navigation.jsx
 
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import SplashScreen from '../screens/SplashScreen';
-import LoginScreen from '../screens/guest/LoginScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import LoginScreen from "../screens/guest/LoginScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import SplashScreen from "../components/SplashScreen";
+import AppStack from "../navigation/AppNavigator";
+import AuthStack from "../navigation/AuthNavigator";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth } from "../redux/slices/authSlice";
 
 const Stack = createStackNavigator();
 
 const Navigation = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const isAuth = auth.isAuth;
+  const isLoading = auth.isLoading;
+  useEffect(() => {
+    dispatch(getAuth());
+  }, []);
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
-            <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Login" component={LoginScreen}  options={{ headerShown: false }} />
-        </Stack.Navigator>
+      {isAuth ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
