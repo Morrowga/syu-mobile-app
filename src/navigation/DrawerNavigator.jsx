@@ -6,7 +6,7 @@ import {
 import { StyleSheet, Text, View, Image } from "react-native";
 import HomeScreen from "../screens/app/HomeScreen";
 import Icon from "react-native-vector-icons/Ionicons"; // Adjust based on your preferred icon set
-import { Box, Divider } from "native-base";
+import { Box } from "native-base";
 
 const Drawer = createDrawerNavigator();
 
@@ -35,7 +35,7 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
-        <View>
+        <View style={styles.container}>
           <Box style={styles.logoBox}>
             <Image
               source={require("../../assets/logo3.png")}
@@ -46,11 +46,10 @@ const CustomDrawerContent = (props) => {
                 marginBottom: 20,
               }}
             />
-            <Text style={styles.logoText}>SYU MOBILE</Text>
           </Box>
         </View>
       </View>
-      <Divider />
+
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
@@ -66,13 +65,12 @@ const DrawerNavigator = () => {
       })}
     >
       <Drawer.Screen
-        name="Dashboard"
+        name="Home"
         component={HomeScreen}
         options={{
           drawerIcon: ({ color, size }) => (
             <Icon name="home-outline" color={color} size={size} />
           ),
-          drawerLabel: "Dashboard",
         }}
       />
       <Drawer.Screen
@@ -126,7 +124,6 @@ const styles = StyleSheet.create({
   drawerContent: {
     width: "auto",
     height: 100,
-    paddingHorizontal: 10,
   },
   logoBox: { flexDirection: "row", alignItems: "center", paddingTop: 10 },
   logoText: {
