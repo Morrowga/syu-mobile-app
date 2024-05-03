@@ -11,7 +11,7 @@ export const getAuth = () => async (dispatch) => {
   dispatch(startLoading());
 
   setTimeout(() => {
-    dispatch(authSuccess());
+    dispatch(authFail());
   }, 2000);
 };
 

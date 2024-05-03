@@ -1,5 +1,4 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../screens/app/HomeScreen";
 import BottomNavigator from "./BottomNavigator";
 const Stack = createStackNavigator();
 

@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { NativeBaseProvider } from 'native-base';
 
-import LoginScreen from "../screens/guest/LoginScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import SplashScreen from "../components/SplashScreen";
 import AppStack from "../navigation/AppNavigator";
@@ -26,9 +26,11 @@ const Navigation = () => {
     return <SplashScreen />;
   }
   return (
-    <NavigationContainer>
-      {isAuth ? <AppStack /> : <AuthStack />}
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        {isAuth ? <AppStack /> : <AuthStack />}
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
 };
 

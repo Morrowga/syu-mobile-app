@@ -1,22 +1,24 @@
-// Login.jsx
+// Otp.jsx
 import { View, Text,StyleSheet } from 'react-native';
 import { Button, Box } from "native-base";
-import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from "react-redux";
+import { authSuccess } from '../../redux/slices/authSlice';
 
-const Login = () => {
-  const navigation = useNavigation();
-  
+const OtpScreen = () => {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.body}>
         <Text style={styles.textStyle}>Login</Text>
         <Box alignItems="center" style={styles.boxStyle}>
-          <Button onPress={() => navigation.navigate('Otp')}>OTP</Button>
+          <Button onPress={() => dispatch(authSuccess())}>Reach Otp</Button>
         </Box>
     </View>
   );
 };
 
-export default Login;
+export default OtpScreen;
 
 
 const styles = StyleSheet.create({

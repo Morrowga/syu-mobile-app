@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { View, Text,StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading } from '../redux/store'; 
+import { setLoading } from '../redux/slices/loadingSlice';
 import { useNavigation } from '@react-navigation/native';
 
 const SplashScreen = () => {
@@ -12,9 +12,11 @@ const SplashScreen = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      
       dispatch(setLoading(false));
 
       navigation.navigate('Login');
+
     }, 3000); 
     
     return () => clearTimeout(timer);
