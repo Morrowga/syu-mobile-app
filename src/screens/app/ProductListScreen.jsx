@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const HomeScreen = () => (
+const ProductListScreen = () => (
   <View style={styles.container}>
-    <Text>Home Screen</Text>
+    <Text>Product List Screen</Text>
   </View>
 );
 const styles = StyleSheet.create({
@@ -10,6 +10,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-},
+  },
 });
-export default HomeScreen;
+export default ProductListScreen;

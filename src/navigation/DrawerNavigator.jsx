@@ -17,7 +17,7 @@ const DrawerNavigator = () => (
     }}
   >
     <Drawer.Screen
-      name="HomeDrawer"
+      name="Home"
       component={HomeScreen}
       options={{
         drawerIcon: ({ color, size }) => (

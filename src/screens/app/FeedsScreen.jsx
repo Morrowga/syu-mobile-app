@@ -1,16 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import { AspectRatio, Image, Stack, Box,Heading,VStack, HStack,FlatList } from "native-base";
+import { useNavigation } from '@react-navigation/native';
 
 
-const NewFeedScreen = () => {
+const FeedsScreen = () => {
+  const navigation = useNavigation();
+
   const data = [
     { id: 1, name: "Item 1" },
     { id: 2, name: "Item 2" },
     { id: 4, name: "Item 4" },
-    // Add more items as needed
   ];
   const renderItem = ({ item }) => (
-    <Box key={item} maxW="180" height={250} mt={3} rounded="lg" overflow="hidden"  borderColor="coolGray.200" borderWidth="1" _dark={{
+    <Box key={item} maxW="180" height={250} mt={3} rounded="lg" overflow="hidden" onPress={() => console.log('hello')}  borderColor="coolGray.200" borderWidth="1" _dark={{
       borderColor: "coolGray.600",
       backgroundColor: "gray.700"
       }} _web={{
@@ -57,4 +59,4 @@ const NewFeedScreen = () => {
 const styles = StyleSheet.create({
 });
 
-export default NewFeedScreen;
+export default FeedsScreen;
