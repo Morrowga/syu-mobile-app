@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const AddToCartScreen = () => (
+const CartScreen = () => (
   <View style={styles.container}>
-    <Text>Add To Cart Screen</Text>
+    <Text>Cart Screen</Text>
   </View>
 );
 const styles = StyleSheet.create({
@@ -12,4 +12,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-export default AddToCartScreen;
+export default CartScreen;

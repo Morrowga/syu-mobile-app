@@ -1,29 +1,12 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { StyleSheet, Text, View } from "react-native";
 import HomeScreen from "../screens/app/HomeScreen";
-import Icon from "react-native-vector-icons/Ionicons"; // Adjust based on your preferred icon set
+import OrderListScreen from "../screens/app/OrderListScreen";
+import ProfileScreen from "../screens/app/ProfileScreen";
+import WishlistScreen from "../screens/app/WishlistScreen";
+import AddToCartScreen from "../screens/app/CartScreen";
+import Icon from "react-native-vector-icons/Ionicons";
 const Drawer = createDrawerNavigator();
-
-const ProfileScreen = () => (
-  <View style={styles.container}>
-    <Text>Profile Screen</Text>
-  </View>
-);
-const OrderListScreen = () => (
-  <View style={styles.container}>
-    <Text>Order List Screen</Text>
-  </View>
-);
-const WishlistScreen = () => (
-  <View style={styles.container}>
-    <Text>Wishlist Screen</Text>
-  </View>
-);
-const AddToCartScreen = () => (
-  <View style={styles.container}>
-    <Text>AddToCart Screen</Text>
-  </View>
-);
 
 const DrawerNavigator = () => (
   <Drawer.Navigator
@@ -71,7 +54,7 @@ const DrawerNavigator = () => (
       }}
     />
     <Drawer.Screen
-      name="AddToCart"
+      name="Cart"
       component={AddToCartScreen}
       options={{
         drawerIcon: ({ color, size }) => (
