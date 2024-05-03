@@ -82,7 +82,7 @@ const ProductListScreen = () => {
       <Box alignItems="center" pl={5} pr={5} pt={5}>
         <Input variant="rounded" size="2xl" mx="3" backgroundColor="#fff" borderColor="#000" focusOutlineColor="#000" placeholder="Search" w="100%" />
       </Box>
-      <FlatList data={data} renderItem={renderItem} 
+      <FlatList mt={4} data={data} renderItem={renderItem} 
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         contentContainerStyle={{ padding: 10 }}
