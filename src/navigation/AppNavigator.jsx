@@ -14,6 +14,11 @@ const AppStack = () => {
           name="BottomNavigator" 
           component={BottomNavigator} 
       />
+       <Stack.Screen
+          name="Product List"
+          component={ProductListScreen}
+          options={{ headerShown: true }}
+        />
     </Stack.Navigator>
   );
 };
