@@ -55,9 +55,6 @@ const NewFeedScreen = () => {
   )
 };
 const styles = StyleSheet.create({
-  container: 
-  {
-    top: 50
-  }
 });
+
 export default NewFeedScreen;
