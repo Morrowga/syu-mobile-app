@@ -24,7 +24,6 @@ const BottomNavigator = () => (
           iconName = focused ? "cart" : "cart-outline";
         }
 
-        // You can return any component that you like here!
         return <Icon name={iconName} size={size} color={color} />;
       },
       headerShown: false,
