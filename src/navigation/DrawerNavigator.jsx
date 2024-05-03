@@ -5,31 +5,14 @@ import {
 } from "@react-navigation/drawer";
 import { StyleSheet, Text, View, Image } from "react-native";
 import HomeScreen from "../screens/app/HomeScreen";
+import WishlistScreen from "../screens/app/WishlistScreen";
+import ProfileScreen from "../screens/app/ProfileScreen";
+import OrderListScreen from "../screens/app/OrderListScreen";
+import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons"; // Adjust based on your preferred icon set
 import { Box, Divider } from "native-base";
 
 const Drawer = createDrawerNavigator();
-
-const ProfileScreen = () => (
-  <View style={styles.container}>
-    <Text>Profile Screen</Text>
-  </View>
-);
-const OrderListScreen = () => (
-  <View style={styles.container}>
-    <Text>Order List Screen</Text>
-  </View>
-);
-const WishlistScreen = () => (
-  <View style={styles.container}>
-    <Text>Wishlist Screen</Text>
-  </View>
-);
-const AddToCartScreen = () => (
-  <View style={styles.container}>
-    <Text>AddToCart Screen</Text>
-  </View>
-);
 
 const CustomDrawerContent = (props) => {
   return (
@@ -85,7 +68,7 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="OrderList"
+        name="Orders"
         component={OrderListScreen}
         options={{
           drawerIcon: ({ color, size }) => (
@@ -103,8 +86,8 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
-        name="AddToCart"
-        component={AddToCartScreen}
+        name="Cart"
+        component={CartScreen}
         options={{
           drawerIcon: ({ color, size }) => (
             <Icon name="cart-outline" color={color} size={size} />
