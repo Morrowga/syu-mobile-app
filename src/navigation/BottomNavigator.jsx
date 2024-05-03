@@ -3,8 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons"; // Adjust based on your preferred icon set
-import NewFeedScreen from "../screens/app/NewFeed";
-import AddToCartScreen from "../screens/app/AddToCartScreen";
+import FeedsScreen from "../screens/app/FeedsScreen";
+import CartScreen from "../screens/app/CartScreen";
 import DrawerNavigator from "./DrawerNavigator";
 
 const Tab = createBottomTabNavigator();
@@ -17,9 +17,9 @@ const BottomNavigator = () => (
         let iconName;
         if (route.name === "Home") {
           iconName = focused ? "home" : "home-outline";
-        } else if (route.name === "NewFeed") {
+        } else if (route.name === "Feeds") {
           iconName = focused ? "newspaper" : "newspaper-outline";
-        } else if (route.name === "AddToCart") {
+        } else if (route.name === "Cart") {
           iconName = focused ? "cart" : "cart-outline";
         }
         return <Icon name={iconName} size={size} color={color} />;
@@ -36,8 +36,8 @@ const BottomNavigator = () => (
         headerShown: false,
       })}
     />
-    <Tab.Screen name="NewFeed" component={NewFeedScreen} />
-    <Tab.Screen name="AddToCart" component={AddToCartScreen} />
+    <Tab.Screen name="Feeds" component={FeedsScreen} />
+    <Tab.Screen name="Cart" component={CartScreen} />
   </Tab.Navigator>
 );
 
