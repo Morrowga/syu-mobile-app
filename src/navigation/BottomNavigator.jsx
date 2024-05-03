@@ -11,12 +11,12 @@ const Tab = createBottomTabNavigator();
 
 const BottomNavigator = () => (
   <Tab.Navigator
-    initialRouteName="Home"
+    initialRouteName="Menu"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        if (route.name === "Home") {
-          iconName = focused ? "home" : "home-outline";
+        if (route.name === "Menu") {
+          iconName = focused ? "menu" : "menu-outline";
         } else if (route.name === "Feeds") {
           iconName = focused ? "newspaper" : "newspaper-outline";
         } else if (route.name === "Cart") {
@@ -30,7 +30,7 @@ const BottomNavigator = () => (
     })}
   >
     <Tab.Screen
-      name="Home"
+      name="Menu"
       component={DrawerNavigator}
       options={() => ({
         headerShown: false,
