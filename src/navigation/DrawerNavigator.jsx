@@ -9,7 +9,7 @@ import WishlistScreen from "../screens/app/WishlistScreen";
 import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
 import CartScreen from "../screens/app/CartScreen";
-import Icon from "react-native-vector-icons/Ionicons"; // Adjust based on your preferred icon set
+import Icon from "react-native-vector-icons/Ionicons";
 import { Box } from "native-base";
 
 const Drawer = createDrawerNavigator();
