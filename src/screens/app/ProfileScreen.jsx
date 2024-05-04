@@ -3,6 +3,7 @@ import {
   View,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from "react-native";
 import {
   Avatar,
