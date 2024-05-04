@@ -38,12 +38,12 @@ export default Login;
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: "#000",
+    // backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
   },
   textStyle: {
-    color: "#fff",
+    // color: "#fff",
     paddingBottom: 10,
   },
   boxStyle: {
