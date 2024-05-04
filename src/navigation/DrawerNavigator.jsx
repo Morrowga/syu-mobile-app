@@ -10,7 +10,8 @@ import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Box } from "native-base";
+import { Box, IconButton } from "native-base";
+import NotificationIcon from "../components/NotificationIcon";
 
 const Drawer = createDrawerNavigator();
 
@@ -54,6 +55,7 @@ const DrawerNavigator = () => {
           drawerIcon: ({ color, size }) => (
             <Icon name="home-outline" color={color} size={size} />
           ),
+          headerRight: () => <NotificationIcon notificationCount={5} />,
         }}
       />
       <Drawer.Screen
