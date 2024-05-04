@@ -1,7 +1,10 @@
 import { StyleSheet, View,TouchableOpacity } from "react-native";
 import { Heading, Box,FlatList,Stack, Text, Badge, VStack} from "native-base";
+import { useNavigation } from '@react-navigation/native';
 
 const OrderListScreen = () => {
+  const navigation = useNavigation();
+
   const orders = [
     { id: 1, name: 'Order#1234', order_status_color: 'info', order_status: 'Confirmed' },
     { id: 2, name: 'Order#5678', order_status_color: 'danger', order_status: 'Add Payment' },
@@ -9,7 +12,7 @@ const OrderListScreen = () => {
   ];
 
   const renderItem = ({ item }) => (
-<TouchableOpacity onPress={() => console.log('pressed...')}>
+<TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: 1, order_name: item.name})}>
 <VStack>
     <Badge colorScheme="danger" alignSelf="flex-end" rounded="full" variant="solid" mb={-3} mt={2} mr={2} zIndex={1} >
       2

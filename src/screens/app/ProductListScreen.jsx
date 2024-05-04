@@ -15,7 +15,7 @@ const ProductListScreen = () => {
 
     const { params } = route;
   
-    const { category_id, category_name } = params;
+  const { category_id, category_name } = params;
 
     navigation.setOptions({
         title: category_name,

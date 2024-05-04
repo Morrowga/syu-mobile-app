@@ -1,6 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomNavigator from "./BottomNavigator";
 import ProductListScreen from "../screens/app/ProductListScreen";
+import OrderInfoScreen from "../screens/app/OrderInfoScreen";
+
 const Stack = createStackNavigator();
 
 const AppStack = () => {
@@ -14,11 +16,16 @@ const AppStack = () => {
           name="BottomNavigator" 
           component={BottomNavigator} 
       />
-       <Stack.Screen
-          name="Product List"
-          component={ProductListScreen}
-          options={{ headerShown: true }}
-        />
+      <Stack.Screen
+        name="Product List"
+        component={ProductListScreen}
+        options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name="Order Info"
+        component={OrderInfoScreen}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 };
