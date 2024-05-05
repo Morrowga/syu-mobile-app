@@ -11,7 +11,7 @@ const NotificationIcon = ({ notificationCount }) => {
     <View style={styles.container}>
       <Icon name="notifications" size={30} color="black" onPress={() => navigation.navigate('Notifications')} />
       {notificationCount > 0 && (
-        <View style={styles.badge} onPress={() => navigation.navigate('Notifications')}>
+        <View style={styles.badge}>
           <Text style={styles.badgeText}>{notificationCount}</Text>
         </View>
       )}
@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
   },
   badge: {
     position: "absolute",
-    right: 6, 
-    top: 6,
+    right: 7, 
+    top: 5,
     backgroundColor: "red",
     borderRadius: 10,
     width: 18,
