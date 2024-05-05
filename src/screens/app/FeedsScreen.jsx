@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const FeedsScreen = () => {
+  
   const navigation = useNavigation();
 
   const data = [

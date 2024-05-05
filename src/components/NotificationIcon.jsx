@@ -1,13 +1,17 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from '@react-navigation/native';
 
 const NotificationIcon = ({ notificationCount }) => {
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Icon name="notifications" size={30} color="black" />
+      <Icon name="notifications" size={30} color="black" onPress={() => navigation.navigate('Notifications')} />
       {notificationCount > 0 && (
-        <View style={styles.badge}>
+        <View style={styles.badge} onPress={() => navigation.navigate('Notifications')}>
           <Text style={styles.badgeText}>{notificationCount}</Text>
         </View>
       )}
