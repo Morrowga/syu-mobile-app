@@ -53,7 +53,7 @@ const WishlistScreen = () => {
 
   return (
     <View style={styles.container}>
-        <Box flexDirection="row" justifyContent="space-between" mx={5} mt={5}>
+        <Box flexDirection="row" flex={1} justifyContent="space-between" mx={5} mt={5}>
             <Box width="57%">
                 <Input
                 variant="rounded"
@@ -100,5 +100,9 @@ const WishlistScreen = () => {
   )
 };
 const styles = StyleSheet.create({
+  container: 
+  {
+    flex: 1
+  }
 });
 export default WishlistScreen;

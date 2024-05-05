@@ -8,6 +8,7 @@ import HomeScreen from "../screens/app/HomeScreen";
 import WishlistScreen from "../screens/app/WishlistScreen";
 import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
+import LoginScreen from "../screens/guest/LoginScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Box, IconButton } from "native-base";

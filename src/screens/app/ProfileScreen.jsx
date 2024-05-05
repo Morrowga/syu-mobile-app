@@ -6,16 +6,13 @@ import {
   Alert,
 } from "react-native";
 import {
-  Avatar,
   Stack,
   Box,
   Heading,
   Input,
   Select,
-  Text,
   CheckIcon,
   FormControl,
-  WarningOutlineIcon,
   Button,
 } from "native-base";
 import { useState } from "react";
