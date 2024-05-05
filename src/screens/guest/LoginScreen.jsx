@@ -21,7 +21,7 @@ const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const sendOtp = () => {
-    navigation.navigate("Otp");
+    navigation.navigate("OTP");
   };
 
   return (

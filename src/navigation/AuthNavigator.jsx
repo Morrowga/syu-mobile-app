@@ -13,9 +13,9 @@ const AuthStack = () => {
           options={{ headerShown: false }}
         />
          <Stack.Screen
-          name="Otp"
+          name="OTP"
           component={OtpScreen}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
     </Stack.Navigator>
     

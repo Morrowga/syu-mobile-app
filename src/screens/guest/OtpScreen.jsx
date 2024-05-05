@@ -1,4 +1,5 @@
 // Otp.jsx
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from "react-native";
 import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,21 +8,30 @@ import OTPTextView from "react-native-otp-textinput";
 import { useRef } from "react";
 
 const OtpScreen = () => {
-  const auth = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
-  let otpInput = useRef(null);
+
+  const auth = useSelector((state) => state.auth);
+
+  const handleOtpChange = (index, value) => {
+    if(value.length == 5)
+    {
+      dispatch(authSuccess());
+    }
+  };
+
+
   return (
     <View style={styles.body}>
       <Text style={styles.textStyle}>ENTER OTP CODE</Text>
 
       <OTPTextView
+        handleTextChange={(val) => handleOtpChange(0, val)}
         containerStyle={styles.textInputContainer}
         textInputStyle={styles.roundedTextInput}
+        tintColor="#000"
         inputCount={5}
       />
-      <Box alignItems="center" style={styles.boxStyle}>
-        <Button onPress={() => dispatch(authSuccess())}>Reach Otp</Button>
-      </Box>
     </View>
   );
 };
@@ -47,7 +57,7 @@ const styles = StyleSheet.create({
   },
 
   roundedTextInput: {
-    borderRadius: 10,
-    borderWidth: 4,
+    // borderRadius: 10,
+    // borderWidth: 3
   },
 });
