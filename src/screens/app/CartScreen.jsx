@@ -8,14 +8,7 @@ const CartScreen = () => {
   const cartCategories = useSelector(getCategoryFromState);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("Product List", {
-          category_id: 1,
-          category_name: item.name,
-        })
-      }
-    >
+    <TouchableOpacity onPress={() => {}}>
       <Box
         key={item}
         flex={1}
@@ -60,7 +53,7 @@ const CartScreen = () => {
         data={cartCategories}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.category_id}
       />
     </View>
   );
