@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 const NotificationIcon = ({ notificationCount }) => {
   return (
     <View style={styles.container}>
-      <Icon name="notifications" size={30} color="tomato" />
+      <Icon name="notifications" size={30} color="black" />
       {notificationCount > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{notificationCount}</Text>
@@ -17,20 +17,20 @@ const NotificationIcon = ({ notificationCount }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 50, // Adjust width and height as needed
+    width: 50, 
     height: 50,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    marginRight: 15, // Spacing for visual clarity
+    marginRight: 15, 
   },
   badge: {
     position: "absolute",
-    right: -6, // Adjust position based on your needs
-    top: -3,
+    right: 6, 
+    top: 5,
     backgroundColor: "red",
     borderRadius: 10,
-    width: 20, // Adjust size accordingly
+    width: 20,
     height: 20,
     justifyContent: "center",
     alignItems: "center",
