@@ -1,52 +1,81 @@
 // Login.jsx
-import { View, Text, StyleSheet } from "react-native";
-import { Button, Box, Input, Stack } from "native-base";
+import { View, StyleSheet,ImageBackground } from "react-native";
+import { Button, Box, Stack, FormControl, Input } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 
 const Login = () => {
+
+  const [formData, setFormData] = useState({
+    msisdn: "",
+  });
+
+  const handleInputChange = (key, value) => {
+    setFormData({
+      ...formData,
+      [key]: value,
+    });
+  };
+
   const navigation = useNavigation();
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const sendOtp = () => {
-    navigation.navigate("Otp");
+    navigation.navigate("OTP");
   };
 
   return (
-    <View style={styles.body}>
-      <Text style={styles.textStyle}>Login</Text>
-      <Stack space={4} w="75%" maxW="300px" mx="auto">
-        <Input
-          variant="rounded"
-          value={phoneNumber}
-          onChangeText={(e) => setPhoneNumber(e)}
-          keyboardType="phone-pad"
-          mt={4}
-          textAlign="center"
-        />
-      </Stack>
+    <ImageBackground 
+      source={require("../../../assets/bgsample.png")}
+      style={styles.background}
+    >
+    <View style={styles.container}>
+      <Box width="80%" bg="rgba(0, 0, 0, 0.8)" p={10} rounded="xl" flexDirection="column">
+        <FormControl
+          maxW="300"
+          isRequired
+          isInvalid={formData.msisdn === ""}
+        >
+          {/* <FormControl.Label>Enter Mobile Number</FormControl.Label> */}
+          <Input
+            color="#fff"
+            size="xl"
+            my={2}
+            borderWidth={2}
+            p={3}
+            placeholder="09..."
+            rounded="full"
+            onChangeText={(text) => handleInputChange("username", text)}
+          />
+        </FormControl>
 
-      <Box alignItems="center" style={styles.boxStyle}>
-        <Button onPress={sendOtp}>SEND OTP</Button>
+        <Button
+          width="full"
+          variant="outline"
+          rounded="full"
+          color="#fff"
+          onPress={sendOtp}
+          style={{ marginTop: 10 }}
+        >
+          Submit
+        </Button>
       </Box>
     </View>
+    </ImageBackground>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
-  body: {
+  container: {
     flex: 1,
-    // backgroundColor: "#000",
     alignItems: "center",
     justifyContent: "center",
   },
-  textStyle: {
-    // color: "#fff",
-    paddingBottom: 10,
-  },
-  boxStyle: {
-    marginTop: 20,
-  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  }
 });

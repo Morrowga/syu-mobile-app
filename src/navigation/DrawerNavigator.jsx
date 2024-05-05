@@ -8,10 +8,12 @@ import HomeScreen from "../screens/app/HomeScreen";
 import WishlistScreen from "../screens/app/WishlistScreen";
 import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
+import LoginScreen from "../screens/guest/LoginScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Box, IconButton } from "native-base";
 import NotificationIcon from "../components/NotificationIcon";
+import CustomizationScreen from "../screens/app/CustomizationScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -91,6 +93,15 @@ const DrawerNavigator = () => {
         options={{
           drawerIcon: ({ color, size }) => (
             <Icon name="cart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Customization"
+        component={CustomizationScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="cog-outline" color={color} size={size} />
           ),
         }}
       />
