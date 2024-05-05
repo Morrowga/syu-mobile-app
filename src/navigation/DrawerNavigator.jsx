@@ -13,6 +13,7 @@ import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Box, IconButton } from "native-base";
 import NotificationIcon from "../components/NotificationIcon";
+import CustomizationScreen from "../screens/app/CustomizationScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -92,6 +93,15 @@ const DrawerNavigator = () => {
         options={{
           drawerIcon: ({ color, size }) => (
             <Icon name="cart-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Customization"
+        component={CustomizationScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Icon name="cog-outline" color={color} size={size} />
           ),
         }}
       />
