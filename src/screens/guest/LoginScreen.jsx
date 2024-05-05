@@ -43,7 +43,7 @@ const Login = () => {
             my={2}
             borderWidth={2}
             p={3}
-            placeholder="Enter your phone..."
+            placeholder="09..."
             rounded="full"
             onChangeText={(text) => handleInputChange("username", text)}
           />
@@ -54,7 +54,7 @@ const Login = () => {
           variant="outline"
           rounded="full"
           color="#fff"
-          onPress={() => sendOtp}
+          onPress={sendOtp}
           style={{ marginTop: 10 }}
         >
           Submit
