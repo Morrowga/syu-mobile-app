@@ -57,7 +57,7 @@ const WishlistScreen = () => {
             <Box width="57%">
                 <Input
                 variant="rounded"
-                size="xl"
+                size="md"
                 mt={1}
                 backgroundColor="#fff"
                 borderColor="#000"
@@ -69,7 +69,7 @@ const WishlistScreen = () => {
             <Box width="40%">
                 <Select
                 variant="rounded"
-                size="xl"
+                size="md"
                 backgroundColor="#fff"
                 borderColor="#000"
                 focusOutlineColor="#000"
