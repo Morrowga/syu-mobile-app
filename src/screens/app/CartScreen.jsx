@@ -114,7 +114,7 @@ const CartScreen = () => {
         ListEmptyComponent={renderEmptyComponent}
         keyExtractor={(item) => item.category_id}
       />
-      {totalQty != 0 ? (
+      {totalQty && totalQty != 0 ? (
         <View>
           <Box p={4} flexDirection="row" justifyContent="space-between">
             <Heading size="sm" px="2.5">
