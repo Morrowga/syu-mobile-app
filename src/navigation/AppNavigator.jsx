@@ -3,6 +3,7 @@ import BottomNavigator from "./BottomNavigator";
 import ProductListScreen from "../screens/app/ProductListScreen";
 import OrderInfoScreen from "../screens/app/OrderInfoScreen";
 import NotificationsScreen from "../screens/app/NotificationsScreen";
+import CartProductListScreen from "../screens/app/CartProductListScreen";
 
 const Stack = createStackNavigator();
 
@@ -13,10 +14,7 @@ const AppStack = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen 
-          name="BottomNavigator" 
-          component={BottomNavigator} 
-      />
+      <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
       <Stack.Screen
         name="Product List"
         component={ProductListScreen}
@@ -30,6 +28,12 @@ const AppStack = () => {
       <Stack.Screen
         name="Notifications"
         component={NotificationsScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="Cart Product List"
+        component={CartProductListScreen}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>

@@ -17,19 +17,15 @@ const OrderInfoScreen = () => {
   const route = useRoute();
 
   useEffect(() => {
-
     const { params } = route;
-  
-    const { order_id,order_name } = params;
 
-    console.log(order_id)
+    const { order_id, order_name } = params;
 
     navigation.setOptions({
-        title: order_name,
-        headerBackTitle: 'Back',
+      title: order_name,
+      headerBackTitle: "Back",
     });
-
-  },[]);
+  }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: 1, order_name: item.name})}>
