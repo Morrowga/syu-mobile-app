@@ -114,17 +114,23 @@ const CartScreen = () => {
         ListEmptyComponent={renderEmptyComponent}
         keyExtractor={(item) => item.category_id}
       />
-      <Box p={4} flexDirection="row" justifyContent="space-between">
-        <Heading size="sm" px="2.5">
-          Total Count ({totalQty})
-        </Heading>
-        <Text>{totalPrice} Ks</Text>
-      </Box>
-      <Box p={4} flexDirection="row" justifyContent="center" w="full">
-        <Button w="full" rounded="full">
-          Proceed To Checkout
-        </Button>
-      </Box>
+      {totalQty != 0 ? (
+        <View>
+          <Box p={4} flexDirection="row" justifyContent="space-between">
+            <Heading size="sm" px="2.5">
+              Total Count ({totalQty})
+            </Heading>
+            <Text>{totalPrice} Ks</Text>
+          </Box>
+          <Box p={4} flexDirection="row" justifyContent="center" w="full">
+            <Button w="full" rounded="full">
+              Proceed To Checkout
+            </Button>
+          </Box>
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };
