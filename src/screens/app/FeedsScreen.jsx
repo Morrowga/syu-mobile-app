@@ -1,5 +1,12 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { AspectRatio, Image, Stack, Box, Heading, FlatList } from "native-base";
+import { 
+  AspectRatio, 
+  Image, 
+  Stack, 
+  Box, 
+  Heading, 
+  FlatList 
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 const FeedsScreen = () => {

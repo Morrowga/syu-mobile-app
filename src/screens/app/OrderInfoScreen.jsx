@@ -1,14 +1,27 @@
 import { StyleSheet, View,TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
-import { Heading, Box,FlatList,Stack, Text, Badge,Divider,Button,Image, VStack, HStack} from "native-base";
+import { 
+  Heading,
+  Box,
+  FlatList,
+  Stack, 
+  Text, 
+  Badge,
+  Divider,
+  Button,
+  Image, 
+  VStack, 
+  HStack
+} from "native-base";
 import { useEffect } from "react";
 import { useNavigation } from '@react-navigation/native';
 
 
 const OrderInfoScreen = () => {
 
-  const orderStatus = true;
+  const orderStatus = false;
   let buttonBottom;
+  let orderName;
 
   if(orderStatus)
   {
@@ -16,9 +29,13 @@ const OrderInfoScreen = () => {
     Save Gallery
     </Button> 
   } else {
-    buttonBottom = <Button w="full" colorScheme="danger" variant="outline" rounded="full">
-     Payment Action Needed
-    </Button> 
+    buttonBottom = 
+    <Box w="full">
+      <Text fontWeight="bold" p={2}>Order Status - Pending</Text>
+      <Button colorScheme="danger" variant="outline" rounded="full">
+      Payment Action Needed
+      </Button> 
+    </Box>
   }
 
   
@@ -41,10 +58,11 @@ const OrderInfoScreen = () => {
       title: order_name,
       headerBackTitle: "Back",
     });
+
+    orderName = order_name
   }, []);
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: 1, order_name: item.name})}>
     <VStack>
         <Box 
           key={item}
@@ -63,21 +81,33 @@ const OrderInfoScreen = () => {
           <Stack p="4" space={3}>
             <Stack flexDirection="row" justifyContent="space-between" space={2}>
               <Box>
-                <Heading size="sm" mt={2.5}>
-                    {item.name} x {item.total_count}
+                <Heading size="sm">
+                    {item.name}
                 </Heading>
-                <Text mt={1} color="#20acc1">
-                   View Details
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Order Category Detail", {
+                      category_name: item.name,
+                      order_name: orderName
+                    })
+                  }
+                >
+                  <Text mt={1} color="#20acc1" 
+                  >
+                    View Details
+                  </Text>
+                </TouchableOpacity>
               </Box>
+              <Text>
+                  QTY: {item.total_count}
+              </Text>
               <Box>
-                <Text>{item.total_amt} MMK</Text>
+                <Text>{item.total_amt} Ks</Text>
               </Box>
             </Stack>
           </Stack>
         </Box>
         </VStack>
-      </TouchableOpacity>
       );
 
       return (
@@ -112,7 +142,7 @@ const OrderInfoScreen = () => {
                   Total Count 
               </Heading>
               <Text>
-                  10000 MMK
+                  10000 Ks
               </Text>
             </Box>
           </Box>

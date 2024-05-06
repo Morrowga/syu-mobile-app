@@ -8,7 +8,14 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { AspectRatio, Image, Box, FlatList, Input, Fab } from "native-base";
+import { 
+  AspectRatio, 
+  Image, 
+  Box, 
+  FlatList, 
+  Input, 
+  Fab 
+} from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import DetailModalBox from "../../components/DetailModalBox";
 import { useSelector } from "react-redux";

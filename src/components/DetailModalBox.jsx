@@ -121,13 +121,13 @@ const DetailModalBox = ({
 
           <View style={styles.modalBody}>
             <View style={styles.cartInput}>
-              <IconButton
+               <IconButton
                 variant="solid"
-                icon={<Icon name="add" color="#fff" />}
+                icon={<Icon name="remove" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={incrementQty}
+                onPress={decrementQty}
               />
               <Input
                 size={"xs"}
@@ -140,11 +140,11 @@ const DetailModalBox = ({
               />
               <IconButton
                 variant="solid"
-                icon={<Icon name="remove" color="#fff" />}
+                icon={<Icon name="add" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={decrementQty}
+                onPress={incrementQty}
               />
 
               <View style={styles.totalPrice}>

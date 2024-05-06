@@ -4,6 +4,7 @@ import ProductListScreen from "../screens/app/ProductListScreen";
 import OrderInfoScreen from "../screens/app/OrderInfoScreen";
 import NotificationsScreen from "../screens/app/NotificationsScreen";
 import CartProductListScreen from "../screens/app/CartProductListScreen";
+import OrderCategoryDetailScreen from "../screens/app/OrderCategoryDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,13 @@ const AppStack = () => {
         component={CartProductListScreen}
         options={{ headerShown: true }}
       />
+
+      <Stack.Screen
+        name="Order Category Detail"
+        component={OrderCategoryDetailScreen}
+        options={{ headerShown: true }}
+      />
+      
     </Stack.Navigator>
   );
 };

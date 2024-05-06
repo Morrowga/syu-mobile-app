@@ -1,5 +1,13 @@
 import { StyleSheet, View,TouchableOpacity } from "react-native";
-import { Heading, Box,FlatList,Stack, Text, Badge, VStack} from "native-base";
+import { 
+  Heading, 
+  Box,
+  FlatList,
+  Stack, 
+  Text, 
+  Badge, 
+  VStack
+} from "native-base";
 import { useNavigation } from '@react-navigation/native';
 
 const OrderListScreen = () => {
@@ -49,7 +57,7 @@ const OrderListScreen = () => {
           </Box>
           <Box>
             <Text mt={1} textAlign="right">
-                5000 MMK
+                5000 Ks
             </Text>
             <Text mt={3} opacity={0.3} textAlign="right">
                 May, 4 06:00 AM, 2024
