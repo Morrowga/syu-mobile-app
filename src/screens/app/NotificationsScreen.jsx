@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const NotificationsScreen = () => (
+const NotificationsScreen = () => {
   <View style={styles.container}>
     <Text>Notifications Screen</Text>
-  </View>
-);
+  </View> 
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
