@@ -1,17 +1,17 @@
 // Otp.jsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { authSuccess } from "../../redux/slices/authSlice";
 import OTPTextView from "react-native-otp-textinput";
-import { useRef } from "react";
 
 const OtpScreen = () => {
 
-  const dispatch = useDispatch();
+  const [disabled, setDisabled] = useState(true); 
+  const [countdown, setCountdown] = useState(60); 
 
-  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const handleOtpChange = (index, value) => {
     if(value.length == 5)
@@ -19,6 +19,31 @@ const OtpScreen = () => {
       dispatch(authSuccess());
     }
   };
+
+  const startCountdown = () => {
+    const interval = setInterval(() => {
+      setCountdown(prevCountdown => {
+        if (prevCountdown === 1) {
+          clearInterval(interval); 
+          setDisabled(false); 
+          return 0; 
+        }
+        return prevCountdown - 1; 
+      });
+    }, 1000); 
+  };
+
+  const handleResendClick = () => {
+    setDisabled(true); 
+    setCountdown(60); 
+    startCountdown();
+  };
+
+
+  useEffect(() => {
+    startCountdown(); 
+  }, []);
+
 
 
   return (
@@ -32,6 +57,14 @@ const OtpScreen = () => {
         tintColor="#000"
         inputCount={5}
       />
+
+      <Box alignSelf="flex-end" p={10}>
+        <TouchableOpacity>
+            <Button w="200" rounded="full" variant="outline" onPress={handleResendClick} isDisabled={disabled}>
+              {countdown > 0 ? 'Resend in ' +  countdown + ' seconds' : "Resend"}
+            </Button>
+        </TouchableOpacity>
+        </Box>
     </View>
   );
 };
@@ -41,23 +74,13 @@ export default OtpScreen;
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    // backgroundColor: "#000",
     alignItems: "center",
-    justifyContent: "center",
+    top: 100
   },
   textStyle: {
-    // color: "#fff",
     paddingBottom: 10,
-  },
-  boxStyle: {
-    marginTop: 20,
   },
   textInputContainer: {
     marginBottom: 20,
-  },
-
-  roundedTextInput: {
-    // borderRadius: 10,
-    // borderWidth: 3
   },
 });

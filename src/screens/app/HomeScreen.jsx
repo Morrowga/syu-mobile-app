@@ -73,8 +73,8 @@ const HomeScreen = () => {
           }}
         />
       </Box>
-      <Box textAlign="center" alignItems="center">
-        <Heading>Concurrent 999999 </Heading>
+      <Box textAlign="center" alignItems="left" mx={5}>
+        <Heading>Welcome To Universe...</Heading>
       </Box>
       <FlatList
         my={1}
