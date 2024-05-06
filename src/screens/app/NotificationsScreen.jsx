@@ -6,7 +6,6 @@ import {
   Button,
   Box, 
   Badge,
-  ScrollView,
   HStack,
   Heading, 
   FlatList 
@@ -102,14 +101,13 @@ const NotificationsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          contentContainerStyle={{ padding: 10 }}
-          keyExtractor={(item) => item.id}
-        />
-      </ScrollView>
+      <FlatList
+        flex={1}
+        data={data}
+        renderItem={renderItem}
+        contentContainerStyle={{ padding: 10 }}
+        keyExtractor={(item) => item.id}
+      />
       <TouchableOpacity>
         <HStack m={5} justifyContent="flex-end">
           <Button w="full" colorScheme="danger" variant="outline" onPress={() => handleRemoveAllItem()} rounded="full">
