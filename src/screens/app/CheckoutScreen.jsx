@@ -4,6 +4,9 @@ import {
   Button,
   Heading,
   Image,
+  Input,
+  InputGroup,
+  InputRightAddon,
   Text,
   View,
 } from "native-base";
@@ -13,13 +16,15 @@ import Icon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteAllCartData } from "../../redux/slices/cartSlice";
+import { selectTotalPrice } from "../../redux/selectors/cartSelectors";
 
 const CheckoutScreen = () => {
   const [imageUri, setImageUri] = useState(null);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const totalPrice = useSelector(selectTotalPrice);
 
   const handleChoosePhoto = async () => {
     const permissionResult =
@@ -53,6 +58,18 @@ const CheckoutScreen = () => {
   };
   return (
     <View style={styles.container}>
+      <Box mb={5}>
+        <InputGroup justifyContent="center">
+          <Input
+            readOnly
+            h={10}
+            value={String(totalPrice)}
+            minW={70}
+            placeholder="nativebase"
+          />
+          <InputRightAddon children={"KS"} />
+        </InputGroup>
+      </Box>
       <Box style={styles.imageUpload}>
         {imageUri ? (
           <TouchableWithoutFeedback onPress={handleClearPhoto}>
