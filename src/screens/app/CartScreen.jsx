@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-import { getCategoryFromState } from "../../redux/selectors/cartSelectors";
+import {
+  getCategoryFromState,
+  selectTotalPrice,
+  selectTotalQuantity,
+} from "../../redux/selectors/cartSelectors";
 import {
   Badge,
   Box,
@@ -18,6 +22,8 @@ const CartScreen = () => {
   const { cartData } = useSelector((state) => state.cart);
   const cartCategories = useSelector(getCategoryFromState);
   const navigation = useNavigation();
+  const totalQty = useSelector(selectTotalQuantity);
+  const totalPrice = useSelector(selectTotalPrice);
 
   const goCartProductList = (category_id, category_name) => {
     navigation.navigate("Cart Product List", { category_id, category_name });
@@ -101,17 +107,32 @@ const CartScreen = () => {
   return (
     <View style={styles.container}>
       <FlatList
+        style={styles.cartCategoryList}
         data={cartCategories}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
         ListEmptyComponent={renderEmptyComponent}
         keyExtractor={(item) => item.category_id}
       />
+      <Box p={4} flexDirection="row" justifyContent="space-between">
+        <Heading size="sm" px="2.5">
+          Total Count ({totalQty})
+        </Heading>
+        <Text>{totalPrice} Ks</Text>
+      </Box>
+      <Box p={4} flexDirection="row" justifyContent="center" w="full">
+        <Button w="full" rounded="full">
+          Proceed To Checkout
+        </Button>
+      </Box>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  cartCategoryList: {
     flex: 1,
   },
 });
