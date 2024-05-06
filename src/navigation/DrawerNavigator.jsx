@@ -1,5 +1,6 @@
 import {
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
   createDrawerNavigator,
 } from "@react-navigation/drawer";
@@ -11,7 +12,7 @@ import OrderListScreen from "../screens/app/OrderListScreen";
 import LoginScreen from "../screens/guest/LoginScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Box, IconButton } from "native-base";
+import { Box, Button, IconButton } from "native-base";
 import NotificationIcon from "../components/NotificationIcon";
 import CustomizationScreen from "../screens/app/CustomizationScreen";
 
@@ -37,6 +38,14 @@ const CustomDrawerContent = (props) => {
       </View>
 
       <DrawerItemList {...props} />
+      <DrawerItem
+        label="Logout"
+        labelStyle={{ color: "gray" }}
+        onPress={() => {}}
+        icon={({ color, size }) => (
+          <Icon name="log-out" color="gray" size={size} />
+        )}
+      />
     </DrawerContentScrollView>
   );
 };

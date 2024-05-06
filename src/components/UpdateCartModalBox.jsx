@@ -17,6 +17,7 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { throttle } from "lodash";
 import {
   decreaseCartQty,
   deleteItem,
@@ -40,9 +41,11 @@ const UpdateCartModalBox = ({
   const cartDetail = cartData.find((cart) => cart.id == id);
 
   const decreaseQty = (id) => {
-    dispatch(decreaseCartQty(id));
-    if (cartDetail?.qty == 1) {
-      onClose();
+    if (id) {
+      dispatch(decreaseCartQty(id));
+      if (cartDetail?.qty === 1) {
+        onClose();
+      }
     }
   };
 
@@ -78,7 +81,6 @@ const UpdateCartModalBox = ({
       }}
     >
       <Modal.Content maxWidth="400px">
-        <Modal.CloseButton />
         <Modal.Header>Item Detail</Modal.Header>
         <Modal.Body>
           {imageSrc ? (
@@ -118,7 +120,7 @@ const UpdateCartModalBox = ({
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={() => decreaseQty(cartDetail.id)}
+                onPress={() => decreaseQty(cartDetail?.id)}
               />
 
               <View style={styles.totalPrice}>
@@ -180,6 +182,9 @@ const UpdateCartModalBox = ({
           </View>
         </Modal.Body>
         <Modal.Footer style={styles.footer}>
+          <Button onPress={onClose} rounded="full">
+            Confirm
+          </Button>
           <Button
             backgroundColor="red.500"
             onPress={() => deleteProduct(cartDetail.id)}
@@ -212,6 +217,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "center",
+    gap: 10,
   },
   selectBox: {
     flex: 1,

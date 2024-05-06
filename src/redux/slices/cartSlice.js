@@ -1,5 +1,4 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
-
 const initialState = {
   cartData: [],
   total_qty: 0,
@@ -38,6 +37,7 @@ export const cartSlice = createSlice({
       const index = state.cartData.findIndex(
         (item) => item.id === action.payload
       );
+
       if (index !== -1 && state.cartData[index].qty > 1) {
         state.cartData[index].qty -= 1;
         state.cartData[index].totalPrice =

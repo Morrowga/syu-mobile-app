@@ -121,7 +121,7 @@ const DetailModalBox = ({
 
           <View style={styles.modalBody}>
             <View style={styles.cartInput}>
-               <IconButton
+              <IconButton
                 variant="solid"
                 icon={<Icon name="remove" color="#fff" />}
                 rounded="full"
