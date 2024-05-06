@@ -9,23 +9,31 @@ import HomeScreen from "../screens/app/HomeScreen";
 import WishlistScreen from "../screens/app/WishlistScreen";
 import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
-import LoginScreen from "../screens/guest/LoginScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Box, Button, IconButton } from "native-base";
 import NotificationIcon from "../components/NotificationIcon";
 import CustomizationScreen from "../screens/app/CustomizationScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { authFail } from "../redux/slices/authSlice";
 
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+      dispatch(authFail());
+  };
+
   return (
     <DrawerContentScrollView {...props}>
       <View style={styles.drawerContent}>
         <View style={styles.container}>
           <Box style={styles.logoBox}>
             <Image
-              source={require("../../assets/logo3.png")}
+              source={require("../../assets/innerlogo.png")}
               style={{
                 width: 50,
                 height: 70,
@@ -41,7 +49,7 @@ const CustomDrawerContent = (props) => {
       <DrawerItem
         label="Logout"
         labelStyle={{ color: "gray" }}
-        onPress={() => {}}
+        onPress={() => handleLogout()}
         icon={({ color, size }) => (
           <Icon name="log-out" color="gray" size={size} />
         )}

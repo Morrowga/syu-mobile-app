@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const CustomizationScreen = () => (
-  <View style={styles.container}>
-    <Text>Customization Screen</Text>
-  </View>
-);
+const CustomizationScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text>Customization Screen</Text>
+    </View>
+  )
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,

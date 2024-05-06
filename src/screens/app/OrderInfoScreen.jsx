@@ -139,7 +139,15 @@ const OrderInfoScreen = () => {
             </Box>
             <Box p={4} flexDirection="row" justifyContent="space-between">
               <Heading size="sm" px="2.5">
-                  Total Count 
+                  Total Count
+              </Heading>
+              <Text>
+                  10
+              </Text>
+            </Box>
+            <Box p={4} flexDirection="row" justifyContent="space-between">
+              <Heading size="sm" px="2.5">
+                  Total Amount
               </Heading>
               <Text>
                   10000 Ks
