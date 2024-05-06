@@ -28,7 +28,9 @@ const CartScreen = () => {
   const goCartProductList = (category_id, category_name) => {
     navigation.navigate("Cart Product List", { category_id, category_name });
   };
-
+  const goCheckout = () => {
+    navigation.navigate("Checkout");
+  };
   const renderItem = ({ item }) => (
     <Box
       key={item}
@@ -123,7 +125,7 @@ const CartScreen = () => {
             <Text>{totalPrice} Ks</Text>
           </Box>
           <Box p={4} flexDirection="row" justifyContent="center" w="full">
-            <Button w="full" rounded="full">
+            <Button w="full" rounded="full" onPress={goCheckout}>
               Proceed To Checkout
             </Button>
           </Box>

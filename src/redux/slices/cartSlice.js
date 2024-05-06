@@ -79,6 +79,10 @@ export const cartSlice = createSlice({
         state.cartData.splice(index, 1);
       }
     },
+
+    deleteAllCartData: (state) => {
+      state.cartData = [];
+    },
   },
 });
 export const {
@@ -91,5 +95,6 @@ export const {
   updateSize,
   updateQuality,
   deleteItem,
+  deleteAllCartData,
 } = cartSlice.actions;
 export default cartSlice.reducer;

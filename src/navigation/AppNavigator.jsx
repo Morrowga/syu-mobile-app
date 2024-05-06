@@ -5,6 +5,7 @@ import OrderInfoScreen from "../screens/app/OrderInfoScreen";
 import NotificationsScreen from "../screens/app/NotificationsScreen";
 import CartProductListScreen from "../screens/app/CartProductListScreen";
 import OrderCategoryDetailScreen from "../screens/app/OrderCategoryDetailScreen";
+import CheckoutScreen from "../screens/app/CheckoutScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,7 +44,12 @@ const AppStack = () => {
         component={OrderCategoryDetailScreen}
         options={{ headerShown: true }}
       />
-      
+
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
+        options={{ headerShown: true }}
+      />
     </Stack.Navigator>
   );
 };
