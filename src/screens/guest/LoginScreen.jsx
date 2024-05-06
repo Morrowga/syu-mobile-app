@@ -36,7 +36,6 @@ const Login = () => {
           isRequired
           isInvalid={formData.msisdn === ""}
         >
-          {/* <FormControl.Label>Enter Mobile Number</FormControl.Label> */}
           <Input
             color="#fff"
             size="xl"
