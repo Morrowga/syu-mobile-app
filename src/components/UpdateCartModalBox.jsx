@@ -19,9 +19,12 @@ import { StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   decreaseCartQty,
+  deleteItem,
   increaseCartQty,
   updateCartQty,
   updateCartQtyByInput,
+  updateQuality,
+  updateSize,
 } from "../redux/slices/cartSlice";
 
 const UpdateCartModalBox = ({
@@ -36,7 +39,6 @@ const UpdateCartModalBox = ({
   const { cartData } = useSelector((state) => state.cart);
   const cartDetail = cartData.find((cart) => cart.id == id);
 
-  console.log(cartDetail);
   const decreaseQty = (id) => {
     dispatch(decreaseCartQty(id));
     if (cartDetail?.qty == 1) {
@@ -53,6 +55,17 @@ const UpdateCartModalBox = ({
     dispatch(updateCartQtyByInput({ id: product_id, qty: newQuantity }));
   };
 
+  const handleQualitySelectBox = (value) => {
+    dispatch(updateQuality({ id, quality: value }));
+  };
+
+  const handleSizeSelectBox = (value) => {
+    dispatch(updateSize({ id, size: value }));
+  };
+  const deleteProduct = async (id) => {
+    dispatch(deleteItem(id));
+    onClose();
+  };
   return (
     <Modal
       isOpen={isOpen}
@@ -133,7 +146,7 @@ const UpdateCartModalBox = ({
                 }}
                 mt={1}
                 size={"sm"}
-                // onValueChange={(itemValue) => handleQualitySelectBox(itemValue)}
+                onValueChange={(itemValue) => handleQualitySelectBox(itemValue)}
               >
                 {qualities.map((size) => (
                   <Select.Item
@@ -153,7 +166,7 @@ const UpdateCartModalBox = ({
                 mt={1}
                 h={10}
                 minW={130}
-                // onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
+                onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
               >
                 {sizes.map((size) => (
                   <Select.Item
@@ -166,7 +179,15 @@ const UpdateCartModalBox = ({
             </View>
           </View>
         </Modal.Body>
-        {/* <Modal.Footer style={styles.footer}></Modal.Footer> */}
+        <Modal.Footer style={styles.footer}>
+          <Button
+            backgroundColor="red.500"
+            onPress={() => deleteProduct(cartDetail.id)}
+            rounded="full"
+          >
+            Remove From Cart
+          </Button>
+        </Modal.Footer>
       </Modal.Content>
     </Modal>
   );
@@ -183,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    gap: 5,
+    gap: 10,
   },
   input: {
     textAlign: "center",

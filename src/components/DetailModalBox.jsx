@@ -56,7 +56,6 @@ const DetailModalBox = ({
   }, [id]);
 
   const incrementQty = () => {
-    console.log(price);
     setCartDetail((prevState) => ({
       ...prevState,
       qty: prevState.qty + 1,
@@ -228,7 +227,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    gap: 5,
+    gap: 10,
   },
   input: {
     textAlign: "center",
