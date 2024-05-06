@@ -7,118 +7,76 @@ import {
   Input,
   HStack,
   IconButton,
-  KeyboardAvoidingView,
   Text,
+  KeyboardAvoidingView,
+  InputRightAddon,
+  InputGroup,
   Select,
   CheckIcon,
-  Divider,
-  InputGroup,
-  InputRightAddon,
 } from "native-base";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  calculateTotalQty,
-  setCartData,
+  decreaseCartQty,
+  increaseCartQty,
   updateCartQty,
+  updateCartQtyByInput,
 } from "../redux/slices/cartSlice";
 
-const DetailModalBox = ({
-  isOpen,
+const UpdateCartModalBox = ({
   id,
+  isOpen,
   onClose,
   imageSrc,
-  category_id,
-  category_name,
-  price,
   sizes,
   qualities,
 }) => {
   const dispatch = useDispatch();
   const { cartData } = useSelector((state) => state.cart);
+  const cartDetail = cartData.find((cart) => cart.id == id);
 
-  const [cartDetail, setCartDetail] = useState({});
-
-  useEffect(() => {
-    setCartDetail({
-      id,
-      category_id,
-      category_name,
-      imageSrc,
-      price,
-      qty: 1,
-      totalPrice: price,
-
-      quality: null,
-      size: null,
-    });
-  }, [id]);
-
-  const incrementQty = () => {
-    console.log(price);
-    setCartDetail((prevState) => ({
-      ...prevState,
-      qty: prevState.qty + 1,
-      totalPrice: (prevState.qty + 1) * prevState.price,
-    }));
-  };
-
-  const decrementQty = () => {
-    setCartDetail((prevState) => ({
-      ...prevState,
-      qty: prevState.qty > 1 ? prevState.qty - 1 : 1,
-      totalPrice: (prevState.qty > 1 ? prevState.qty - 1 : 1) * prevState.price,
-    }));
-  };
-
-  const addToCart = () => {
-    if (!cartDetail.size || !cartDetail.quality) {
-      return;
+  console.log(cartDetail);
+  const decreaseQty = (id) => {
+    dispatch(decreaseCartQty(id));
+    if (cartDetail?.qty == 1) {
+      onClose();
     }
-    let isExists = cartData.find((cart) => cart.id == cartDetail.id);
-    if (isExists) {
-      dispatch(updateCartQty(cartDetail));
-    } else {
-      dispatch(setCartData(cartDetail));
-    }
-    onClose();
   };
 
-  const handleQtyChange = (newQty) => {
-    const qty = parseInt(newQty, 10) || 1;
-    setCartDetail((prevState) => ({
-      ...prevState,
-      qty,
-      totalPrice: qty * prevState.price,
-    }));
+  const increaseQty = (id) => {
+    dispatch(increaseCartQty(id));
   };
 
-  const handleSizeSelectBox = (value) => {
-    setCartDetail((prevState) => ({
-      ...prevState,
-      size: value,
-    }));
-  };
-
-  const handleQualitySelectBox = (value) => {
-    setCartDetail((prevState) => ({
-      ...prevState,
-      quality: value,
-    }));
+  const handleInputChange = (value, product_id) => {
+    const newQuantity = parseInt(value, 10);
+    dispatch(updateCartQtyByInput({ id: product_id, qty: newQuantity }));
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      avoidKeyboard
+      _overlay={{
+        useRNModal: false,
+        useRNModalOnAndroid: false,
+      }}
+    >
       <Modal.Content maxWidth="400px">
         <Modal.CloseButton />
         <Modal.Header>Item Detail</Modal.Header>
         <Modal.Body>
-          <Image
-            source={{ uri: imageSrc }}
-            alt="Preview"
-            style={{ width: "100%", height: 300 }}
-          />
+          {imageSrc ? (
+            <Image
+              source={{ uri: imageSrc }}
+              alt="Preview"
+              style={{ width: "100%", height: 300 }}
+            />
+          ) : (
+            ""
+          )}
 
           <View style={styles.modalBody}>
             <View style={styles.cartInput}>
@@ -128,24 +86,26 @@ const DetailModalBox = ({
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={incrementQty}
+                onPress={() => increaseQty(cartDetail.id)}
               />
+
               <Input
                 size={"xs"}
-                value={String(cartDetail.qty)}
+                value={String(cartDetail?.qty)}
                 style={styles.input}
                 w="15%"
                 mx={2}
                 keyboardType="number-pad"
-                onChangeText={handleQtyChange}
+                onChangeText={(e) => handleInputChange(e, cartDetail.id)}
               />
+
               <IconButton
                 variant="solid"
                 icon={<Icon name="remove" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={decrementQty}
+                onPress={() => decreaseQty(cartDetail.id)}
               />
 
               <View style={styles.totalPrice}>
@@ -161,10 +121,9 @@ const DetailModalBox = ({
                 </InputGroup>
               </View>
             </View>
-
             <View style={styles.selectBox}>
               <Select
-                selectedValue={cartDetail.quality}
+                selectedValue={cartDetail?.quality}
                 minW={130}
                 h={10}
                 placeholder="Quality"
@@ -174,7 +133,7 @@ const DetailModalBox = ({
                 }}
                 mt={1}
                 size={"sm"}
-                onValueChange={(itemValue) => handleQualitySelectBox(itemValue)}
+                // onValueChange={(itemValue) => handleQualitySelectBox(itemValue)}
               >
                 {qualities.map((size) => (
                   <Select.Item
@@ -185,7 +144,7 @@ const DetailModalBox = ({
                 ))}
               </Select>
               <Select
-                selectedValue={cartDetail.size}
+                selectedValue={cartDetail?.size}
                 placeholder="Size"
                 _selectedItem={{
                   bg: "teal.600",
@@ -194,7 +153,7 @@ const DetailModalBox = ({
                 mt={1}
                 h={10}
                 minW={130}
-                onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
+                // onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
               >
                 {sizes.map((size) => (
                   <Select.Item
@@ -207,11 +166,7 @@ const DetailModalBox = ({
             </View>
           </View>
         </Modal.Body>
-        <Modal.Footer style={styles.footer}>
-          <Button rounded="full" onPress={addToCart}>
-            Add To Cart
-          </Button>
-        </Modal.Footer>
+        {/* <Modal.Footer style={styles.footer}></Modal.Footer> */}
       </Modal.Content>
     </Modal>
   );
@@ -251,4 +206,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailModalBox;
+export default UpdateCartModalBox;

@@ -13,11 +13,12 @@ export const getCategoryFromState = createSelector(
     const categoryTotalQty = {};
 
     cartData.forEach((item) => {
-      const { category_id, category_name, qty } = item;
+      const { category_id, category_name, qty, totalPrice } = item;
       if (categoryTotalQty[category_name]) {
         categoryTotalQty[category_name].qty += qty;
+        categoryTotalQty[category_name].totalPrice += totalPrice;
       } else {
-        categoryTotalQty[category_name] = { category_id, qty };
+        categoryTotalQty[category_name] = { category_id, qty, totalPrice };
       }
     });
 
@@ -25,8 +26,13 @@ export const getCategoryFromState = createSelector(
       category_id: categoryTotalQty[category_name].category_id,
       category_name,
       qty: categoryTotalQty[category_name].qty,
+      totalPrice: categoryTotalQty[category_name].totalPrice,
     }));
 
     return result;
   }
+);
+
+export const selectTotalPrice = createSelector([selectCartData], (cartData) =>
+  cartData.reduce((total, item) => total + item.totalPrice, 0)
 );
