@@ -184,7 +184,7 @@ const ProductListScreen = () => {
       <Box alignItems="center" pl={5} pr={5} pt={5}>
         <Input
           variant="rounded"
-          size="2xl"
+          size="lg"
           mx="3"
           backgroundColor="#fff"
           borderColor="#000"
