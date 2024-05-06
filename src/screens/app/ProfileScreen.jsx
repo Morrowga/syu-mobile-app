@@ -15,6 +15,7 @@ import {
   FormControl,
   Button,
 } from "native-base";
+import React, { useEffect } from 'react';
 import { useState } from "react";
 
 const ProfileScreen = () => {
@@ -46,10 +47,13 @@ const ProfileScreen = () => {
     ) {
       Alert.alert("Validation Error", "Please fill in all fields.");
     } else {
-      // Validation passed, you can submit the form data here
       console.log("Form data:", formData);
     }
   };
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+}, [])
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
