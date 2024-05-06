@@ -73,10 +73,10 @@ const OrderCategoryDetailScreen = () => {
     },
   ];
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item,index }) => (
     <TouchableOpacity>
       <Box
-        key={item}
+        key={index}
         flex={1}
         width="100%"
         mt={3}
