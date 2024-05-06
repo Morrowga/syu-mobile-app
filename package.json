@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "expo": "~50.0.17",
     "expo-status-bar": "~1.11.1",
+    "lodash": "^4.17.21",
     "native-base": "^3.4.28",
     "react": "18.2.0",
     "react-native": "0.73.6",
