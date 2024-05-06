@@ -1,20 +1,19 @@
-import { StyleSheet, Text, View,TouchableOpacity,LogBox } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, LogBox } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import React, { useEffect, useState } from 'react';
-import { 
-  Stack, 
+import React, { useEffect, useState } from "react";
+import {
+  Stack,
   Button,
-  Box, 
+  Box,
   Badge,
   ScrollView,
   HStack,
-  Heading, 
-  FlatList 
+  Heading,
+  FlatList,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 const NotificationsScreen = () => {
-
   const navigation = useNavigation();
 
   const [data, setData] = useState([
@@ -36,7 +35,9 @@ const NotificationsScreen = () => {
   ]);
 
   const handleRemoveItem = (indexToRemove) => {
-    setData(prevData => prevData.filter((_, index) => index !== indexToRemove));
+    setData((prevData) =>
+      prevData.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleRemoveAllItem = () => {
@@ -44,16 +45,25 @@ const NotificationsScreen = () => {
   };
 
   useEffect(() => {
-      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, [])
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity style={styles.touchParent}>
-        <Badge
-          colorScheme="danger" rounded="full" w={5} h={5} mb={-11} ml={-1} alignSelf="start" zIndex={11} variant="solid" _text={{
-            fontSize: 12
-          }}>
-        </Badge>
+      <Badge
+        colorScheme="danger"
+        rounded="full"
+        w={5}
+        h={5}
+        mb={-11}
+        ml={-1}
+        alignSelf="start"
+        zIndex={11}
+        variant="solid"
+        _text={{
+          fontSize: 12,
+        }}
+      ></Badge>
       <Box
         key={index}
         flex={1}
@@ -80,14 +90,27 @@ const NotificationsScreen = () => {
               <Heading size="xs">{item.title}</Heading>
             </Box>
             <Box w="10%">
-              <TouchableOpacity
-                onPress={() => handleRemoveItem(index)}
-              >
+              <TouchableOpacity onPress={() => handleRemoveItem(index)}>
                 <Badge
-                  colorScheme="dark" alignSelf="flex-end" w={7} h={7} mt={-2} mr={-2} rounded="full" zIndex={11} variant="solid" _text={{
-                    fontSize: 12
-                  }}>
-                    <Icon name="close-outline" size={10} color="black" onPress={() => handleRemoveItem(index)} />
+                  colorScheme="dark"
+                  alignSelf="flex-end"
+                  w={7}
+                  h={7}
+                  mt={-2}
+                  mr={-2}
+                  rounded="full"
+                  zIndex={11}
+                  variant="solid"
+                  _text={{
+                    fontSize: 12,
+                  }}
+                >
+                  <Icon
+                    name="close-outline"
+                    size={10}
+                    color="black"
+                    onPress={() => handleRemoveItem(index)}
+                  />
                 </Badge>
               </TouchableOpacity>
             </Box>
@@ -112,7 +135,13 @@ const NotificationsScreen = () => {
       </ScrollView>
       <TouchableOpacity>
         <HStack m={5} justifyContent="flex-end">
-          <Button w="full" colorScheme="danger" variant="outline" onPress={() => handleRemoveAllItem()} rounded="full">
+          <Button
+            w="full"
+            colorScheme="danger"
+            variant="outline"
+            onPress={() => handleRemoveAllItem()}
+            rounded="full"
+          >
             Clear all
           </Button>
         </HStack>
@@ -123,10 +152,10 @@ const NotificationsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 3
+    margin: 3,
   },
-  touchParent:{
-    marginTop: 5
-  }
+  touchParent: {
+    marginTop: 5,
+  },
 });
 export default NotificationsScreen;
