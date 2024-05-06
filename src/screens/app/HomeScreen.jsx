@@ -38,7 +38,6 @@ const HomeScreen = () => {
         key={item}
         flex={1}
         width="100%"
-        mt={3}
         rounded="lg"
         overflow="hidden"
         borderColor="coolGray.200"
@@ -84,7 +83,11 @@ const HomeScreen = () => {
             }}
           />
       </Box>
+      <Box textAlign="center" alignItems="center">
+        <Heading>Concurrent 999999 </Heading>
+      </Box>
       <FlatList
+        my={1}
         data={data}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}

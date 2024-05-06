@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
+  LogBox
 } from "react-native";
 import {
   Stack,
