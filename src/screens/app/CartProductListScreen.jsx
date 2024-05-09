@@ -142,6 +142,7 @@ const CartProductListScreen = () => {
   const getSelectedSize = (id) => {
     return categorySizes.find((size) => size.id == id)?.name;
   };
+  
   const openModal = (data) => {
     setModalInfo({
       isOpen: true,
