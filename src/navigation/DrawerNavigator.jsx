@@ -16,15 +16,15 @@ import NotificationIcon from "../components/NotificationIcon";
 import CustomizationScreen from "../screens/app/CustomizationScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { authFail } from "../redux/slices/authSlice";
+import { logout } from "../api/auth";
 
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerContent = (props) => {
-
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-      dispatch(authFail());
+    dispatch(logout());
   };
 
   return (

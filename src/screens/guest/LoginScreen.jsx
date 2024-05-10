@@ -1,65 +1,68 @@
 // Login.jsx
-import { View, StyleSheet,ImageBackground } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
 import { Button, Box, Stack, FormControl, Input } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../../api/auth";
 
 const Login = () => {
+  const navigation = useNavigation();
+  const [msisdn, setMsisdn] = useState("");
+  const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
-    msisdn: "",
-  });
-
-  const handleInputChange = (key, value) => {
-    setFormData({
-      ...formData,
-      [key]: value,
+  const handleInputChange = (value) => {
+    setMsisdn(value);
+  };
+  const goNextRoute = () => {
+    return navigation.navigate("OTP");
+  };
+  const sendOtp = async () => {
+    dispatch(login({ msisdn: msisdn })).then((resp) => {
+      console.log(resp);
+      goNextRoute();
     });
   };
 
-  const navigation = useNavigation();
-  const [phoneNumber, setPhoneNumber] = useState("");
-
-  const sendOtp = () => {
-    navigation.navigate("OTP");
-  };
-
   return (
-    <ImageBackground 
+    <ImageBackground
       source={require("../../../assets/bgsample.png")}
       style={styles.background}
     >
-    <View style={styles.container}>
-      <Box width="80%" bg="rgba(0, 0, 0, 0.8)" p={10} rounded="xl" flexDirection="column">
-        <FormControl
-          maxW="300"
-          isRequired
-          isInvalid={formData.msisdn === ""}
+      <View style={styles.container}>
+        <Box
+          width="80%"
+          bg="rgba(0, 0, 0, 0.8)"
+          p={10}
+          rounded="xl"
+          flexDirection="column"
         >
-          <Input
-            color="#fff"
-            size="xl"
-            my={2}
-            borderWidth={2}
-            p={3}
-            placeholder="09..."
-            rounded="full"
-            onChangeText={(text) => handleInputChange("username", text)}
-          />
-        </FormControl>
+          <FormControl maxW="300" isRequired isInvalid={msisdn === ""}>
+            <Input
+              color="#fff"
+              size="xl"
+              my={2}
+              borderWidth={2}
+              p={3}
+              keyboardType="number-pad"
+              placeholder="09..."
+              rounded="full"
+              onChangeText={(value) => handleInputChange(value)}
+            />
+          </FormControl>
 
-        <Button
-          width="full"
-          variant="outline"
-          rounded="full"
-          color="#fff"
-          onPress={sendOtp}
-          style={{ marginTop: 10 }}
-        >
-          Submit
-        </Button>
-      </Box>
-    </View>
+          <Button
+            width="full"
+            variant="outline"
+            rounded="full"
+            color="#fff"
+            onPress={sendOtp}
+            style={{ marginTop: 10 }}
+          >
+            Submit
+          </Button>
+        </Box>
+      </View>
     </ImageBackground>
   );
 };
@@ -74,7 +77,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  }
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
 });
