@@ -77,7 +77,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isAuth = false;
         state.isError = true;
-        state.error_message = payload;
+        // state.error_message = payload;
       });
 
     //logout user

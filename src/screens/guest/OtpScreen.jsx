@@ -1,21 +1,30 @@
 // Otp.jsx
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { authSuccess } from "../../redux/slices/authSlice";
 import OTPTextView from "react-native-otp-textinput";
 import { resendOtp, verifyOtp } from "../../api/auth";
+import { useNavigation } from "@react-navigation/native";
 
 const OtpScreen = () => {
   const [disabled, setDisabled] = useState(true);
   const [countdown, setCountdown] = useState(60);
   const { msisdn, isError, error_message } = useSelector((state) => state.auth);
+  const navigation = useNavigation();
 
   const dispatch = useDispatch();
 
   const handleOtpChange = (index, value) => {
     if (value.length == 4) {
+      Keyboard.dismiss();
       dispatch(verifyOtp({ msisdn: msisdn, otp: value }));
     }
   };

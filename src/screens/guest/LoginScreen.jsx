@@ -1,15 +1,16 @@
 // Login.jsx
-import { View, StyleSheet, ImageBackground } from "react-native";
-import { Button, Box, Stack, FormControl, Input } from "native-base";
+import { View, StyleSheet, ImageBackground, Keyboard } from "react-native";
+import { Button, Box, Stack, FormControl, Input, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../api/auth";
 
 const Login = () => {
   const navigation = useNavigation();
   const [msisdn, setMsisdn] = useState("");
   const dispatch = useDispatch();
+  const { isError, error_message } = useSelector((state) => state.auth);
 
   const handleInputChange = (value) => {
     setMsisdn(value);
@@ -18,9 +19,15 @@ const Login = () => {
     return navigation.navigate("OTP");
   };
   const sendOtp = async () => {
-    dispatch(login({ msisdn: msisdn })).then((resp) => {
-      goNextRoute();
-    });
+    Keyboard.dismiss();
+    dispatch(login({ msisdn: msisdn }))
+      .unwrap()
+      .then((resp) => {
+        goNextRoute();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -50,6 +57,7 @@ const Login = () => {
             />
           </FormControl>
 
+          <Text style={styles.error_message}>{error_message}</Text>
           <Button
             width="full"
             variant="outline"
@@ -78,5 +86,9 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
+  },
+  error_message: {
+    color: "red",
+    textAlign: "center",
   },
 });
