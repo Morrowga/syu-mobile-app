@@ -14,15 +14,13 @@ import { getCategories } from "../../api/feed";
 
 const FeedsScreen = () => {
   const dispatch = useDispatch();
-  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
-  const { isError, error_message, categories } = useSelector((state) => state.feed);
+  const { isError, error_message, categories, isLoading } = useSelector((state) => state.feed);
 
   const fetchCategories = () =>
   {
     dispatch(getCategories())
     .then((resp) => {
-      setRefreshing(false);
     })
     .catch((error) => {
       console.error("Categories fetched failed:", error);
@@ -34,8 +32,6 @@ const FeedsScreen = () => {
   }, []); 
 
   const onRefresh = () => {
-    setRefreshing(true);
-
     fetchCategories()
   };
 
@@ -96,7 +92,7 @@ const FeedsScreen = () => {
       <FlatList
        refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={isLoading}
             onRefresh={onRefresh}
           />
         }
