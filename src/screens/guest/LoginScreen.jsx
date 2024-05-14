@@ -14,16 +14,16 @@ const Login = () => {
   const handleInputChange = (value) => {
     setMsisdn(value);
   };
-  const goNextRoute = () => {
-    return navigation.navigate("OTP");
-  };
-  const sendOtp = async () => {
-    dispatch(login({ msisdn: msisdn })).then((resp) => {
-      console.log(resp);
-      goNextRoute();
-    });
+
+  const goNextRoute = async () => {
+    return navigation.navigate('OTP')
   };
 
+  const sendOtp = async (msisdn) => {
+      await dispatch(login({ msisdn: msisdn })).then(() => {
+        navigation.navigate('OTP');
+      });
+  };
   return (
     <ImageBackground
       source={require("../../../assets/bgsample.png")}
