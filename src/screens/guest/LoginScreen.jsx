@@ -19,7 +19,6 @@ const Login = () => {
   };
   const sendOtp = async () => {
     dispatch(login({ msisdn: msisdn })).then((resp) => {
-      console.log(resp);
       goNextRoute();
     });
   };

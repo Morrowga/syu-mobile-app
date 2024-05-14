@@ -8,6 +8,8 @@ const initialState = {
   isError: false,
   authData: null,
   msisdn: "",
+  isApiRun: false,
+  error_message: "",
 };
 
 export const authSlice = createSlice({
@@ -20,61 +22,70 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     // login
-    builder.addCase(login.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(login.fulfilled, (state, { payload }) => {
-      state.msisdn = payload?.data.msisdn;
-      state.isLoading = false;
-    });
-    builder.addCase(login.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-    });
+    builder
+      .addCase(login.pending, (state) => {
+        state.isApiRun = true;
+      })
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.msisdn = payload?.data.msisdn;
+        state.isApiRun = false;
+      })
+      .addCase(login.rejected, (state, { payload }) => {
+        state.isApiRun = false;
+        state.isError = true;
+        state.error_message = payload;
+      });
 
     //verify otp
-    builder.addCase(verifyOtp.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(verifyOtp.fulfilled, (state, { payload }) => {
-      state.isAuth = true;
-      state.authData = payload.data;
-      state.isLoading = false;
-      state.msisdn = "";
-    });
-    builder.addCase(verifyOtp.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-    });
+    builder
+      .addCase(verifyOtp.pending, (state) => {
+        state.isApiRun = true;
+      })
+      .addCase(verifyOtp.fulfilled, (state, { payload }) => {
+        state.isAuth = true;
+        state.authData = payload.data;
+        state.isApiRun = false;
+        state.msisdn = "";
+      })
+      .addCase(verifyOtp.rejected, (state, action) => {
+        state.isApiRun = false;
+        state.isError = true;
+        state.error_message = payload;
+      });
 
     // get user data
-    builder.addCase(getUserData.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getUserData.fulfilled, (state, action) => {
-      state.authData = action.payload.data;
-      state.isLoading = false;
-      state.isAuth = true;
-    });
-    builder.addCase(getUserData.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isAuth = false;
-    });
+    builder
+      .addCase(getUserData.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUserData.fulfilled, (state, action) => {
+        state.authData = action.payload.data;
+        state.isLoading = false;
+        state.isAuth = true;
+      })
+      .addCase(getUserData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAuth = false;
+        state.isError = true;
+        state.error_message = payload;
+      });
 
     //logout user
-    builder.addCase(logout.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-      state.authData = null;
-      state.isLoading = false;
-      state.isAuth = false;
-    });
-    builder.addCase(logout.rejected, (state, action) => {
-      console.log(action.payload, "logout");
-      // state.isLoading = false;
-      // state.isAuth = false;
-    });
+    builder
+      .addCase(logout.pending, (state) => {
+        state.isApiRun = true;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.authData = null;
+        state.isApiRun = false;
+        state.isAuth = false;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        console.log(action.payload, "logout");
+        // state.isAuth = false;
+        // state.isError = true;
+        // state.error_message = payload;
+      });
   },
 });
 export const { startLoading } = authSlice.actions;

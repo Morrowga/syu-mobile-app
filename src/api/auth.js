@@ -61,3 +61,18 @@ export const logout = createAsyncThunk(
     }
   }
 );
+
+export const resendOtp = createAsyncThunk(
+  "auth/resend_otp",
+  async (data, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("send-otp", {
+        msisdn: data.msisdn,
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

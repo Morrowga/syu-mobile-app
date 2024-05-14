@@ -5,12 +5,12 @@ import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { authSuccess } from "../../redux/slices/authSlice";
 import OTPTextView from "react-native-otp-textinput";
+import { resendOtp } from "../../api/auth";
 
 const OtpScreen = () => {
   const [disabled, setDisabled] = useState(true);
   const [countdown, setCountdown] = useState(60);
-  const { authData } = useSelector((state) => state.auth);
-  console.log(authData, "authData");
+  const { msisdn } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -34,13 +34,15 @@ const OtpScreen = () => {
   };
 
   const handleResendClick = () => {
-    setDisabled(true);
-    setCountdown(60);
-    startCountdown();
+    dispatch(resendOtp({ msisdn: msisdn })).then(() => {
+      setDisabled(true);
+      setCountdown(60);
+      startCountdown();
+    });
   };
 
   useEffect(() => {
-    // startCountdown();
+    startCountdown();
   }, []);
 
   return (
