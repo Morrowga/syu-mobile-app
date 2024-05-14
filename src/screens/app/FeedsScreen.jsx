@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,RefreshControl } from "react-native";
 import { 
   AspectRatio, 
   Image, 
@@ -7,28 +7,39 @@ import {
   Heading, 
   FlatList 
 } from "native-base";
+import { useEffect,useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { categories } from "../../api/feed";
 
 const FeedsScreen = () => {
+  const [data, setData] = useState();
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
-  const data = [
-    {
-      id: 1,
-      name: "Stickers",
-      url: "https://i.pinimg.com/564x/83/4f/0f/834f0f52baf0e41b7d00ca0a3f576c82.jpg",
-    },
-    {
-      id: 2,
-      name: "Badges",
-      url: "https://i.pinimg.com/564x/74/03/4a/74034a50354130d58c51f668dab33dda.jpg",
-    },
-    {
-      id: 3,
-      name: "Posters",
-      url: "https://i.pinimg.com/564x/b8/d7/56/b8d7563fcd90b660f05358844380171b.jpg",
-    },
-  ];
+  const fetchCategories = () =>
+  {
+    dispatch(categories())
+    .then((resp) => {
+      setData(resp.payload.data.data)
+      setRefreshing(false);
+    })
+    .catch((error) => {
+      console.error("Categories fetched failed:", error);
+    });
+  }
+  
+  useEffect(() => {
+    fetchCategories()
+  }, []); 
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    fetchCategories()
+  };
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() =>
@@ -61,7 +72,7 @@ const FeedsScreen = () => {
       >
         <Box>
           <AspectRatio w="100%" ratio={16 / 5}>
-            <Image source={{ uri: item.url }} alt="image" />
+            <Image source={{ uri: item.image_url }} alt="image" />
           </AspectRatio>
         </Box>
         <Stack p="4" space={3}>
@@ -84,6 +95,12 @@ const FeedsScreen = () => {
   return (
     <View style={styles.container}>
       <FlatList
+       refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         data={data}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
