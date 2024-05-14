@@ -20,7 +20,8 @@ const Login = () => {
   };
 
   const sendOtp = async (msisdn) => {
-      await dispatch(login({ msisdn: msisdn })).then(() => {
+      await dispatch(login({ msisdn: msisdn })).then((resp) => {
+        console.log(resp)
         navigation.navigate('OTP');
       });
   };
