@@ -5,18 +5,18 @@ import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { authSuccess } from "../../redux/slices/authSlice";
 import OTPTextView from "react-native-otp-textinput";
-import { resendOtp } from "../../api/auth";
+import { resendOtp, verifyOtp } from "../../api/auth";
 
 const OtpScreen = () => {
   const [disabled, setDisabled] = useState(true);
   const [countdown, setCountdown] = useState(60);
-  const { msisdn } = useSelector((state) => state.auth);
+  const { msisdn, isError, error_message } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const handleOtpChange = (index, value) => {
-    if (value.length == 5) {
-      // dispatch(authSuccess());
+    if (value.length == 4) {
+      dispatch(verifyOtp({ msisdn: msisdn, otp: value }));
     }
   };
 
@@ -54,8 +54,9 @@ const OtpScreen = () => {
         containerStyle={styles.textInputContainer}
         textInputStyle={styles.roundedTextInput}
         tintColor="#000"
-        inputCount={5}
+        inputCount={4}
       />
+      {isError ? <Text style={styles.error_message}>{error_message}</Text> : ""}
 
       <Box alignSelf="flex-end" p={10}>
         <TouchableOpacity>
@@ -87,5 +88,8 @@ const styles = StyleSheet.create({
   },
   textInputContainer: {
     marginBottom: 20,
+  },
+  error_message: {
+    color: "red",
   },
 });

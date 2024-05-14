@@ -2,7 +2,7 @@ import axios from "axios";
 import storage from "../storage/storage";
 
 // const BASE_URL = "http://syu-web.test/api";
-const BASE_URL = "http://192.168.1.6:8000/api";
+const BASE_URL = "http://192.168.1.4:8000/api";
 axios.defaults.baseURL = BASE_URL;
 
 const setAuthHeaders = (config, authToken) => {
@@ -25,9 +25,8 @@ const setAuthHeaders = (config, authToken) => {
 axios.interceptors.request.use(async (config) => {
   try {
     const auth = await storage.load({ key: "authState" });
-
-    if (auth && auth.data && auth.data.token) {
-      return setAuthHeaders(config, auth.data.token);
+    if (auth && auth.token) {
+      return setAuthHeaders(config, auth.token);
     } else {
       return setAuthHeaders(config, null);
     }

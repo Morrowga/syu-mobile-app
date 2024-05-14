@@ -22,12 +22,13 @@ export const verifyOtp = createAsyncThunk(
         msisdn: data.msisdn,
         otp: data.otp,
       });
-
       if (response && response.data) {
         storage.save({
           key: "authState",
-          data: response.data.data,
-          token: response.data.token,
+          data: {
+            authData: response.data.data,
+            token: response.data.token,
+          },
         });
       }
       return response.data;
@@ -42,7 +43,7 @@ export const getUserData = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await storage.load({ key: "authState" });
-      return response;
+      return response.authData;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -55,7 +56,6 @@ export const logout = createAsyncThunk(
     try {
       let response = await HTTP.post("logout");
       storage.remove({ key: "authState" });
-      return response;
     } catch (error) {
       return rejectWithValue(error.message);
     }

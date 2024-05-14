@@ -19,11 +19,17 @@ export const authSlice = createSlice({
     startLoading: (state) => {
       state.isLoading = true;
     },
+    clearError: (state) => {
+      state.isError = false;
+      state.error_message = "";
+    },
   },
   extraReducers: (builder) => {
     // login
     builder
       .addCase(login.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
         state.isApiRun = true;
       })
       .addCase(login.fulfilled, (state, { payload }) => {
@@ -39,6 +45,8 @@ export const authSlice = createSlice({
     //verify otp
     builder
       .addCase(verifyOtp.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
         state.isApiRun = true;
       })
       .addCase(verifyOtp.fulfilled, (state, { payload }) => {
@@ -47,7 +55,7 @@ export const authSlice = createSlice({
         state.isApiRun = false;
         state.msisdn = "";
       })
-      .addCase(verifyOtp.rejected, (state, action) => {
+      .addCase(verifyOtp.rejected, (state, { payload }) => {
         state.isApiRun = false;
         state.isError = true;
         state.error_message = payload;
@@ -56,14 +64,16 @@ export const authSlice = createSlice({
     // get user data
     builder
       .addCase(getUserData.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
         state.isLoading = true;
       })
-      .addCase(getUserData.fulfilled, (state, action) => {
-        state.authData = action.payload.data;
+      .addCase(getUserData.fulfilled, (state, { payload }) => {
+        state.authData = payload;
         state.isLoading = false;
         state.isAuth = true;
       })
-      .addCase(getUserData.rejected, (state, action) => {
+      .addCase(getUserData.rejected, (state, { payload }) => {
         state.isLoading = false;
         state.isAuth = false;
         state.isError = true;
@@ -73,6 +83,8 @@ export const authSlice = createSlice({
     //logout user
     builder
       .addCase(logout.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
         state.isApiRun = true;
       })
       .addCase(logout.fulfilled, (state, action) => {
@@ -80,13 +92,13 @@ export const authSlice = createSlice({
         state.isApiRun = false;
         state.isAuth = false;
       })
-      .addCase(logout.rejected, (state, action) => {
-        console.log(action.payload, "logout");
-        // state.isAuth = false;
-        // state.isError = true;
-        // state.error_message = payload;
+      .addCase(logout.rejected, (state, { payload }) => {
+        state.isApiRun = true;
+        state.isAuth = false;
+        state.isError = true;
+        state.error_message = payload;
       });
   },
 });
-export const { startLoading } = authSlice.actions;
+export const { startLoading, clearError } = authSlice.actions;
 export default authSlice.reducer;

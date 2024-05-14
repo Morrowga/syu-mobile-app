@@ -2,11 +2,13 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { AspectRatio, Image, Stack, Box, Heading, FlatList } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
+import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
   const route = useRoute();
   const { order_id, isOpen } = route.params || {};
   const navigation = useNavigation();
+  const { authData } = useSelector((state) => state.auth);
 
   const data = [
     {

@@ -6,6 +6,9 @@ import NotificationsScreen from "../screens/app/NotificationsScreen";
 import CartProductListScreen from "../screens/app/CartProductListScreen";
 import OrderCategoryDetailScreen from "../screens/app/OrderCategoryDetailScreen";
 import CheckoutScreen from "../screens/app/CheckoutScreen";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getUserData } from "../api/auth";
 
 const Stack = createStackNavigator();
 
