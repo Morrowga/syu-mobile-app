@@ -9,20 +9,19 @@ import {
 } from "native-base";
 import { useEffect,useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-import { categories } from "../../api/feed";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from "../../api/feed";
 
 const FeedsScreen = () => {
-  const [data, setData] = useState();
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
+  const { isError, error_message, categories } = useSelector((state) => state.feed);
 
   const fetchCategories = () =>
   {
-    dispatch(categories())
+    dispatch(getCategories())
     .then((resp) => {
-      setData(resp.payload.data.data)
       setRefreshing(false);
     })
     .catch((error) => {
@@ -101,7 +100,7 @@ const FeedsScreen = () => {
             onRefresh={onRefresh}
           />
         }
-        data={data}
+        data={categories?.data}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
         keyExtractor={(item) => item.id}

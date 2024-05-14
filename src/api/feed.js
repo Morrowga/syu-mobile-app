@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { HTTP } from "./http";
 import storage from "../storage/storage";
 
-export const categories = createAsyncThunk(
+export const getCategories = createAsyncThunk(
   "app/category",
   async (data, { rejectWithValue }) => {
     try {

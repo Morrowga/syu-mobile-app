@@ -1,4 +1,4 @@
-// loadingSlice.jsx
+// authSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
 import { getUserData, login, logout, verifyOtp } from "../../api/auth";
 
