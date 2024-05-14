@@ -1,8 +1,7 @@
 import axios from "axios";
 import storage from "../storage/storage";
+import { BASE_URL } from "../../env";
 
-// const BASE_URL = "http://syu-web.test/api";
-const BASE_URL = "http://192.168.1.4:8000/api";
 axios.defaults.baseURL = BASE_URL;
 
 const setAuthHeaders = (config, authToken) => {
