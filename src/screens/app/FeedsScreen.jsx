@@ -72,7 +72,7 @@ const FeedsScreen = () => {
       >
         <Box>
           <AspectRatio w="100%" ratio={16 / 5}>
-            <Image source={{ uri: item.image_url }} alt="image" />
+            <Image source={{ uri: item.image_url ?? 'https://i.pinimg.com/564x/a5/a3/6a/a5a36a233e62dffa9855e193ca1b0d2a.jpg' }} alt="image" fallbackSource="https://i.pinimg.com/564x/a5/a3/6a/a5a36a233e62dffa9855e193ca1b0d2a.jpg" />
           </AspectRatio>
         </Box>
         <Stack p="4" space={3}>
@@ -84,7 +84,7 @@ const FeedsScreen = () => {
               _dark={{ color: "violet.400" }}
               fontWeight="500"
             >
-              1000+ Design
+              {item.total_product_count > 1 ?  item.total_product_count + ' Designs' : '0 Design'}
             </Text>
           </Stack>
         </Stack>
