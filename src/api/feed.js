@@ -13,3 +13,15 @@ export const getCategories = createAsyncThunk(
     }
   }
 );
+
+export const getFeeds = createAsyncThunk(
+  "app/product",
+  async (filter, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.get("feeds?category=" + filter?.category_id + '&q=' + filter?.q);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

@@ -197,7 +197,7 @@ const DetailModalBox = ({
               >
                 {sizes.map((size) => (
                   <Select.Item
-                    label={size.name}
+                    label={size.name + ' (' + size.size + ')'}
                     value={size.id}
                     key={size.id}
                   />
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    marginTop: 10,
+    marginTop: 15,
   },
   totalPrice: {
     flexDirection: "row",

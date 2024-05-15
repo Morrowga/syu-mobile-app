@@ -7,7 +7,7 @@ import {
   Heading, 
   FlatList 
 } from "native-base";
-import { useEffect,useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../api/feed";
@@ -39,8 +39,7 @@ const FeedsScreen = () => {
     <TouchableOpacity
       onPress={() =>
         navigation.navigate("Product List", {
-          category_id: item.id,
-          category_name: item.name,
+          category: item,
         })
       }
     >
@@ -79,7 +78,7 @@ const FeedsScreen = () => {
               _dark={{ color: "violet.400" }}
               fontWeight="500"
             >
-              {item.total_product_count > 1 ?  item.total_product_count + ' Designs' : '0 Design'}
+              {item.total_product_count >= 1 ?  item.total_product_count + ' Designs' : '0 Design'}
             </Text>
           </Stack>
         </Stack>

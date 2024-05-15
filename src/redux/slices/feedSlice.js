@@ -1,11 +1,12 @@
 // feedSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories } from "../../api/feed";
+import { getCategories, getFeeds } from "../../api/feed";
 
 const initialState = {
   isLoading: false,
   isError: false,
-  categories: "",
+  categories: [],
+  feeds: [],
   error_message: "",
 };
 
@@ -35,6 +36,20 @@ export const feedSlice = createSlice({
         state.isError = true;
         state.error_message = payload;
       });
+
+    // getFeeds
+    builder
+    .addCase(getFeeds.pending, (state) => {
+      state.isError = false;
+      state.error_message = "";
+    })
+    .addCase(getFeeds.fulfilled, (state, { payload }) => {
+      state.feeds = payload?.data;
+    })
+    .addCase(getFeeds.rejected, (state, { payload }) => {
+      state.isError = true;
+      state.error_message = payload;
+    });
   },
 });
 export const { startLoading, clearError } = feedSlice.actions;
