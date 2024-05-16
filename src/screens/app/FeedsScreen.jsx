@@ -29,7 +29,7 @@ const FeedsScreen = () => {
   
   useEffect(() => {
     fetchCategories()
-  }, []); 
+  },[]); 
 
   const onRefresh = () => {
     fetchCategories()

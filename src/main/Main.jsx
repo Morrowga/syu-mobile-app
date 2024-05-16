@@ -32,8 +32,8 @@ const Navigation = () => {
   };
   useEffect(() => {
     dispatch(startLoading());
-    dispatch(getThemeData());
     setTimeout(() => {
+      dispatch(getThemeData());
       dispatch(getUserData());
     }, 2000);
   }, [dispatch]);

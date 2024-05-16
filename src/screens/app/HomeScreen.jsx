@@ -3,16 +3,20 @@ import {
   Text,
   View,
   TouchableOpacity,
+  RefreshControl,
   Dimensions,
 } from "react-native";
-import { AspectRatio, Image, Stack, Box, Heading, FlatList } from "native-base";
+import { AspectRatio, Image, Stack, Box, Heading, FlatList, ScrollView } from "native-base";
+import { useRef, useEffect, useState } from 'react';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { getThemeData } from "../../api/theme";
 const { width: viewportWidth } = Dimensions.get("window");
+
 const HomeScreen = () => {
+  const flatListRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const route = useRoute();
   const { order_id, isOpen } = route.params || {};
   const navigation = useNavigation();
@@ -23,43 +27,32 @@ const HomeScreen = () => {
     {
       id: 1,
       name: "Feeds",
-      url: "https://i.pinimg.com/564x/62/25/11/6225112c610b1d75a888ed2ed9997a39.jpg",
+      url: "https://i.pinimg.com/originals/e7/d1/fb/e7d1fba4afc3977229252f507b50cf4a.gif",
       route: "Feeds",
     },
     {
       id: 2,
       name: "Customization",
-      url: "https://i.pinimg.com/736x/3e/b2/a1/3eb2a13096448488940afec4a2191e35.jpg",
+      url: "https://foxonline.temple.edu/animations/sites/animations/files/2021-03/Gears.gif",
       route: "Customization",
     },
   ];
 
-  const carousels = [
-    {
-      title: "Item 1",
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-    {
-      title: "Item 2",
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-    {
-      title: "Item 3",
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-    {
-      title: "Item 4",
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-    {
-      title: "Item 5",
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-  ];
-
   useEffect(() => {
+
     dispatch(getThemeData());
+
+  //   if (theme.banners && theme.banners.length > 0) {
+  //     const intervalId = setInterval(() => {
+  //       const nextIndex = (currentIndex + 1) % theme.banners.length;
+  //       flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
+  //       setCurrentIndex(nextIndex);
+  //     }, 3000); 
+  
+  //     return () => clearInterval(intervalId); 
+  //   }
   }, []);
+  
 
   const renderItem = ({ item }) => (
     <Box style={{ paddingVertical: 5 }}>
@@ -105,18 +98,20 @@ const HomeScreen = () => {
   const carouselItem = ({ item }) => {
     return (
       <View style={[styles.slide, { backgroundColor: theme.app_bg_color }]}>
-        <AspectRatio w="100%" ratio={16 / 5}>
-          <Image source={{ uri: item.url }} alt="image" />
+        <AspectRatio w="100%" ratio={16 / 8}>
+          <Image source={{ uri: item.image }} borderRadius={10} alt="image" />
         </AspectRatio>
       </View>
     );
   };
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container]} 
+    >
       <Box alignItems="center" paddingY={5}>
         <FlatList
-          data={carousels}
+          ref={flatListRef}
+          data={theme.banners}
           renderItem={carouselItem}
           keyExtractor={(item, index) => index.toString()}
           horizontal
@@ -128,7 +123,7 @@ const HomeScreen = () => {
       </Box>
       <Box textAlign="center" alignItems="left" mx={5}>
         <Heading style={{ color: theme.app_text_color }}>
-          Welcome To Universe...
+          Welcome from the universe...
         </Heading>
       </Box>
       <FlatList
@@ -147,11 +142,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   slide: {
-    width: viewportWidth - 60,
-    backgroundColor: "floralwhite",
-    borderRadius: 5,
+    width: viewportWidth - 20,
+    borderRadius: 15,
+    borderColor: '#898b8c',
     marginHorizontal: 10,
-    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    padding: 10,
     alignItems: "center",
   },
   image: {

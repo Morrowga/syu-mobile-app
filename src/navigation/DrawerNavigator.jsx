@@ -11,7 +11,7 @@ import ProfileScreen from "../screens/app/ProfileScreen";
 import OrderListScreen from "../screens/app/OrderListScreen";
 import CartScreen from "../screens/app/CartScreen";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Box, Button, IconButton } from "native-base";
+import { Box, Button, IconButton, theme } from "native-base";
 import NotificationIcon from "../components/NotificationIcon";
 import CustomizationScreen from "../screens/app/CustomizationScreen";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,13 @@ import { authFail } from "../redux/slices/authSlice";
 import { logout } from "../api/auth";
 
 const Drawer = createDrawerNavigator();
+
+
+const getThemeData = () => {
+  const theme = useSelector((state) => state.theme);
+
+  return theme;
+}
 
 const CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
@@ -33,7 +40,7 @@ const CustomDrawerContent = (props) => {
         <View style={styles.container}>
           <Box style={styles.logoBox}>
             <Image
-              source={require("../../assets/innerlogo.png")}
+              source={{ uri: getThemeData()?.app_logo_img }}
               style={{
                 width: 50,
                 height: 70,
@@ -58,7 +65,6 @@ const CustomDrawerContent = (props) => {
   );
 };
 const DrawerNavigator = () => {
-  const theme = useSelector((state) => state.theme);
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
@@ -66,7 +72,7 @@ const DrawerNavigator = () => {
         drawerActiveTintColor: "tomato",
         drawerInactiveTintColor: "gray",
         drawerLabelStyle: { fontSize: 15 },
-        headerTintColor: theme.app_text_color,
+        headerTintColor: getThemeData()?.app_text_color,
       })}
     >
       <Drawer.Screen
@@ -79,7 +85,7 @@ const DrawerNavigator = () => {
           headerRight: () => (
             <NotificationIcon
               notificationCount={5}
-              color={theme.app_text_color}
+              color={getThemeData()?.app_text_color}
             />
           ),
         }}
