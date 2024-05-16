@@ -6,15 +6,23 @@ import {
   RefreshControl,
   Dimensions,
 } from "react-native";
-import { AspectRatio, Image, Stack, Box, Heading, FlatList, ScrollView } from "native-base";
-import { useRef, useEffect, useState } from 'react';
+import {
+  AspectRatio,
+  Image,
+  Stack,
+  Box,
+  Heading,
+  FlatList,
+  ScrollView,
+} from "native-base";
+import { useRef, useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
 import { useDispatch, useSelector } from "react-redux";
 import { getThemeData } from "../../api/theme";
 const { width: viewportWidth } = Dimensions.get("window");
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigate }) => {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const route = useRoute();
@@ -39,20 +47,23 @@ const HomeScreen = () => {
   ];
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      dispatch(getThemeData());
+      if (theme.banners && theme.banners.length > 0) {
+        const intervalId = setInterval(() => {
+          const nextIndex = (currentIndex + 1) % theme.banners.length;
+          flatListRef.current.scrollToIndex({
+            index: nextIndex,
+            animated: true,
+          });
+          setCurrentIndex(nextIndex);
+        }, 3000);
 
-    dispatch(getThemeData());
-
-  //   if (theme.banners && theme.banners.length > 0) {
-  //     const intervalId = setInterval(() => {
-  //       const nextIndex = (currentIndex + 1) % theme.banners.length;
-  //       flatListRef.current.scrollToIndex({ index: nextIndex, animated: true });
-  //       setCurrentIndex(nextIndex);
-  //     }, 3000); 
-  
-  //     return () => clearInterval(intervalId); 
-  //   }
-  }, []);
-  
+        return () => clearInterval(intervalId);
+      }
+    });
+    return () => unsubscribe();
+  }, [navigation]);
 
   const renderItem = ({ item }) => (
     <Box style={{ paddingVertical: 5 }}>
@@ -106,8 +117,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={[styles.container]} 
-    >
+    <View style={[styles.container]}>
       <Box alignItems="center" paddingY={5}>
         <FlatList
           ref={flatListRef}
@@ -144,9 +154,9 @@ const styles = StyleSheet.create({
   slide: {
     width: viewportWidth - 20,
     borderRadius: 15,
-    borderColor: '#898b8c',
+    borderColor: "#898b8c",
     marginHorizontal: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
     padding: 10,
     alignItems: "center",
   },
