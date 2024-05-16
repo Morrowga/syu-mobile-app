@@ -33,7 +33,7 @@ const HomeScreen = () => {
     {
       id: 2,
       name: "Customization",
-      url: "https://foxonline.temple.edu/animations/sites/animations/files/2021-03/Gears.gif",
+      url: "https://i.pinimg.com/originals/f8/f0/14/f8f014a118438355626a816430c701cb.gif",
       route: "Customization",
     },
   ];
