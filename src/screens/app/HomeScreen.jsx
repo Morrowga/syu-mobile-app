@@ -49,19 +49,8 @@ const HomeScreen = ({ navigate }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(getThemeData());
-      if (theme.banners && theme.banners.length > 0) {
-        const intervalId = setInterval(() => {
-          const nextIndex = (currentIndex + 1) % theme.banners.length;
-          flatListRef.current.scrollToIndex({
-            index: nextIndex,
-            animated: true,
-          });
-          setCurrentIndex(nextIndex);
-        }, 3000);
-
-        return () => clearInterval(intervalId);
-      }
     });
+
     return () => unsubscribe();
   }, [navigation]);
 

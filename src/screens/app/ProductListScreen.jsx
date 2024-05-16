@@ -155,7 +155,7 @@ const ProductListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Box alignItems="center" justifyContent="space-between" pl={5} pr={5} pt={5} flexDirection="row">
+      <Box alignItems="center" pl={5} pr={5} pt={5} flexDirection="row">
         <Input
           variant="rounded"
           size="lg"
@@ -166,18 +166,10 @@ const ProductListScreen = () => {
           focusOutlineColor="#000"
           placeholder="Search"
           flex={1} 
+          rightElement={
+            <Icon color="black" name="search-outline" style={styles.inputInnerIcon} onPress={fetchFeeds} size={20} />
+          }
         />
-        <TouchableOpacity>
-          <Button
-            width="auto"
-            variant="outline"
-            rounded="full"
-            onPress={fetchFeeds}
-            color="#fff"
-          >
-            <Icon color="black" name="search-outline" size={20} />
-          </Button>
-        </TouchableOpacity>
       </Box>
       <FlatList
         style={styles.listStyle}
@@ -228,6 +220,9 @@ const ProductListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  inputInnerIcon:{
+    paddingRight: 10
   },
   listStyle: {
     flex: 1,

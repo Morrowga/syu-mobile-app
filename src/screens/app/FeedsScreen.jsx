@@ -28,7 +28,10 @@ const FeedsScreen = () => {
   }
   
   useEffect(() => {
-    fetchCategories()
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchCategories()
+    });
+    return () => unsubscribe();
   },[]); 
 
   const onRefresh = () => {

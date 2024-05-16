@@ -8,13 +8,17 @@ import {
   Select,
   CheckIcon,
 } from "native-base";
+import { useEffect } from 'react';
+import Icon from "react-native-vector-icons/Ionicons";
+import { getCategories } from "../../api/feed";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+
 
 const WishlistScreen = () => {
-  const categories = [
-    { id: 1, name: "Stickers" },
-    { id: 2, name: "Badges" },
-    { id: 3, name: "Posters" },
-  ];
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const { categories, isLoading } = useSelector((state) => state.feed);
 
   const data = [
     {
@@ -38,6 +42,23 @@ const WishlistScreen = () => {
       url: "https://i.pinimg.com/564x/0f/e9/93/0fe993d90864db5b8bd14518eceed654.jpg",
     },
   ];
+
+  const fetchCategories = () =>
+  {
+    dispatch(getCategories())
+    .then((resp) => {
+    })
+    .catch((error) => {
+      console.error("Categories fetched failed:", error);
+    });
+  }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchCategories()
+    });
+    return () => unsubscribe();
+  },[]); 
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => console.log("pressed...")}>
@@ -89,6 +110,9 @@ const WishlistScreen = () => {
             focusOutlineColor="#000"
             placeholder="Search"
             w="100%"
+            rightElement={
+              <Icon color="black" name="search-outline" style={styles.inputInnerIcon} onPress={console.log('pressed')} size={20} />
+            }
           />
         </Box>
         <Box width="40%">
@@ -107,7 +131,7 @@ const WishlistScreen = () => {
             mt={1}
             onValueChange={(itemValue) => console.log(itemValue)}
           >
-            {categories.map((category) => (
+            {categories?.data.map((category) => (
               <Select.Item
                 label={category.name}
                 value={category.id}
@@ -134,6 +158,9 @@ const WishlistScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  inputInnerIcon:{
+    paddingRight: 10
   },
 });
 export default WishlistScreen;
