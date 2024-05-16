@@ -8,12 +8,15 @@ import {
 import { AspectRatio, Image, Stack, Box, Heading, FlatList } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getThemeData } from "../../api/theme";
 const { width: viewportWidth } = Dimensions.get("window");
 const HomeScreen = () => {
   const route = useRoute();
   const { order_id, isOpen } = route.params || {};
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { authData } = useSelector((state) => state.auth);
   const theme = useSelector((state) => state.theme);
   const data = [
@@ -53,6 +56,11 @@ const HomeScreen = () => {
       url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
     },
   ];
+
+  useEffect(() => {
+    dispatch(getThemeData());
+  }, []);
+
   const renderItem = ({ item }) => (
     <Box style={{ paddingVertical: 5 }}>
       <TouchableOpacity onPress={() => navigation.navigate(item.route)}>
