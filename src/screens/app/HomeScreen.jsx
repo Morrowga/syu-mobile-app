@@ -1,15 +1,21 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { AspectRatio, Image, Stack, Box, Heading, FlatList } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
 import { useSelector } from "react-redux";
-
+const { width: viewportWidth } = Dimensions.get("window");
 const HomeScreen = () => {
   const route = useRoute();
   const { order_id, isOpen } = route.params || {};
   const navigation = useNavigation();
   const { authData } = useSelector((state) => state.auth);
-
+  const theme = useSelector((state) => state.theme);
   const data = [
     {
       id: 1,
@@ -24,8 +30,31 @@ const HomeScreen = () => {
       route: "Customization",
     },
   ];
+
+  const carousels = [
+    {
+      title: "Item 1",
+      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
+    },
+    {
+      title: "Item 2",
+      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
+    },
+    {
+      title: "Item 3",
+      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
+    },
+    {
+      title: "Item 4",
+      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
+    },
+    {
+      title: "Item 5",
+      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
+    },
+  ];
   const renderItem = ({ item }) => (
-    <Box>
+    <Box style={{ paddingVertical: 5 }}>
       <TouchableOpacity onPress={() => navigation.navigate(item.route)}>
         <Box
           key={item}
@@ -34,6 +63,7 @@ const HomeScreen = () => {
           rounded="lg"
           overflow="hidden"
           borderColor="coolGray.200"
+          style={{ backgroundColor: theme.app_bg_color }}
           borderWidth="1"
           _dark={{
             borderColor: "coolGray.600",
@@ -54,7 +84,9 @@ const HomeScreen = () => {
           </Box>
           <Stack p="4" space={3}>
             <Stack flexDirection="row" justifyContent="space-between" space={2}>
-              <Heading size="sm">{item.name}</Heading>
+              <Heading size="sm" style={{ color: theme.app_text_color }}>
+                {item.name}
+              </Heading>
             </Stack>
           </Stack>
         </Box>
@@ -62,21 +94,34 @@ const HomeScreen = () => {
     </Box>
   );
 
+  const carouselItem = ({ item }) => {
+    return (
+      <View style={[styles.slide, { backgroundColor: theme.app_bg_color }]}>
+        <AspectRatio w="100%" ratio={16 / 5}>
+          <Image source={{ uri: item.url }} alt="image" />
+        </AspectRatio>
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.container}>
-      <Box alignItems="center">
-        <Image
-          source={require("../../../assets/innerlogo.png")}
-          alt="Logo Image"
-          style={{
-            width: 280,
-            height: 280,
-            resizeMode: "contain",
-          }}
+    <View style={[styles.container]}>
+      <Box alignItems="center" paddingY={5}>
+        <FlatList
+          data={carousels}
+          renderItem={carouselItem}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToAlignment="center"
+          pagingEnabled
+          decelerationRate="fast"
         />
       </Box>
       <Box textAlign="center" alignItems="left" mx={5}>
-        <Heading>Welcome To Universe...</Heading>
+        <Heading style={{ color: theme.app_text_color }}>
+          Welcome To Universe...
+        </Heading>
       </Box>
       <FlatList
         my={1}
@@ -89,6 +134,30 @@ const HomeScreen = () => {
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  slide: {
+    width: viewportWidth - 60,
+    backgroundColor: "floralwhite",
+    borderRadius: 5,
+    marginHorizontal: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  image: {
+    width: 280,
+    height: 280,
+    resizeMode: "contain",
+    // borderRadius: 5,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 10,
+  },
+});
 
 export default HomeScreen;

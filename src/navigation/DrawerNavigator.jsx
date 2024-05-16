@@ -58,6 +58,7 @@ const CustomDrawerContent = (props) => {
   );
 };
 const DrawerNavigator = () => {
+  const theme = useSelector((state) => state.theme);
   return (
     <Drawer.Navigator
       drawerContent={CustomDrawerContent}
@@ -65,6 +66,7 @@ const DrawerNavigator = () => {
         drawerActiveTintColor: "tomato",
         drawerInactiveTintColor: "gray",
         drawerLabelStyle: { fontSize: 15 },
+        headerTintColor: theme.app_text_color,
       })}
     >
       <Drawer.Screen
@@ -74,7 +76,12 @@ const DrawerNavigator = () => {
           drawerIcon: ({ color, size }) => (
             <Icon name="home-outline" color={color} size={size} />
           ),
-          headerRight: () => <NotificationIcon notificationCount={5} />,
+          headerRight: () => (
+            <NotificationIcon
+              notificationCount={5}
+              color={theme.app_text_color}
+            />
+          ),
         }}
       />
       <Drawer.Screen
