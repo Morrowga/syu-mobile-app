@@ -4,9 +4,9 @@ import storage from "../storage/storage";
 
 export const getCategories = createAsyncThunk(
   "app/category",
-  async (data, { rejectWithValue }) => {
+  async (paginate, { rejectWithValue }) => {
     try {
-      let response = await HTTP.get("categories");
+      let response = await HTTP.get("categories?paginate=" + paginate);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);

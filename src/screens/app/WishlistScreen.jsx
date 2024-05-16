@@ -45,7 +45,7 @@ const WishlistScreen = () => {
 
   const fetchCategories = () =>
   {
-    dispatch(getCategories())
+    dispatch(getCategories(1))
     .then((resp) => {
     })
     .catch((error) => {
