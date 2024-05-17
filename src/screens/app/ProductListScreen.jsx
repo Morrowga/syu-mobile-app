@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Dimensions,
   RefreshControl,
   LogBox
 } from "react-native";
@@ -40,7 +39,7 @@ const ProductListScreen = () => {
   const [page, setPage] = useState(1);
 
   const dispatch = useDispatch();
-  const { isError, error_message, feeds, isLoading } = useSelector((state) => state.feed);
+  const { isError, error_message, feeds,feed_last_page, isLoading } = useSelector((state) => state.feed);
   const route = useRoute();
   const { params } = route;
   const { category } = params;
@@ -101,11 +100,11 @@ const ProductListScreen = () => {
   };
 
   const onEndReached = () => {
-    if(page <= feeds.last_page)
-    {
-      setPage(page + 1)
-      getFeeds();
-    }
+    // if (page < feed_last_page) {
+    //   setPage(page + 1);
+    //   fetchFeeds();
+    // }
+    // console.log(page);
   };
 
   useEffect(() => {
@@ -174,7 +173,7 @@ const ProductListScreen = () => {
       <FlatList
         style={styles.listStyle}
         mt={4}
-        data={feeds?.data}
+        data={feeds}
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}

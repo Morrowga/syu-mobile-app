@@ -7,6 +7,7 @@ const initialState = {
   isError: false,
   categories: [],
   feeds: [],
+  feed_last_page: 0,
   error_message: "",
 };
 
@@ -44,7 +45,8 @@ export const feedSlice = createSlice({
       state.error_message = "";
     })
     .addCase(getFeeds.fulfilled, (state, { payload }) => {
-      state.feeds = payload?.data;
+      state.feeds =  payload?.data.data;
+      state.feed_last_page = payload?.data.last_page
     })
     .addCase(getFeeds.rejected, (state, { payload }) => {
       state.isError = true;

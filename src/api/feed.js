@@ -18,7 +18,7 @@ export const getFeeds = createAsyncThunk(
   "app/product",
   async (filter, { rejectWithValue }) => {
     try {
-      let response = await HTTP.get("feeds?category=" + filter?.category_id + '&q=' + filter?.q);
+      let response = await HTTP.get("feeds?page=" + filter?.page +"&category=" + filter?.category_id + '&q=' + filter?.q);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
