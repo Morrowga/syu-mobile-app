@@ -110,8 +110,8 @@ const ProductListScreen = () => {
       title: category.name,
       headerBackTitle: "Back",
     });
-
-    fetchFeeds();
+    dispatch(clearFeedData());
+    fetchFeeds(1);
 
     LogBox.ignoreLogs(["source.uri should not be an empty string"]);
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
