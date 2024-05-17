@@ -53,7 +53,6 @@ const ProductListScreen = () => {
 
   const handleSearchInputChange = (value) => {
     setSearch(value);
-    console.log(q);
   };
 
   const fetchFeeds = (initial_page) => {
@@ -102,6 +101,10 @@ const ProductListScreen = () => {
     }
   };
 
+  const searchFeed = () => {
+    dispatch(clearFeedData());
+    fetchFeeds(1);
+  };
   useEffect(() => {
     navigation.setOptions({
       title: category.name,
@@ -167,7 +170,7 @@ const ProductListScreen = () => {
               color="black"
               name="search-outline"
               style={styles.inputInnerIcon}
-              onPress={fetchFeeds}
+              onPress={searchFeed}
               size={20}
             />
           }
