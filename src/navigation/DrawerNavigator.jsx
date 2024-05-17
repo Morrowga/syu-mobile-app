@@ -20,12 +20,11 @@ import { logout } from "../api/auth";
 
 const Drawer = createDrawerNavigator();
 
-
 const getThemeData = () => {
   const theme = useSelector((state) => state.theme);
 
   return theme;
-}
+};
 
 const CustomDrawerContent = (props) => {
   const dispatch = useDispatch();
@@ -72,7 +71,7 @@ const DrawerNavigator = () => {
         drawerActiveTintColor: "tomato",
         drawerInactiveTintColor: "gray",
         drawerLabelStyle: { fontSize: 15 },
-        headerTintColor: getThemeData()?.app_text_color,
+        // headerTintColor: getThemeData()?.app_text_color,
       })}
     >
       <Drawer.Screen

@@ -54,6 +54,7 @@ const HomeScreen = ({ navigate }) => {
     return () => unsubscribe();
   }, [navigation]);
 
+  console.log(theme, "theme");
   const renderItem = ({ item }) => (
     <Box style={{ paddingVertical: 5 }}>
       <TouchableOpacity onPress={() => navigation.navigate(item.route)}>

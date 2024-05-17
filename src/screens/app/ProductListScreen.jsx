@@ -4,28 +4,28 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
-  LogBox
+  LogBox,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { 
-  AspectRatio, 
-  Image, 
-  Box, 
-  FlatList, 
+import {
+  AspectRatio,
+  Image,
+  Box,
+  FlatList,
   Button,
-  Input, 
-  Fab 
+  Input,
+  Fab,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import DetailModalBox from "../../components/DetailModalBox";
 import { useDispatch, useSelector } from "react-redux";
 import { selectTotalQuantity } from "../../redux/selectors/cartSelectors";
 import { getFeeds } from "../../api/feed";
+import { clearFeedData } from "../../redux/slices/feedSlice";
 
 const ProductListScreen = () => {
-
   const [modalInfo, setModalInfo] = useState({
     isOpen: false,
     imageSrc: "",
@@ -35,40 +35,36 @@ const ProductListScreen = () => {
     price: 0,
   });
 
-  const [q, setSearch] = useState('');
-  const [page, setPage] = useState(1);
-
+  const [q, setSearch] = useState("");
   const dispatch = useDispatch();
-  const { isError, error_message, feeds,feed_last_page, isLoading } = useSelector((state) => state.feed);
+  const {
+    isError,
+    error_message,
+    feeds,
+    feed_last_page,
+    isLoading,
+    next_page,
+  } = useSelector((state) => state.feed);
   const route = useRoute();
   const { params } = route;
   const { category } = params;
   const navigation = useNavigation();
   const totalQty = useSelector(selectTotalQuantity);
 
-  const handleSearchInputChange = (value) => 
-  {
+  const handleSearchInputChange = (value) => {
     setSearch(value);
     console.log(q);
-  }
+  };
 
-  const fetchFeeds = () =>
-  {
+  const fetchFeeds = (initial_page) => {
     const filter = {
       q: q,
-      page: page,
-      category_id: category.id
+      page: initial_page ?? next_page,
+      category_id: category.id,
     };
+    dispatch(getFeeds(filter));
+  };
 
-    dispatch(getFeeds(filter))
-    .then((resp) => {
-      console.log(resp);
-    })
-    .catch((error) => {
-      console.error("Products fetched failed:", error);
-    });
-  }
-  
   const openModal = (data) => {
     setModalInfo({
       isOpen: true,
@@ -96,19 +92,17 @@ const ProductListScreen = () => {
   };
 
   const onRefresh = () => {
-    fetchFeeds()
+    dispatch(clearFeedData());
+    fetchFeeds(1);
   };
 
   const onEndReached = () => {
-    // if (page < feed_last_page) {
-    //   setPage(page + 1);
-    //   fetchFeeds();
-    // }
-    // console.log(page);
+    if (!isLoading && next_page > 1) {
+      fetchFeeds();
+    }
   };
 
   useEffect(() => {
-
     navigation.setOptions({
       title: category.name,
       headerBackTitle: "Back",
@@ -116,9 +110,8 @@ const ProductListScreen = () => {
 
     fetchFeeds();
 
-    LogBox.ignoreLogs(['source.uri should not be an empty string']);
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-
+    LogBox.ignoreLogs(["source.uri should not be an empty string"]);
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   }, []);
 
   const renderItem = ({ item }) => (
@@ -145,7 +138,11 @@ const ProductListScreen = () => {
       >
         <Box>
           <AspectRatio w="100%" ratio={16 / 16}>
-            <Image source={{ uri: item.image_url ?? null }} alt="image" resizeMode="cover" />
+            <Image
+              source={{ uri: item.image_url ?? null }}
+              alt="image"
+              resizeMode="cover"
+            />
           </AspectRatio>
         </Box>
       </Box>
@@ -164,9 +161,15 @@ const ProductListScreen = () => {
           borderColor="#000"
           focusOutlineColor="#000"
           placeholder="Search"
-          flex={1} 
+          flex={1}
           rightElement={
-            <Icon color="black" name="search-outline" style={styles.inputInnerIcon} onPress={fetchFeeds} size={20} />
+            <Icon
+              color="black"
+              name="search-outline"
+              style={styles.inputInnerIcon}
+              onPress={fetchFeeds}
+              size={20}
+            />
           }
         />
       </Box>
@@ -180,13 +183,10 @@ const ProductListScreen = () => {
         contentContainerStyle={{ padding: 10 }}
         keyExtractor={(item) => item.id}
         refreshControl={
-          <RefreshControl
-            refreshing={isLoading}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
         }
         onEndReached={onEndReached}
-        onEndReachedThreshold={0.1} 
+        onEndReachedThreshold={0.1}
       />
       <DetailModalBox
         isOpen={modalInfo.isOpen}
@@ -220,8 +220,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  inputInnerIcon:{
-    paddingRight: 10
+  inputInnerIcon: {
+    paddingRight: 10,
   },
   listStyle: {
     flex: 1,

@@ -9,6 +9,7 @@ const initialState = {
   feeds: [],
   feed_last_page: 0,
   error_message: "",
+  next_page: 1,
 };
 
 export const feedSlice = createSlice({
@@ -21,6 +22,10 @@ export const feedSlice = createSlice({
     clearError: (state) => {
       state.isError = false;
       state.error_message = "";
+    },
+    clearFeedData: (state, { payload }) => {
+      state.feeds = [];
+      state.next_page = 1;
     },
   },
   extraReducers: (builder) => {
@@ -40,19 +45,20 @@ export const feedSlice = createSlice({
 
     // getFeeds
     builder
-    .addCase(getFeeds.pending, (state) => {
-      state.isError = false;
-      state.error_message = "";
-    })
-    .addCase(getFeeds.fulfilled, (state, { payload }) => {
-      state.feeds =  payload?.data.data;
-      state.feed_last_page = payload?.data.last_page
-    })
-    .addCase(getFeeds.rejected, (state, { payload }) => {
-      state.isError = true;
-      state.error_message = payload;
-    });
+      .addCase(getFeeds.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(getFeeds.fulfilled, (state, { payload }) => {
+        state.next_page += 1;
+        state.feeds = state.feeds.concat(payload.data.data);
+        state.feed_last_page = payload?.data.last_page;
+      })
+      .addCase(getFeeds.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.error_message = payload;
+      });
   },
 });
-export const { startLoading, clearError } = feedSlice.actions;
+export const { startLoading, clearError, clearFeedData } = feedSlice.actions;
 export default feedSlice.reducer;
