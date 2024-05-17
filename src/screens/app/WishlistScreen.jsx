@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity,RefreshControl,Text } from "react-native";
 import {
   AspectRatio,
   Image,
@@ -8,9 +8,10 @@ import {
   Select,
   CheckIcon,
 } from "native-base";
-import { useEffect } from 'react';
+import { useEffect, useState,useRef } from 'react';
 import Icon from "react-native-vector-icons/Ionicons";
 import { getCategories } from "../../api/feed";
+import { getWishlists } from "../../api/wishlist";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -18,30 +19,10 @@ import { useNavigation } from "@react-navigation/native";
 const WishlistScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { categories, isLoading } = useSelector((state) => state.feed);
-
-  const data = [
-    {
-      id: 1,
-      url: "https://i.pinimg.com/564x/96/b8/a3/96b8a3fb97906b5e2ff29fff3e205c26.jpg",
-    },
-    {
-      id: 2,
-      url: "https://i.pinimg.com/564x/b1/c7/1f/b1c71f494c11bf67bd333b8943c1340d.jpg",
-    },
-    {
-      id: 3,
-      url: "https://i.pinimg.com/564x/a1/e8/08/a1e808211ef66a56fc430b58805e9e90.jpg",
-    },
-    {
-      id: 4,
-      url: "https://i.pinimg.com/564x/49/5b/ad/495bade2bf589665a804c26e21ec993a.jpg",
-    },
-    {
-      id: 5,
-      url: "https://i.pinimg.com/564x/0f/e9/93/0fe993d90864db5b8bd14518eceed654.jpg",
-    },
-  ];
+  const [q, setSearch] = useState('');
+  const categoryRef = useRef(null);
+  const { categories } = useSelector((state) => state.feed);
+  const { wishlists, isLoading } = useSelector((state) => state.wishlist);
 
   const fetchCategories = () =>
   {
@@ -53,9 +34,42 @@ const WishlistScreen = () => {
     });
   }
 
+  const onRefresh = () => {
+    fetchWishlists()
+  };
+
+  const handleSortInput = (value) => {
+    categoryRef.current.value = value;
+    fetchWishlists();
+  }
+
+
+  const handleSearchInputChange = (value) => {
+    setSearch(value);
+  }
+
+  const fetchWishlists = () =>
+    {
+      const filter = {
+        category_id: categoryRef.current.value ?? '',
+        q: q
+      }
+
+      console.log(filter);
+
+      dispatch(getWishlists(filter))
+      .then((resp) => {
+        console.log(wishlists?.data);
+      })
+      .catch((error) => {
+        console.error("Wishlists fetched failed:", error);
+      });
+    }
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchCategories()
+      fetchWishlists()
     });
     return () => unsubscribe();
   },[]); 
@@ -84,7 +98,7 @@ const WishlistScreen = () => {
       >
         <Box>
           <AspectRatio w="100%" ratio={16 / 16}>
-            <Image source={{ uri: item.url }} alt="image" resizeMode="cover" />
+            <Image source={{ uri: item.image_url }} alt="image" resizeMode="cover" />
           </AspectRatio>
         </Box>
       </Box>
@@ -95,7 +109,6 @@ const WishlistScreen = () => {
     <View style={styles.container}>
       <Box
         flexDirection="row"
-        flex={1}
         justifyContent="space-between"
         mx={5}
         mt={5}
@@ -105,13 +118,14 @@ const WishlistScreen = () => {
             variant="rounded"
             size="md"
             mt={1}
+            onChangeText={(value) => handleSearchInputChange(value)}
             backgroundColor="#fff"
             borderColor="#000"
             focusOutlineColor="#000"
             placeholder="Search"
             w="100%"
             rightElement={
-              <Icon color="black" name="search-outline" style={styles.inputInnerIcon} onPress={console.log('pressed')} size={20} />
+              <Icon color="black" name="search-outline" onPress={fetchWishlists} style={styles.inputInnerIcon} size={20} />
             }
           />
         </Box>
@@ -129,29 +143,48 @@ const WishlistScreen = () => {
               endIcon: <CheckIcon size="5" />,
             }}
             mt={1}
-            onValueChange={(itemValue) => console.log(itemValue)}
+            ref={categoryRef} 
+            onValueChange={(itemValue) => handleSortInput(itemValue)}
           >
-            {categories?.data.map((category) => (
+            {categories?.data.map((categoryItem) => (
               <Select.Item
-                label={category.name}
-                value={category.id}
-                key={category.id}
+                label={categoryItem.name}
+                value={categoryItem.id}
+                key={categoryItem.id}
               />
             ))}
+            <Select.Item
+                label={'All'}
+                value={''}
+                key={''}
+              />
           </Select>
         </Box>
       </Box>
 
-      <FlatList
-        mt={4}
-        data={data}
-        renderItem={renderItem}
-        numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item.id}
-        style={styles.wishlist}
-      />
+      <View style={{ flex: 1 }}>
+        <FlatList
+          mt={4}
+          data={wishlists?.data}
+          renderItem={renderItem}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+          contentContainerStyle={{ padding: 10 }}
+          keyExtractor={(item) => item.id}
+          style={styles.wishlist}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={onRefresh}
+            />
+          }
+          ListEmptyComponent={() => (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , marginTop: 30}}>
+              <Text>No data...</Text>
+            </View>
+          )}
+        />
+      </View>
     </View>
   );
 };

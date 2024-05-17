@@ -6,12 +6,14 @@ import navigatorSlice from "./slices/navigatorSlice";
 import cartSlice from "./slices/cartSlice";
 import feedSlice from "./slices/feedSlice";
 import themeSlice from "./slices/themeSlice";
+import wishlistSlice from "./slices/wishlistSlice";
 
 export const store = configureStore({
   reducer: {
     loading: loadingSlice,
     auth: authSlice,
     feed: feedSlice,
+    wishlist: wishlistSlice,
     navigation: navigatorSlice,
     cart: cartSlice,
     theme: themeSlice,
