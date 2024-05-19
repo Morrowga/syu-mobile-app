@@ -19,7 +19,7 @@ const FeedsScreen = () => {
 
   const fetchCategories = () =>
   {
-    dispatch(getCategories(1))
+    dispatch(getCategories(10))
     .then((resp) => {
     })
     .catch((error) => {
