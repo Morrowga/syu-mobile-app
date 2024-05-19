@@ -33,7 +33,7 @@ const Navigation = () => {
   useEffect(() => {
     dispatch(startLoading());
     dispatch(getThemeData());
-    console.log('main__');
+    console.log("main__");
     setTimeout(() => {
       dispatch(getUserData());
     }, 2000);
@@ -44,7 +44,7 @@ const Navigation = () => {
   }
   return (
     <NativeBaseProvider>
-      <NavigationContainer theme={navigationTheme}>
+      <NavigationContainer>
         {isAuth ? <AppStack /> : <AuthStack />}
       </NavigationContainer>
     </NativeBaseProvider>
