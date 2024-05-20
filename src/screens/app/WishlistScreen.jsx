@@ -32,15 +32,11 @@ const WishlistScreen = () => {
       page: 1
     }
     dispatch(getCategories(filter))
-    .then((resp) => {
-    })
-    .catch((error) => {
-      console.error("Categories fetched failed:", error);
-    });
   }
 
   const onRefresh = () => {
     dispatch(clearWishlistData())
+
     fetchWishlists(1)
   };
 
@@ -54,6 +50,7 @@ const WishlistScreen = () => {
     categoryRef.current.value = value;
 
     dispatch(clearWishlistData())
+    
     fetchWishlists(1);
   }
 
@@ -186,17 +183,12 @@ const WishlistScreen = () => {
           contentContainerStyle={{ padding: 10 }}
           keyExtractor={(item) => item.id}
           style={styles.wishlist}
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={onRefresh}
-            />
-          }
-          ListEmptyComponent={() => (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , marginTop: 30}}>
-              <Text>No data...</Text>
-            </View>
-          )}
+          // refreshControl={
+          //   <RefreshControl
+          //     refreshing={isLoading}
+          //     onRefresh={onRefresh}
+          //   />
+          // }
           onEndReached={onEndReached}
           onEndReachedThreshold={0.1}
         />
