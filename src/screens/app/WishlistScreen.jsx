@@ -46,13 +46,13 @@ const WishlistScreen = () => {
 
   const onEndReached = () => {
     if (!isLoading && next_page > 1) {
-      fetchWishlists(1);
+      fetchWishlists();
     }
   };
 
   const handleSortInput = (value) => {
     categoryRef.current.value = value;
-    
+
     dispatch(clearWishlistData())
     fetchWishlists(1);
   }
