@@ -40,19 +40,20 @@ const WishlistScreen = () => {
   }
 
   const onRefresh = () => {
-    dispatch(clearWishlistData());
-    fetchWishlists()
+    dispatch(clearWishlistData())
+    fetchWishlists(1)
   };
 
   const onEndReached = () => {
     if (!isLoading && next_page > 1) {
-      fetchWishlists(1)
+      fetchWishlists(1);
     }
   };
 
   const handleSortInput = (value) => {
     categoryRef.current.value = value;
-    dispatch(clearWishlistData());
+    
+    dispatch(clearWishlistData())
     fetchWishlists(1);
   }
 
@@ -69,8 +70,6 @@ const WishlistScreen = () => {
         page: initial_page ?? next_page
       }
 
-      console.log(filter);
-
       dispatch(getWishlists(filter))
       .then((resp) => {
         console.log(wishlists?.data);
@@ -83,7 +82,7 @@ const WishlistScreen = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchCategories()
-      dispatch(clearWishlistData());
+      dispatch(clearWishlistData())
       fetchWishlists(1)
     });
     return () => unsubscribe();
@@ -140,7 +139,7 @@ const WishlistScreen = () => {
             placeholder="Search"
             w="100%"
             rightElement={
-              <Icon color="black" name="search-outline" onPress={fetchWishlists(1)} style={styles.inputInnerIcon} size={20} />
+              <Icon color="black" name="search-outline" onPress={fetchWishlists} style={styles.inputInnerIcon} size={20} />
             }
           />
         </Box>
@@ -193,13 +192,13 @@ const WishlistScreen = () => {
               onRefresh={onRefresh}
             />
           }
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.1}
           ListEmptyComponent={() => (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , marginTop: 30}}>
               <Text>No data...</Text>
             </View>
           )}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.1}
         />
       </View>
     </View>
