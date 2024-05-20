@@ -27,6 +27,10 @@ export const feedSlice = createSlice({
       state.feeds = [];
       state.next_page = 1;
     },
+    clearCategoryData: (state, { payload }) => {
+      state.categories = [];
+      state.next_page = 1;
+    },
   },
   extraReducers: (builder) => {
     // getCategories
@@ -36,7 +40,7 @@ export const feedSlice = createSlice({
         state.error_message = "";
       })
       .addCase(getCategories.fulfilled, (state, { payload }) => {
-        state.categories = payload?.data;
+        state.categories = payload?.data?.data;
       })
       .addCase(getCategories.rejected, (state, { payload }) => {
         state.isError = true;
@@ -60,5 +64,5 @@ export const feedSlice = createSlice({
       });
   },
 });
-export const { startLoading, clearError, clearFeedData } = feedSlice.actions;
+export const { startLoading, clearError, clearFeedData,clearCategoryData } = feedSlice.actions;
 export default feedSlice.reducer;

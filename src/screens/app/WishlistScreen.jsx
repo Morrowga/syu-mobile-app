@@ -14,6 +14,7 @@ import { getCategories } from "../../api/feed";
 import { getWishlists } from "../../api/wishlist";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
+import { clearWishlistData } from "../../redux/slices/wishlistSlice";
 
 
 const WishlistScreen = () => {
@@ -22,11 +23,15 @@ const WishlistScreen = () => {
   const [q, setSearch] = useState('');
   const categoryRef = useRef(null);
   const { categories } = useSelector((state) => state.feed);
-  const { wishlists, isLoading } = useSelector((state) => state.wishlist);
+  const { wishlists,next_page, isLoading } = useSelector((state) => state.wishlist);
 
   const fetchCategories = () =>
   {
-    dispatch(getCategories(100))
+    const filter = {
+      per_page: 99999,
+      page: 1
+    }
+    dispatch(getCategories(filter))
     .then((resp) => {
     })
     .catch((error) => {
@@ -35,12 +40,20 @@ const WishlistScreen = () => {
   }
 
   const onRefresh = () => {
+    dispatch(clearWishlistData());
     fetchWishlists()
+  };
+
+  const onEndReached = () => {
+    if (!isLoading && next_page > 1) {
+      fetchWishlists(1)
+    }
   };
 
   const handleSortInput = (value) => {
     categoryRef.current.value = value;
-    fetchWishlists();
+    dispatch(clearWishlistData());
+    fetchWishlists(1);
   }
 
 
@@ -48,11 +61,12 @@ const WishlistScreen = () => {
     setSearch(value);
   }
 
-  const fetchWishlists = () =>
+  const fetchWishlists = (initial_page) =>
     {
       const filter = {
         category_id: categoryRef.current.value ?? '',
-        q: q
+        q: q,
+        page: initial_page ?? next_page
       }
 
       console.log(filter);
@@ -69,7 +83,8 @@ const WishlistScreen = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchCategories()
-      fetchWishlists()
+      dispatch(clearWishlistData());
+      fetchWishlists(1)
     });
     return () => unsubscribe();
   },[]); 
@@ -125,7 +140,7 @@ const WishlistScreen = () => {
             placeholder="Search"
             w="100%"
             rightElement={
-              <Icon color="black" name="search-outline" onPress={fetchWishlists} style={styles.inputInnerIcon} size={20} />
+              <Icon color="black" name="search-outline" onPress={fetchWishlists(1)} style={styles.inputInnerIcon} size={20} />
             }
           />
         </Box>
@@ -146,7 +161,7 @@ const WishlistScreen = () => {
             ref={categoryRef} 
             onValueChange={(itemValue) => handleSortInput(itemValue)}
           >
-            {categories?.data.map((categoryItem) => (
+            {categories?.map((categoryItem) => (
               <Select.Item
                 label={categoryItem.name}
                 value={categoryItem.id}
@@ -165,7 +180,7 @@ const WishlistScreen = () => {
       <View style={{ flex: 1 }}>
         <FlatList
           mt={4}
-          data={wishlists?.data}
+          data={wishlists}
           renderItem={renderItem}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: "space-between" }}
@@ -178,6 +193,8 @@ const WishlistScreen = () => {
               onRefresh={onRefresh}
             />
           }
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.1}
           ListEmptyComponent={() => (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , marginTop: 30}}>
               <Text>No data...</Text>

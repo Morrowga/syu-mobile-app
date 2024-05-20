@@ -33,7 +33,6 @@ const Navigation = () => {
   useEffect(() => {
     dispatch(startLoading());
     dispatch(getThemeData());
-    console.log("main__");
     setTimeout(() => {
       dispatch(getUserData());
     }, 2000);

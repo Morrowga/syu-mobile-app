@@ -19,7 +19,11 @@ const FeedsScreen = () => {
 
   const fetchCategories = () =>
   {
-    dispatch(getCategories(10))
+    const filter = {
+      per_page: 10,
+      page: 1
+    }
+    dispatch(getCategories(filter))
     .then((resp) => {
     })
     .catch((error) => {
@@ -98,7 +102,7 @@ const FeedsScreen = () => {
             onRefresh={onRefresh}
           />
         }
-        data={categories?.data}
+        data={categories}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
         keyExtractor={(item) => item.id}

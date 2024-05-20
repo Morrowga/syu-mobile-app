@@ -6,6 +6,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   wishlists: [],
+  next_page: 1,
   error_message: "",
 };
 
@@ -20,6 +21,10 @@ export const wishlistSlice = createSlice({
       state.isError = false;
       state.error_message = "";
     },
+    clearWishlistData: (state, { payload }) => {
+      state.wishlists = [];
+      state.next_page = 1;
+    },
   },
   extraReducers: (builder) => {
     // getWishlists
@@ -29,7 +34,8 @@ export const wishlistSlice = createSlice({
         state.error_message = "";
       })
       .addCase(getWishlists.fulfilled, (state, { payload }) => {
-        state.wishlists = payload?.data;
+        state.next_page += 1;
+        state.wishlists = state.wishlists.concat(payload.data.data);
       })
       .addCase(getWishlists.rejected, (state, { payload }) => {
         state.isError = true;
@@ -37,5 +43,5 @@ export const wishlistSlice = createSlice({
       });
   },
 });
-export const { startLoading, clearError } = wishlistSlice.actions;
+export const { startLoading, clearError,clearWishlistData } = wishlistSlice.actions;
 export default wishlistSlice.reducer;
