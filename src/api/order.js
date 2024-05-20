@@ -14,3 +14,15 @@ export const getOrders = createAsyncThunk(
   }
 );
 
+export const getOrderDetail = createAsyncThunk(
+    "app/order-detail",
+    async (orderId, { rejectWithValue }) => {
+      try {
+        let response = await HTTP.get("orders/detail/" + orderId);
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+  );
+

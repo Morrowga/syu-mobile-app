@@ -25,10 +25,9 @@ const themeSlice = createSlice({
         state.error_message = "";
       })
       .addCase(getThemeData.fulfilled, (state, { payload }) => {
-        state.app_bg_color = payload.app_bg_color ?? state.app_bg_color;
-        state.app_text_color = payload.app_text_color ?? state.app_text_color;
-        state.app_button_color =
-        payload.app_button_color ?? state.app_button_color;
+        state.app_bg_color = payload.app_bg_color;
+        state.app_text_color = payload.app_text_color;
+        state.app_button_color = payload.app_button_color;
         state.app_logo_img = payload.app_logo_img;
         state.banners = payload.banners;
         state.splash_slogan = payload.splash_slogan;

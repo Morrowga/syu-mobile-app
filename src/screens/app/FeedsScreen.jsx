@@ -23,12 +23,8 @@ const FeedsScreen = () => {
       per_page: 10,
       page: 1
     }
+    
     dispatch(getCategories(filter))
-    .then((resp) => {
-    })
-    .catch((error) => {
-      console.error("Categories fetched failed:", error);
-    });
   }
   
   useEffect(() => {

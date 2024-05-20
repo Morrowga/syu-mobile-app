@@ -29,14 +29,25 @@ const OrderListScreen = () => {
     switch (orderStatus) {
       case 'pending':
         return 'warning'; 
-      case 'completed':
+      case 'confirmed':
         return 'success'; 
-      case 'cancelled':
+      case 'expired':
         return 'danger'; 
+      case 'cancel':
+        return 'danger'; 
+      case 'delivered':
+        return 'success'; 
       default:
         return 'primary';
     }
   };
+
+  const onEndReached = () => {
+    if (!isLoading && next_page > 1) {
+      fetchOrder();
+    }
+  };
+
 
   const fetchOrder = (initial_page) =>
   {
@@ -58,14 +69,15 @@ const OrderListScreen = () => {
   },[]); 
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order: item})}>
+    <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: item.id})}>
     <VStack>
-        <Badge colorScheme="danger" alignSelf="flex-end" rounded="full" variant="solid" mb={-3} mt={2} mr={2} zIndex={1} >
+        {/* <Badge colorScheme="danger" alignSelf="flex-end" rounded="full" variant="solid" mb={-3} mt={2} mr={2} zIndex={1} >
           {item.count}
-        </Badge>
+        </Badge> */}
         <Box
           key={item}
           flex={1}
+          mt={2}
           width="100%"
           rounded="lg"
           overflow="hidden"
@@ -119,6 +131,8 @@ const OrderListScreen = () => {
             onRefresh={onRefresh}
           />
         }
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
       />
     </View>
   )
