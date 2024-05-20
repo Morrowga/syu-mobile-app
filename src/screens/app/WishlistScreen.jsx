@@ -183,12 +183,12 @@ const WishlistScreen = () => {
           contentContainerStyle={{ padding: 10 }}
           keyExtractor={(item) => item.id}
           style={styles.wishlist}
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={isLoading}
-          //     onRefresh={onRefresh}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={onRefresh}
+            />
+          }
           onEndReached={onEndReached}
           onEndReachedThreshold={0.1}
         />

@@ -52,14 +52,14 @@ const OrderInfoScreen = () => {
   useEffect(() => {
     const { params } = route;
 
-    const { order_id, order_name } = params;
+    const { order } = params;
 
     navigation.setOptions({
-      title: order_name,
+      title: order.order_no,
       headerBackTitle: "Back",
     });
 
-    orderName = order_name
+    orderName = order.order_no
   }, []);
 
   const renderItem = ({ item }) => (

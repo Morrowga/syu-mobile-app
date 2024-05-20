@@ -7,6 +7,7 @@ import cartSlice from "./slices/cartSlice";
 import feedSlice from "./slices/feedSlice";
 import themeSlice from "./slices/themeSlice";
 import wishlistSlice from "./slices/wishlistSlice";
+import orderSlice from "./slices/orderSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     auth: authSlice,
     feed: feedSlice,
     wishlist: wishlistSlice,
+    order: orderSlice,
     navigation: navigatorSlice,
     cart: cartSlice,
     theme: themeSlice,
