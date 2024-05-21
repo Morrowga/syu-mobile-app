@@ -77,7 +77,8 @@ const CheckoutScreen = () => {
     };
 
     await dispatch(createOrder(formData)).then((resp) => {
-      const order_id = resp?.id;
+      const order_id = resp?.payload?.id;
+
       navigation.navigate("Order Confirm Screen", { order_id: order_id });
     });
   };

@@ -14,7 +14,7 @@ import {
   Text,
   View,
 } from "native-base";
-import { StyleSheet, TouchableWithoutFeedback } from "react-native";
+import { Alert, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
@@ -30,7 +30,9 @@ const OrderConfirmScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const totalPrice = useSelector(selectTotalPrice);
-  const { paymentMethods, isLoading } = useSelector((state) => state.payment);
+  const { paymentMethods, isLoading, isError, error_message } = useSelector(
+    (state) => state.payment
+  );
 
   const route = useRoute();
   const { params } = route;
@@ -79,14 +81,23 @@ const OrderConfirmScreen = () => {
     const blob = await getImageBlob(imageUri);
     const formData = new FormData();
     formData.append("payment_method", paymentDetail.name);
-    formData.append("paid_delivery_cost", deliveryStatus);
-    formData.append("image", blob);
+    formData.append("paid_delivery_cost", deliveryStatus ? 1 : 0);
+    formData.append("image", {
+      uri: imageUri,
+      name: "photo.jpg",
+      type: blob.type || "image/jpeg",
+    });
+    formData.append("_method", "PATCH");
 
-    dispatch(updatePayment({ order_id: order_id, formData: formData })).then(
-      (resp) => {
+    await dispatch(updatePayment({ order_id: order_id, formData: formData }))
+      .unwrap()
+      .then((resp) => {
+        dispatch(deleteAllCartData());
         navigation.navigate("Home", { order_id: order_id, isOpen: true });
-      }
-    );
+      })
+      .catch((error) => {
+        Alert.alert(error);
+      });
   };
 
   const skipUpload = () => {
@@ -192,8 +203,11 @@ const OrderConfirmScreen = () => {
           w="50%"
           rounded="full"
           onPress={confirmUpload}
-          backgroundColor={imageUri ? "primary.600" : "gray.600"}
-          disabled={imageUri ? false : true}
+          backgroundColor={
+            imageUri && paymentDetail?.name ? "primary.600" : "gray.600"
+          }
+          disabled={imageUri && paymentDetail?.name ? false : true}
+          isLoading={isLoading}
         >
           Upload
         </Button>
