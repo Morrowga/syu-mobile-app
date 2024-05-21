@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { HTTP } from "./http";
 
 export const getThemeData = createAsyncThunk(
-  "app/category",
+  "app/theme",
   async (data, { rejectWithValue }) => {
     try {
       let response = await HTTP.get("setting");
