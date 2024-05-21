@@ -1,129 +1,218 @@
+import { StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 import {
-  AspectRatio,
+  getCategoryFromState,
+  selectTotalPrice,
+  selectTotalQuantity,
+} from "../../redux/selectors/cartSelectors";
+import {
+  Badge,
   Box,
   Button,
+  FlatList,
+  HStack,
   Heading,
-  Image,
-  Input,
-  InputGroup,
-  InputRightAddon,
+  IconButton,
+  Stack,
   Text,
+  VStack,
   View,
+  Icon,
+  Input,
+  TextArea,
 } from "native-base";
-import { StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/Ionicons";
-import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteAllCartData } from "../../redux/slices/cartSlice";
-import { selectTotalPrice } from "../../redux/selectors/cartSelectors";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CheckoutScreen = () => {
-  const [imageUri, setImageUri] = useState(null);
-  const dispatch = useDispatch();
+  const cartCategories = useSelector(getCategoryFromState);
+  const { cartData } = useSelector((state) => state.cart);
+
   const navigation = useNavigation();
+  const totalQty = useSelector(selectTotalQuantity);
   const totalPrice = useSelector(selectTotalPrice);
+  const [toggleNote, setToggleNote] = useState(false);
+  const [note, setNote] = useState("");
 
-  const handleChoosePhoto = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this app to access your photos!");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 2],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
-    }
+  const toggleNoteFunc = () => {
+    setToggleNote((toggle) => !toggle);
   };
 
-  const handleClearPhoto = () => {
-    setImageUri(null);
-    // handleChoosePhoto();
+  const cancelNote = () => {
+    setNote("");
+    setToggleNote(false);
   };
 
-  const onConfirm = () => {
-    dispatch(deleteAllCartData());
-    navigation.navigate("Home", { order_id: 1, isOpen: true });
+  const addNote = () => {
+    setToggleNote(false);
   };
+  const goCartProductList = (category_id, category_name) => {
+    navigation.navigate("Cart Product List", { category_id, category_name });
+  };
+  const orderConfirm = () => {
+    navigation.navigate("Order Confirm Screen", { note: note });
+  };
+  const renderItem = ({ item }) => (
+    <Box
+      key={item}
+      flex={1}
+      width="100%"
+      mt={3}
+      rounded="lg"
+      overflow="hidden"
+      borderColor="coolGray.200"
+      borderWidth="1"
+      _dark={{
+        borderColor: "coolGray.600",
+        backgroundColor: "gray.700",
+      }}
+      _web={{
+        shadow: 2,
+        borderWidth: 0,
+      }}
+      _light={{
+        backgroundColor: "gray.50",
+      }}
+    >
+      <Stack p="4" space={3}>
+        <Stack
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          space={2}
+        >
+          <Heading size="sm">
+            {item.category_name} ({item.totalPrice}) KS
+          </Heading>
+          <VStack>
+            <Badge // bg="red.400"
+              colorScheme="danger"
+              rounded="full"
+              mb={-4}
+              mr={-4}
+              zIndex={1}
+              variant="solid"
+              alignSelf="flex-end"
+              _text={{
+                fontSize: 12,
+              }}
+            >
+              {item.qty}
+            </Badge>
+            <Button
+              mx={{
+                base: "auto",
+                md: 0,
+              }}
+              p="2"
+              bg="cyan.500"
+              _text={{
+                fontSize: 14,
+              }}
+              onPress={() =>
+                goCartProductList(item.category_id, item.category_name)
+              }
+            >
+              View Detail
+            </Button>
+          </VStack>
+        </Stack>
+      </Stack>
+    </Box>
+  );
+
+  const renderEmptyComponent = () => (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>No data available</Text>
+    </View>
+  );
+
+  const orderCartItems = cartData.map((cart) => {
+    return {
+      product_id: cart.id,
+      category_id: cart.category_id,
+      size_id: cart.size,
+      quality_id: cart.quality,
+      qty: cart.qty,
+      total_price: cart.totalPrice,
+    };
+  });
+  console.log(orderCartItems);
   return (
     <View style={styles.container}>
-      <Box mb={5}>
-        <InputGroup justifyContent="center">
-          <Input
-            readOnly
-            h={10}
-            value={String(totalPrice)}
-            minW={70}
-            placeholder="nativebase"
-          />
-          <InputRightAddon children={"KS"} />
-        </InputGroup>
-      </Box>
-      <Box style={styles.imageUpload}>
-        {imageUri ? (
-          <TouchableWithoutFeedback onPress={handleClearPhoto}>
-            <Image
-              source={{ uri: imageUri }}
-              style={styles.imagePreview}
-              alt="preview"
-            />
-          </TouchableWithoutFeedback>
-        ) : (
-          <TouchableOpacity onPress={handleChoosePhoto}>
-            <Icon
-              name="cloud-upload"
-              size={100}
-              style={{ textAlign: "center" }}
-            />
-            <Heading>Click Here To Upload</Heading>
-          </TouchableOpacity>
-        )}
-      </Box>
-      <Box style={styles.buttonContainer}>
-        <Button w="full" rounded="full" onPress={onConfirm}>
-          Confirm
-        </Button>
-      </Box>
+      <FlatList
+        style={styles.cartCategoryList}
+        data={cartCategories}
+        renderItem={renderItem}
+        contentContainerStyle={{ padding: 10 }}
+        ListEmptyComponent={renderEmptyComponent}
+        keyExtractor={(item) => item.category_id}
+      />
+
+      {totalQty && totalQty != 0 ? (
+        <View>
+          <Box px={4} pb={2}>
+            <HStack alignItems="center">
+              <TouchableOpacity onPress={toggleNoteFunc}>
+                <View flexDirection="row" alignItems="center" paddingBottom={1}>
+                  <Text>Note</Text>
+                  <Icon as={Ionicons} name="pencil" size="sm" />
+                </View>
+              </TouchableOpacity>
+            </HStack>
+            {toggleNote ? (
+              <Box>
+                <TextArea
+                  placeholder="Enter note..."
+                  onChangeText={(value) => setNote(value)}
+                  value={note}
+                />
+                <HStack space={2} marginY={2}>
+                  <Button
+                    size="sm"
+                    backgroundColor="red.500"
+                    onPress={cancelNote}
+                  >
+                    Cancel
+                  </Button>
+                  <Button size="sm" onPress={addNote}>
+                    Add
+                  </Button>
+                </HStack>
+              </Box>
+            ) : (
+              <View>
+                <Text>{note}</Text>
+              </View>
+            )}
+          </Box>
+
+          <Box px={4} flexDirection="row" justifyContent="space-between">
+            <Heading size="sm">Total Count ({totalQty})</Heading>
+            <Text>{totalPrice} Ks</Text>
+          </Box>
+
+          <Box p={4} flexDirection="row" justifyContent="center" w="full">
+            <Button w="full" rounded="full" onPress={orderConfirm}>
+              Order Confirm
+            </Button>
+          </Box>
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  noteSection: {
     padding: 20,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 20,
-  },
-  imageUpload: {
-    flex: 1,
-    // borderWidth: 2,
-    // borderRadius: 10,
-    borderStyle: "dashed",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  imagePreview: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
   },
 });
 

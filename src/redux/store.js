@@ -7,6 +7,7 @@ import cartSlice from "./slices/cartSlice";
 import feedSlice from "./slices/feedSlice";
 import themeSlice from "./slices/themeSlice";
 import wishlistSlice from "./slices/wishlistSlice";
+import paymentSlice from "./slices/paymentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,5 +18,6 @@ export const store = configureStore({
     navigation: navigatorSlice,
     cart: cartSlice,
     theme: themeSlice,
+    payment: paymentSlice,
   },
 });

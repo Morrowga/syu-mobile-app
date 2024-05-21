@@ -9,6 +9,7 @@ import CheckoutScreen from "../screens/app/CheckoutScreen";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getUserData } from "../api/auth";
+import OrderConfirmScreen from "../screens/app/OrderConfirmScreen";
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,12 @@ const AppStack = () => {
       <Stack.Screen
         name="Checkout"
         component={CheckoutScreen}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="Order Confirm Screen"
+        component={OrderConfirmScreen}
         options={{ headerShown: true }}
       />
     </Stack.Navigator>

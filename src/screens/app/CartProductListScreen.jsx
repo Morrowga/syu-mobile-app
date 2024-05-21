@@ -24,6 +24,7 @@ const CartProductListScreen = () => {
   const { category_id, category_name } = params;
   const navigation = useNavigation();
   const { cartData } = useSelector((state) => state.cart);
+  const { categories } = useSelector((state) => state.feed);
   const productList = cartData.filter(
     (cart) => cart.category_id == category_id
   );
@@ -32,102 +33,12 @@ const CartProductListScreen = () => {
     imageSrc: "",
     id: "",
   });
-  const qualities = [
-    {
-      id: 1,
-      category_id: 1,
-      name: "Plastic",
-    },
-    {
-      id: 2,
-      category_id: 1,
-      name: "Metal",
-    },
-    {
-      id: 3,
-      category_id: 1,
-      name: "Wood",
-    },
-    {
-      id: 4,
-      category_id: 2,
-      name: "Iron",
-    },
-    {
-      id: 5,
-      category_id: 2,
-      name: "Titanium",
-    },
-    {
-      id: 6,
-      category_id: 2,
-      name: "Diamond",
-    },
-
-    {
-      id: 7,
-      category_id: 3,
-      name: "Gold",
-    },
-    {
-      id: 8,
-      category_id: 3,
-      name: "Platinum",
-    },
-    {
-      id: 9,
-      category_id: 3,
-      name: "Copper",
-    },
-  ];
-  const sizes = [
-    {
-      id: 1,
-      category_id: 1,
-      name: "2x4",
-    },
-    {
-      id: 2,
-      category_id: 1,
-      name: "2.5x3.5",
-    },
-    {
-      id: 3,
-      category_id: 1,
-      name: "1x4",
-    },
-    {
-      id: 4,
-      category_id: 2,
-      name: "2x3",
-    },
-    {
-      id: 5,
-      category_id: 2,
-      name: "5x6",
-    },
-    {
-      id: 6,
-      category_id: 2,
-      name: "4x5",
-    },
-
-    {
-      id: 7,
-      category_id: 3,
-      name: "4x2",
-    },
-    {
-      id: 8,
-      category_id: 3,
-      name: "6x9",
-    },
-    {
-      id: 9,
-      category_id: 3,
-      name: "3x9",
-    },
-  ];
+  const qualities = categories.find(
+    (category) => category.id == category_id
+  )?.qualities;
+  const sizes = categories.find(
+    (category) => category.id == category_id
+  )?.sizes;
 
   const categoryQualities = qualities.filter(
     (quality) => quality.category_id == category_id
@@ -142,7 +53,7 @@ const CartProductListScreen = () => {
   const getSelectedSize = (id) => {
     return categorySizes.find((size) => size.id == id)?.name;
   };
-  
+
   const openModal = (data) => {
     setModalInfo({
       isOpen: true,
