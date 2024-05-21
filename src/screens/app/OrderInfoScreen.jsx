@@ -33,6 +33,12 @@ const OrderInfoScreen = () => {
   );
   const categorizedProducts = useSelector(selectCategorizedProducts);
 
+  const getThemeData = () => {
+    const theme = useSelector((state) => state.theme);
+  
+    return theme;
+  };
+
   const orderStatus = order_detail?.order_status;
   let buttonBottom;
 
@@ -204,8 +210,9 @@ const OrderInfoScreen = () => {
       <Box flex={1}>
         <Box flexDirection="row" justifyContent="space-between" mx={5}>
           <Image
-            source={require("../../../assets/innerlogo.png")}
+            source={{uri: getThemeData()?.app_logo_img}}
             alt="Logo Image"
+            mt={3}
             style={{
               width: 90,
               height: 90,
