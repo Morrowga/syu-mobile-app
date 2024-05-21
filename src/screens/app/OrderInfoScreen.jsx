@@ -27,7 +27,6 @@ const OrderInfoScreen = () => {
   const { params } = route;
 
   const { order_id } = params;
-  // const [categorizedProducts, setCategorizedProducts] = useState([]);
   const { order_detail } = useSelector((state) => state.order);
   const { isError, error_message, categories } = useSelector(
     (state) => state.feed
@@ -36,40 +35,6 @@ const OrderInfoScreen = () => {
 
   const orderStatus = order_detail?.order_status;
   let buttonBottom;
-
-  // const listCategorizedProducts = () => {
-  //   const updatedCategorizedProducts = [];
-  //   categories?.forEach((category) => {
-  //     const productsInCategory = order_detail?.products?.filter(
-  //       (product) => product.category_id === category.id
-  //     );
-  //     if (productsInCategory.length > 0) {
-  //       const totalAmt = productsInCategory.reduce(
-  //         (acc, curr) => acc + curr.total_amt,
-  //         0
-  //       );
-  //       const totalQty = productsInCategory.reduce(
-  //         (acc, curr) => acc + curr.qty,
-  //         0
-  //       );
-
-  //       const categoryObject = {
-  //         category: category.name,
-  //         total_amt: totalAmt,
-  //         total_qty: totalQty,
-  //       };
-
-  //       updatedCategorizedProducts.push(categoryObject);
-  //     }
-  //   });
-
-  //   setCategorizedProducts(updatedCategorizedProducts);
-  // };
-  // const getThemeData = () => {
-  //   const theme = useSelector((state) => state.theme);
-  //   console.log(theme);
-  //   return theme;
-  // };
 
   const fetchCategories = () => {
     const filter = {
@@ -181,10 +146,6 @@ const OrderInfoScreen = () => {
   };
 
   useEffect(() => {
-    // const unsubscribe = navigation.addListener("focus", () => {
-
-    // });
-    // return () => unsubscribe();
     fetchOrderDetail();
     fetchCategories();
 
