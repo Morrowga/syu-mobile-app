@@ -7,7 +7,7 @@ export const selectCategorizedProducts = createSelector(
   (categories, order_detail) => {
     const categorizedProducts = categories
       .map((category) => {
-        const productsInCategory = order_detail.products.filter(
+        const productsInCategory = order_detail?.products?.filter(
           (product) => product.category_id === category.id
         );
         if (productsInCategory?.length > 0) {
