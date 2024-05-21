@@ -1,6 +1,6 @@
 // feedSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getPaymentMethods } from "../../api/payment";
+import { getPaymentMethods, updatePayment } from "../../api/payment";
 
 const initialState = {
   paymentMethods: [],
@@ -19,7 +19,7 @@ export const paymentSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // getFeeds
+    // get payments
     builder
       .addCase(getPaymentMethods.pending, (state) => {
         state.isLoading = true;
@@ -31,6 +31,22 @@ export const paymentSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(getPaymentMethods.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.error_message = payload;
+      });
+
+    // update payment
+    builder
+      .addCase(updatePayment.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(updatePayment.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(updatePayment.rejected, (state, { payload }) => {
         state.isError = true;
         state.isLoading = false;
         state.error_message = payload;

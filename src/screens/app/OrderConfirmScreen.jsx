@@ -10,6 +10,7 @@ import {
   InputGroup,
   InputRightAddon,
   Row,
+  Switch,
   Text,
   View,
 } from "native-base";
@@ -22,7 +23,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAllCartData } from "../../redux/slices/cartSlice";
 import { selectTotalPrice } from "../../redux/selectors/cartSelectors";
-import { getPaymentMethods } from "../../api/payment";
+import { getPaymentMethods, updatePayment } from "../../api/payment";
 
 const OrderConfirmScreen = () => {
   const [imageUri, setImageUri] = useState(null);
@@ -33,8 +34,10 @@ const OrderConfirmScreen = () => {
 
   const route = useRoute();
   const { params } = route;
-  const { note } = params;
+  const { order_id } = params;
+
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [deliveryStatus, setDeliveryStatus] = useState(false);
   const [paymentDetail, setPaymentDetail] = useState({
     name: "",
     account_no: "",
@@ -66,10 +69,29 @@ const OrderConfirmScreen = () => {
     setImageUri(null);
     // handleChoosePhoto();
   };
+  const getImageBlob = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob;
+  };
 
-  const onConfirm = () => {
+  const confirmUpload = async () => {
+    const blob = await getImageBlob(imageUri);
+    const formData = new FormData();
+    formData.append("payment_method", paymentDetail.name);
+    formData.append("paid_delivery_cost", deliveryStatus);
+    formData.append("image", blob);
+
+    dispatch(updatePayment({ order_id: order_id, formData: formData })).then(
+      (resp) => {
+        navigation.navigate("Home", { order_id: order_id, isOpen: true });
+      }
+    );
+  };
+
+  const skipUpload = () => {
     dispatch(deleteAllCartData());
-    navigation.navigate("Home", { order_id: 1, isOpen: true });
+    navigation.navigate("Home", { order_id: 1, isOpen: false });
   };
 
   const getSelectedPayment = (paymentMethod) => {
@@ -80,13 +102,15 @@ const OrderConfirmScreen = () => {
       is_active: paymentMethod.is_active,
     });
   };
-
+  const changeStatus = (value) => {
+    setDeliveryStatus(value);
+  };
   useEffect(() => {
     dispatch(getPaymentMethods());
   }, [dispatch]);
   return (
     <View style={styles.container}>
-      <Box mb={5}>
+      {/* <Box mb={5}>
         <InputGroup justifyContent="center">
           <Input
             readOnly
@@ -97,12 +121,12 @@ const OrderConfirmScreen = () => {
           />
           <InputRightAddon children={"KS"} />
         </InputGroup>
-      </Box>
-      <Box mb={5}>
+      </Box> */}
+      <Box>
         <View flexDirection="row" style={{ gap: 5 }} flexWrap="wrap">
           {paymentMethods.map((paymentMethod) => (
             <TouchableOpacity
-              key={paymentMethod.id}
+              key={paymentMethod.account_no}
               style={
                 selectedPayment == paymentMethod.account_no ? styles.border : ""
               }
@@ -137,6 +161,12 @@ const OrderConfirmScreen = () => {
           ""
         )}
       </Box>
+      <Box mb={5}>
+        <HStack alignItems="center" space={4}>
+          <Text>Delivery</Text>
+          <Switch size="md" onValueChange={(value) => changeStatus(value)} />
+        </HStack>
+      </Box>
       <Box style={styles.imageUpload}>
         {imageUri ? (
           <TouchableWithoutFeedback onPress={handleClearPhoto}>
@@ -158,10 +188,16 @@ const OrderConfirmScreen = () => {
         )}
       </Box>
       <Box style={styles.buttonContainer}>
-        <Button w="50%" rounded="full" onPress={onConfirm}>
+        <Button
+          w="50%"
+          rounded="full"
+          onPress={confirmUpload}
+          backgroundColor={imageUri ? "primary.600" : "gray.600"}
+          disabled={imageUri ? false : true}
+        >
           Upload
         </Button>
-        <Button w="50%" rounded="full" onPress={onConfirm}>
+        <Button back w="50%" rounded="full" onPress={skipUpload}>
           Skip
         </Button>
       </Box>

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryFromState,
   selectTotalPrice,
@@ -25,16 +25,32 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { createOrder } from "../../api/order";
+import { deleteAllCartData } from "../../redux/slices/cartSlice";
 
 const CheckoutScreen = () => {
+  const dispatch = useDispatch();
   const cartCategories = useSelector(getCategoryFromState);
   const { cartData } = useSelector((state) => state.cart);
+  const { isLoading, isError, error_message } = useSelector(
+    (state) => state.order
+  );
 
   const navigation = useNavigation();
   const totalQty = useSelector(selectTotalQuantity);
   const totalPrice = useSelector(selectTotalPrice);
   const [toggleNote, setToggleNote] = useState(false);
   const [note, setNote] = useState("");
+
+  const orderCartItems = cartData.map((cart) => {
+    return {
+      product_id: cart.id,
+      size_id: cart.size,
+      quality_id: cart.quality,
+      qty: cart.qty,
+      total_price: cart.totalPrice,
+    };
+  });
 
   const toggleNoteFunc = () => {
     setToggleNote((toggle) => !toggle);
@@ -51,8 +67,19 @@ const CheckoutScreen = () => {
   const goCartProductList = (category_id, category_name) => {
     navigation.navigate("Cart Product List", { category_id, category_name });
   };
-  const orderConfirm = () => {
-    navigation.navigate("Order Confirm Screen", { note: note });
+  const orderConfirm = async () => {
+    const formData = {
+      total_price: totalPrice,
+      overall_price: totalPrice,
+      note: note,
+      products: JSON.stringify(orderCartItems),
+      waiting_days: 10,
+    };
+
+    await dispatch(createOrder(formData)).then((resp) => {
+      const order_id = resp?.id;
+      navigation.navigate("Order Confirm Screen", { order_id: order_id });
+    });
   };
   const renderItem = ({ item }) => (
     <Box
@@ -129,17 +156,6 @@ const CheckoutScreen = () => {
     </View>
   );
 
-  const orderCartItems = cartData.map((cart) => {
-    return {
-      product_id: cart.id,
-      category_id: cart.category_id,
-      size_id: cart.size,
-      quality_id: cart.quality,
-      qty: cart.qty,
-      total_price: cart.totalPrice,
-    };
-  });
-  console.log(orderCartItems);
   return (
     <View style={styles.container}>
       <FlatList
@@ -195,7 +211,12 @@ const CheckoutScreen = () => {
           </Box>
 
           <Box p={4} flexDirection="row" justifyContent="center" w="full">
-            <Button w="full" rounded="full" onPress={orderConfirm}>
+            <Button
+              w="full"
+              rounded="full"
+              onPress={() => orderConfirm()}
+              isLoading={isLoading}
+            >
               Order Confirm
             </Button>
           </Box>

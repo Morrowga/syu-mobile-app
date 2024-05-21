@@ -12,3 +12,19 @@ export const getPaymentMethods = createAsyncThunk(
     }
   }
 );
+
+export const updatePayment = createAsyncThunk(
+  "payment/updatePayment",
+  async ({ formData, order_id }, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("orders/payment/" + order_id, formData, {
+        headers: {
+          "Custom-Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

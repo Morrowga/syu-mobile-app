@@ -57,17 +57,32 @@ export const cartSlice = createSlice({
     },
 
     updateSize: (state, action) => {
-      const { id, size } = action.payload;
+      const { id, size, sizes, qualities } = action.payload;
       const index = state.cartData.findIndex((item) => item.id === id);
       if (index !== -1) {
-        state.cartData[index].size = size;
+        const currentSize = sizes.find((s) => s.id === size);
+        if (currentSize) {
+          const item = state.cartData[index];
+          const qualityPrice =
+            qualities.find((q) => q.id === item.quality)?.price || 0;
+          item.size = size;
+          item.price = Number(currentSize.price) + Number(qualityPrice);
+          item.totalPrice = item.qty * item.price;
+        }
       }
     },
     updateQuality: (state, action) => {
-      const { id, quality } = action.payload;
+      const { id, quality, sizes, qualities } = action.payload;
       const index = state.cartData.findIndex((item) => item.id === id);
       if (index !== -1) {
-        state.cartData[index].quality = quality;
+        const currentQuality = qualities.find((q) => q.id === quality);
+        if (currentQuality) {
+          const item = state.cartData[index];
+          const sizePrice = sizes.find((s) => s.id === item.size)?.price || 0;
+          item.quality = quality;
+          item.price = Number(sizePrice) + Number(currentQuality.price);
+          item.totalPrice = item.qty * item.price;
+        }
       }
     },
 

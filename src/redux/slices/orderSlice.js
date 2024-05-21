@@ -1,6 +1,6 @@
 // wishlistSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrders,getOrderDetail } from "../../api/order";
+import { getOrders, getOrderDetail, createOrder } from "../../api/order";
 
 const initialState = {
   isLoading: false,
@@ -45,18 +45,35 @@ export const orderSlice = createSlice({
 
     // getOrderDetail
     builder
-    .addCase(getOrderDetail.pending, (state) => {
-      state.isError = false;
-      state.error_message = "";
-    })
-    .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
-      state.order_detail = payload?.data;
-    })
-    .addCase(getOrderDetail.rejected, (state, { payload }) => {
-      state.isError = true;
-      state.error_message = payload;
-    });
+      .addCase(getOrderDetail.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
+        state.order_detail = payload?.data;
+      })
+      .addCase(getOrderDetail.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.error_message = payload;
+      });
+
+    // createOrder
+    builder
+      .addCase(createOrder.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+        state.isLoading = true;
+      })
+      .addCase(createOrder.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(createOrder.rejected, (state, { payload }) => {
+        state.isLoading = false;
+
+        state.isError = true;
+        state.error_message = payload;
+      });
   },
 });
-export const { startLoading, clearError,clearOrderData } = orderSlice.actions;
+export const { startLoading, clearError, clearOrderData } = orderSlice.actions;
 export default orderSlice.reducer;

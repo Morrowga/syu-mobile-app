@@ -34,6 +34,7 @@ const DetailModalBox = ({
   price,
   sizes,
   qualities,
+  isWishlist,
 }) => {
   const dispatch = useDispatch();
   const { cartData } = useSelector((state) => state.cart);
@@ -41,17 +42,25 @@ const DetailModalBox = ({
   const [cartDetail, setCartDetail] = useState({});
 
   useEffect(() => {
+    let initial_price =
+      qualities.length > 0 && sizes.length > 0
+        ? Number(qualities[0].price) + Number(sizes[0].price)
+        : 0;
+    let quality_id = qualities.length > 0 ? qualities[0].id : null;
+    let size_id = sizes.length > 0 ? sizes[0].id : null;
     setCartDetail({
       id,
       category_id,
       category_name,
       imageSrc,
-      price,
+      price: initial_price,
+      sizePrice: sizes.length > 0 ? Number(sizes[0].price) : 0,
+      qualityPrice: qualities.length > 0 ? Number(qualities[0].price) : 0,
       qty: 1,
-      totalPrice: price,
-
-      quality: null,
-      size: null,
+      totalPrice: initial_price,
+      isWishlist,
+      quality: quality_id,
+      size: size_id,
     });
   }, [id]);
 
@@ -93,23 +102,47 @@ const DetailModalBox = ({
     }));
   };
 
-  const handleSizeSelectBox = (value) => {
-    setCartDetail((prevState) => ({
-      ...prevState,
-      size: value,
-    }));
+  const handleSizeSelectBox = (size_id) => {
+    const current_size = sizes.find((size) => size.id == size_id);
+    const sizePrice = Number(current_size.price);
+    setCartDetail((prevState) => {
+      const newPrice = prevState.qualityPrice + sizePrice;
+      return {
+        ...prevState,
+        size: size_id,
+        sizePrice,
+        price: newPrice,
+        totalPrice: prevState.qty * newPrice,
+      };
+    });
   };
 
-  const handleQualitySelectBox = (value) => {
-    setCartDetail((prevState) => ({
-      ...prevState,
-      quality: value,
-    }));
+  const handleQualitySelectBox = (quality_id) => {
+    const current_quality = qualities.find(
+      (quality) => quality.id == quality_id
+    );
+    const qualityPrice = Number(current_quality.price);
+    setCartDetail((prevState) => {
+      const newPrice = prevState.sizePrice + qualityPrice;
+      return {
+        ...prevState,
+        quality: quality_id,
+        qualityPrice,
+        price: newPrice,
+        totalPrice: prevState.qty * newPrice,
+      };
+    });
   };
 
+  const addToWishlist = () => {
+    setCartDetail((prevState) => ({
+      ...prevState,
+      isWishlist: !prevState.isWishlist,
+    }));
+  };
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <Modal.Content maxWidth="400px">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal.Content>
         <Modal.CloseButton />
         <Modal.Header>Item Detail</Modal.Header>
         <Modal.Body>
@@ -175,11 +208,11 @@ const DetailModalBox = ({
                 size={"sm"}
                 onValueChange={(itemValue) => handleQualitySelectBox(itemValue)}
               >
-                {qualities.map((size) => (
+                {qualities.map((quality) => (
                   <Select.Item
-                    label={size.name}
-                    value={size.id}
-                    key={size.id}
+                    label={quality.name}
+                    value={quality.id}
+                    key={quality.id}
                   />
                 ))}
               </Select>
@@ -192,12 +225,12 @@ const DetailModalBox = ({
                 }}
                 mt={1}
                 h={10}
-                minW={130}
+                minW={160}
                 onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
               >
                 {sizes.map((size) => (
                   <Select.Item
-                    label={size.name + ' (' + size.size + ')'}
+                    label={size.name + " (" + size.size + ")"}
                     value={size.id}
                     key={size.id}
                   />
@@ -207,6 +240,18 @@ const DetailModalBox = ({
           </View>
         </Modal.Body>
         <Modal.Footer style={styles.footer}>
+          <IconButton
+            rounded="full"
+            variant="solid"
+            onPress={() => addToWishlist()}
+            icon={
+              cartDetail?.isWishlist ? (
+                <Icon name="heart" color="#fff" size={20} />
+              ) : (
+                <Icon name="heart-outline" color="#fff" size={20} />
+              )
+            }
+          ></IconButton>
           <Button rounded="full" onPress={addToCart}>
             Add To Cart
           </Button>
@@ -235,6 +280,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     justifyContent: "center",
+    gap: 10,
   },
   selectBox: {
     flex: 1,

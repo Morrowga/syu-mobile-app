@@ -33,6 +33,7 @@ const ProductListScreen = () => {
     category_id: "",
     category_name: "",
     price: 0,
+    isWishlist: false,
   });
 
   const [q, setSearch] = useState("");
@@ -71,7 +72,8 @@ const ProductListScreen = () => {
       imageSrc: data.image_url,
       category_id: category.id,
       category_name: category.name,
-      price: 100,
+      price: 0,
+      isWishlist: data?.wishlist ? true : false,
     });
   };
 
@@ -83,6 +85,7 @@ const ProductListScreen = () => {
       category_id: "",
       category_name: "",
       price: 0,
+      isWishlist: false,
     });
   };
 
@@ -201,6 +204,7 @@ const ProductListScreen = () => {
         price={modalInfo.price}
         qualities={category?.qualities}
         sizes={category?.sizes}
+        isWishlist={modalInfo.isWishlist}
       />
       {totalQty > 0 ? (
         <Fab

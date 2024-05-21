@@ -59,11 +59,11 @@ const UpdateCartModalBox = ({
   };
 
   const handleQualitySelectBox = (value) => {
-    dispatch(updateQuality({ id, quality: value }));
+    dispatch(updateQuality({ id, quality: value, sizes, qualities }));
   };
 
   const handleSizeSelectBox = (value) => {
-    dispatch(updateSize({ id, size: value }));
+    dispatch(updateSize({ id, size: value, sizes, qualities }));
   };
   const deleteProduct = async (id) => {
     dispatch(deleteItem(id));
@@ -73,14 +73,14 @@ const UpdateCartModalBox = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="lg"
+      size="xl"
       avoidKeyboard
       _overlay={{
         useRNModal: false,
         useRNModalOnAndroid: false,
       }}
     >
-      <Modal.Content maxWidth="400px">
+      <Modal.Content>
         <Modal.Header>Item Detail</Modal.Header>
         <Modal.Body>
           {imageSrc ? (
@@ -167,12 +167,12 @@ const UpdateCartModalBox = ({
                 }}
                 mt={1}
                 h={10}
-                minW={130}
+                minW={160}
                 onValueChange={(itemValue) => handleSizeSelectBox(itemValue)}
               >
                 {sizes.map((size) => (
                   <Select.Item
-                    label={size.name}
+                    label={size.name + " (" + size.size + ")"}
                     value={size.id}
                     key={size.id}
                   />
