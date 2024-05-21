@@ -135,33 +135,26 @@ const OrderInfoScreen = () => {
   };
 
   const listCategorizedProducts = async () => {
-    if(await categories?.length > 0)
-      {
-        alert('reach')
-      }  else {
-        alert('empty')
-      }
-
-    // const updatedCategorizedProducts = [];
-    // categories?.forEach(category => {
-    //   const productsInCategory = order_detail?.products?.filter(product => product.category_id === category.id);
-    //   if (productsInCategory.length > 0) {
+    const updatedCategorizedProducts = [];
+    categories?.forEach(category => {
+      const productsInCategory = order_detail?.products?.filter(product => product.category_id === category.id);
+      if (productsInCategory.length > 0) {
         
-    //     const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
-    //     const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
+        const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
+        const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
 
-    //     const categoryObject = {
-    //       category: category.name,
-    //       total_amt: totalAmt,
-    //       total_qty: totalQty
-    //     };
+        const categoryObject = {
+          category: category.name,
+          total_amt: totalAmt,
+          total_qty: totalQty
+        };
 
-    //     updatedCategorizedProducts.push(categoryObject);
+        updatedCategorizedProducts.push(categoryObject);
 
-    //   }
-    // });
+      }
+    });
 
-    // setCategorizedProducts(updatedCategorizedProducts);
+    setCategorizedProducts(updatedCategorizedProducts);
   }
 
   const capitalize = (str) => {
@@ -175,37 +168,23 @@ const OrderInfoScreen = () => {
   };
 
   useEffect(() => {
-    fetchCategories();
-    const { params } = route;
+    const unsubscribe = navigation.addListener("focus", () => {
+      const { params } = route;
 
-    const { order_id } = params;
-
-    fetchOrderDetail(order_id)
-    
-    listCategorizedProducts()
-    // fetchOrderDetail(order_id)
-    // navigation.setOptions({
-    //   title: order_detail?.order_no,
-    //   headerBackTitle: "Back",    
-    // });
-
-    // const unsubscribe = navigation.addListener("focus", () => {
-    //   const { params } = route;
-
-    //   const { order_id } = params;
+      const { order_id } = params;
   
-    //   fetchCategories();
+      fetchCategories();
   
-    //   fetchOrderDetail(order_id)
+      fetchOrderDetail(order_id)
 
-    //   listCategorizedProducts()
+      listCategorizedProducts()
   
-    //   navigation.setOptions({
-    //     title: order_detail?.order_no,
-    //     headerBackTitle: "Back",    
-    //   });
-    // });
-    // return () => unsubscribe();
+      navigation.setOptions({
+        title: order_detail?.order_no,
+        headerBackTitle: "Back",    
+      });
+    });
+    return () => unsubscribe();
   }, []);
 
 
