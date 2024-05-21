@@ -97,13 +97,12 @@ const UpdateCartModalBox = ({
             <View style={styles.cartInput}>
               <IconButton
                 variant="solid"
-                icon={<Icon name="add" color="#fff" />}
+                icon={<Icon name="remove" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={() => increaseQty(cartDetail.id)}
+                onPress={() => decreaseQty(cartDetail?.id)}
               />
-
               <Input
                 size={"xs"}
                 value={String(cartDetail?.qty)}
@@ -113,14 +112,13 @@ const UpdateCartModalBox = ({
                 keyboardType="number-pad"
                 onChangeText={(e) => handleInputChange(e, cartDetail.id)}
               />
-
               <IconButton
                 variant="solid"
-                icon={<Icon name="remove" color="#fff" />}
+                icon={<Icon name="add" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={() => decreaseQty(cartDetail?.id)}
+                onPress={() => increaseQty(cartDetail.id)}
               />
 
               <View style={styles.totalPrice}>
