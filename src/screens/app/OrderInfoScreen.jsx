@@ -144,15 +144,14 @@ const OrderInfoScreen = () => {
         (product) => product.category_id === category.id
       );
       if (productsInCategory.length > 0) {
-        const totalAmt = productsInCategory.reduce(
-          (acc, curr) => acc + curr.total_amt,
-          0
-        );
+        
+        const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
+        const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
 
         const categoryObject = {
           category: category.name,
-          products: productsInCategory,
           total_amt: totalAmt,
+          total_qty: totalQty
         };
 
         updatedCategorizedProducts.push(categoryObject);
@@ -160,8 +159,23 @@ const OrderInfoScreen = () => {
     });
 
     setCategorizedProducts(updatedCategorizedProducts);
+<<<<<<< HEAD
   };
 
+=======
+  }
+
+  const capitalize = (str) => {
+    const words = str.split(' ');
+  
+    const capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+  
+    return capitalizedWords.join(' ');
+  };
+  
+>>>>>>> 767be94f1433e6b5ac2d1693dede3c01f63701e8
   useEffect(() => {
     const { params } = route;
 
@@ -181,6 +195,7 @@ const OrderInfoScreen = () => {
 
   const renderItem = ({ item }) => (
     <VStack>
+<<<<<<< HEAD
       <Box
         key={item.id}
         flex={1}
@@ -216,6 +231,50 @@ const OrderInfoScreen = () => {
             <Box>
               <Text>{item.total_amt} Ks</Text>
             </Box>
+=======
+        <Box 
+          key={item}
+          flex={1}
+          width="100%"
+          overflow="hidden"
+          _dark={{
+          }}
+          _web={{
+            shadow: 2,
+            borderWidth: 0
+          }}
+          _light={{
+          }}
+        >
+          <Stack p="4" space={3}>
+            <Stack flexDirection="row" justifyContent="space-between" space={2}>
+              <Box>
+                <Heading size="sm" textTransform="capitalize">
+                    {item.category}
+                </Heading>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Order Category Detail", {
+                      category_name: capitalize(item.category),
+                      order_name: order_detail?.order_no,
+                      order_id: order_detail?.id
+                    })
+                  }
+                >
+                  <Text mt={1} color="#20acc1" 
+                  >
+                    View Details
+                  </Text>
+                </TouchableOpacity>
+              </Box>
+              <Text>
+                  QTY: {item.total_qty}
+              </Text>
+              <Box>
+                <Text>{item.total_amt} Ks</Text>
+              </Box>
+            </Stack>
+>>>>>>> 767be94f1433e6b5ac2d1693dede3c01f63701e8
           </Stack>
         </Stack>
       </Box>
@@ -269,9 +328,13 @@ const OrderInfoScreen = () => {
             Delivery Fees
           </Heading>
           <Text>
+<<<<<<< HEAD
             {order_detail?.paid_delivery_cost
               ? order_detail?.user?.shippingcity?.cost + " Ks"
               : "Not Included"}
+=======
+              {order_detail?.total_qty}
+>>>>>>> 767be94f1433e6b5ac2d1693dede3c01f63701e8
           </Text>
         </Box>
         <Box p={4} flexDirection="row" justifyContent="space-between">
