@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import {
   AspectRatio,
@@ -15,21 +15,32 @@ import {
   Spacer,
   CheckIcon,
 } from "native-base";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderDetail } from "../../api/order";
 
 const OrderCategoryDetailScreen = () => {
-
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { order_detail, isLoading } = useSelector((state) => state.order);
 
   const route = useRoute();
+
+  const fetchOrderDetail = (orderId) =>
+    {
+      dispatch(getOrderDetail(orderId))
+    }
+  
 
   useEffect(() => {
 
     const { params } = route;
 
-    const { category_name, order_name } = params;
+    const { category_name, order_name, order_id } = params;
+
+    fetchOrderDetail(order_id)
 
     navigation.setOptions({
-      title: order_name + ' ' + category_name,
+      title: `${order_name} (${category_name})`,
       headerBackTitle: "Back",
     });
 
@@ -73,10 +84,10 @@ const OrderCategoryDetailScreen = () => {
     },
   ];
 
-  const renderItem = ({ item,index }) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity>
       <Box
-        key={index}
+        key={item.id}
         flex={1}
         width="100%"
         mt={3}
@@ -99,20 +110,20 @@ const OrderCategoryDetailScreen = () => {
         <Stack p="4" space={3}>
           <HStack flexDirection="row" alignItems="center" space={2}>
             <Image
-              source={{ uri: item.url }}
+              source={{ uri: item.image_url }}
               alt="image"
               resizeMode="cover"
               w={50}
               h={50}
             />
             <Stack>
-              <Heading size="xs">({item.totalPrice}) KS</Heading>
-              <Text>QTY: {item.qty} </Text>
+              <Text>QTY: {item.qty} x {item.per_amt} </Text>
+              <Heading mt={1} size="xs">({item.total_amt}) KS</Heading>
             </Stack>
             <Spacer />
             <Stack>
-              <Heading size="xs">{item?.quality}</Heading>
-              <Text> {item?.size} </Text>
+              <Heading textAlign="right" size="xs">{item?.quality?.name + ' ( ' + item?.size?.name + ' )'}</Heading>
+              <Heading textAlign="right" size="xs" mt={1}> {item?.size?.size} </Heading>
             </Stack>
           </HStack>
         </Stack>
@@ -123,10 +134,10 @@ const OrderCategoryDetailScreen = () => {
   return (
     <View style={styles.container}>
        <FlatList
-        data={data}
+        data={order_detail?.products}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item.category_id}
+        keyExtractor={(item) => item.id}
       />
     </View>
   );

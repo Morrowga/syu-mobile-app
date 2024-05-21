@@ -123,11 +123,12 @@ const OrderInfoScreen = () => {
       if (productsInCategory.length > 0) {
         
         const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
+        const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
 
         const categoryObject = {
           category: category.name,
-          products: productsInCategory,
-          total_amt: totalAmt
+          total_amt: totalAmt,
+          total_qty: totalQty
         };
 
         updatedCategorizedProducts.push(categoryObject);
@@ -137,6 +138,16 @@ const OrderInfoScreen = () => {
 
     setCategorizedProducts(updatedCategorizedProducts);
   }
+
+  const capitalize = (str) => {
+    const words = str.split(' ');
+  
+    const capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    });
+  
+    return capitalizedWords.join(' ');
+  };
   
   useEffect(() => {
     const { params } = route;
@@ -181,8 +192,9 @@ const OrderInfoScreen = () => {
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("Order Category Detail", {
-                      category_name: item.name,
-                      order_name: orderName
+                      category_name: capitalize(item.category),
+                      order_name: order_detail?.order_no,
+                      order_id: order_detail?.id
                     })
                   }
                 >
@@ -193,7 +205,7 @@ const OrderInfoScreen = () => {
                 </TouchableOpacity>
               </Box>
               <Text>
-                  QTY: {item.products?.length}
+                  QTY: {item.total_qty}
               </Text>
               <Box>
                 <Text>{item.total_amt} Ks</Text>
@@ -236,7 +248,7 @@ const OrderInfoScreen = () => {
               Total Count
           </Heading>
           <Text>
-              {order_detail?.count}
+              {order_detail?.total_qty}
           </Text>
         </Box>
         <Box p={4} flexDirection="row" justifyContent="space-between">
