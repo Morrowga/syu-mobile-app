@@ -35,7 +35,7 @@ export const orderSlice = createSlice({
         state.error_message = "";
       })
       .addCase(getOrders.fulfilled, (state, { payload }) => {
-        state.isLoading = false
+        state.isLoading = false;
         state.next_page += 1;
         state.orders = state.orders.concat(payload.data.data);
       })
@@ -46,18 +46,18 @@ export const orderSlice = createSlice({
 
     // getOrderDetail
     builder
-    .addCase(getOrderDetail.pending, (state) => {
-      state.isError = false;
-      state.error_message = "";
-    })
-    .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
-      state.isLoading = false
-      state.order_detail = payload?.data;
-    })
-    .addCase(getOrderDetail.rejected, (state, { payload }) => {
-      state.isError = true;
-      state.error_message = payload;
-    });
+      .addCase(getOrderDetail.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(getOrderDetail.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.order_detail = payload?.data;
+      })
+      .addCase(getOrderDetail.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.error_message = payload;
+      });
   },
 });
 export const { startLoading, clearError, clearOrderData } = orderSlice.actions;

@@ -18,17 +18,53 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrderDetail } from "../../api/order";
 import { getCategories } from "../../api/feed";
+import { selectCategorizedProducts } from "../../redux/selectors/orderSelectors";
 
 const OrderInfoScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
-  const [categorizedProducts, setCategorizedProducts] = useState([]);
+  const { params } = route;
+
+  const { order_id } = params;
+  // const [categorizedProducts, setCategorizedProducts] = useState([]);
   const { order_detail } = useSelector((state) => state.order);
-  const { isError, error_message, categories } = useSelector((state) => state.feed);
+  const { isError, error_message, categories } = useSelector(
+    (state) => state.feed
+  );
+  const categorizedProducts = useSelector(selectCategorizedProducts);
+
   const orderStatus = order_detail?.order_status;
   let buttonBottom;
 
+  // const listCategorizedProducts = () => {
+  //   const updatedCategorizedProducts = [];
+  //   categories?.forEach((category) => {
+  //     const productsInCategory = order_detail?.products?.filter(
+  //       (product) => product.category_id === category.id
+  //     );
+  //     if (productsInCategory.length > 0) {
+  //       const totalAmt = productsInCategory.reduce(
+  //         (acc, curr) => acc + curr.total_amt,
+  //         0
+  //       );
+  //       const totalQty = productsInCategory.reduce(
+  //         (acc, curr) => acc + curr.qty,
+  //         0
+  //       );
+
+  //       const categoryObject = {
+  //         category: category.name,
+  //         total_amt: totalAmt,
+  //         total_qty: totalQty,
+  //       };
+
+  //       updatedCategorizedProducts.push(categoryObject);
+  //     }
+  //   });
+
+  //   setCategorizedProducts(updatedCategorizedProducts);
+  // };
   // const getThemeData = () => {
   //   const theme = useSelector((state) => state.theme);
   //   console.log(theme);
@@ -130,33 +166,9 @@ const OrderInfoScreen = () => {
       break;
   }
 
-  const fetchOrderDetail = (orderId) => {
-    dispatch(getOrderDetail(orderId));
+  const fetchOrderDetail = () => {
+    dispatch(getOrderDetail(order_id));
   };
-
-  const listCategorizedProducts = () => {
-    console.log('rendered');
-    const updatedCategorizedProducts = [];
-    categories?.forEach(category => {
-      const productsInCategory = order_detail?.products?.filter(product => product.category_id === category.id);
-      if (productsInCategory?.length > 0) {
-        
-        const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
-        const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
-
-        const categoryObject = {
-          category: category.name,
-          total_amt: totalAmt,
-          total_qty: totalQty
-        };
-
-        updatedCategorizedProducts.push(categoryObject);
-
-      }
-    });
-
-    setCategorizedProducts(updatedCategorizedProducts);
-  }
 
   const capitalize = (str) => {
     const words = str.split(" ");
@@ -169,20 +181,18 @@ const OrderInfoScreen = () => {
   };
 
   useEffect(() => {
-    const { params } = route;
-    const { order_id } = params;
+    // const unsubscribe = navigation.addListener("focus", () => {
 
+    // });
+    // return () => unsubscribe();
+    fetchOrderDetail();
     fetchCategories();
-    fetchOrderDetail(order_id);
-
-    listCategorizedProducts();
 
     navigation.setOptions({
-        title: order_detail?.order_no,
-        headerBackTitle: "Back",    
+      title: order_detail?.order_no,
+      headerBackTitle: "Back",
     });
-}, []);
-
+  }, []);
 
   const renderItem = ({ item }) => (
     <VStack>
@@ -249,9 +259,9 @@ const OrderInfoScreen = () => {
           </Box>
         </Box>
         <Box>
-          <FlatList 
-            data={categorizedProducts} 
-            renderItem={renderItem} 
+          <FlatList
+            data={categorizedProducts}
+            renderItem={renderItem}
             contentContainerStyle={{ padding: 10 }}
             keyExtractor={(item) => item}
           />
@@ -268,13 +278,13 @@ const OrderInfoScreen = () => {
           <Heading size="sm" px="2.5">
             Total Count
           </Heading>
-          <Text>{order_detail?.count}</Text>
+          <Text>{order_detail?.total_qty}</Text>
         </Box>
         <Box p={4} flexDirection="row" justifyContent="space-between">
           <Heading size="sm" px="2.5">
             Delivery Fees
           </Heading>
-          <Text>{order_detail?.total_qty}</Text>
+          <Text>{order_detail?.paid_delivery_cost ? order_detail?.user?.shippingcity?.cost : 'not included'}</Text>
         </Box>
         <Box p={4} flexDirection="row" justifyContent="space-between">
           <Heading size="sm" px="2.5">
