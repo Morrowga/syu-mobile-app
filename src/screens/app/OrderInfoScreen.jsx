@@ -24,10 +24,8 @@ const OrderInfoScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [categorizedProducts, setCategorizedProducts] = useState([]);
-  const { order_detail, isLoading } = useSelector((state) => state.order);
-  const { isError, error_message, categories } = useSelector(
-    (state) => state.feed
-  );
+  const { order_detail } = useSelector((state) => state.order);
+  const { isError, error_message, categories } = useSelector((state) => state.feed);
   const orderStatus = order_detail?.order_status;
   let buttonBottom;
 
@@ -136,35 +134,35 @@ const OrderInfoScreen = () => {
     dispatch(getOrderDetail(orderId));
   };
 
-  const listCategorizedProducts = () => {
-    const updatedCategorizedProducts = [];
-
-    categories?.forEach((category) => {
-      const productsInCategory = order_detail?.products?.filter(
-        (product) => product.category_id === category.id
-      );
-      if (productsInCategory.length > 0) {
-        const totalAmt = productsInCategory.reduce(
-          (acc, curr) => acc + curr.total_amt,
-          0
-        );
-        const totalQty = productsInCategory.reduce(
-          (acc, curr) => acc + curr.qty,
-          0
-        );
-
-        const categoryObject = {
-          category: category.name,
-          total_amt: totalAmt,
-          total_qty: totalQty,
-        };
-
-        updatedCategorizedProducts.push(categoryObject);
+  const listCategorizedProducts = async () => {
+    if(await categories?.length > 0)
+      {
+        alert('reach')
+      }  else {
+        alert('empty')
       }
-    });
 
-    setCategorizedProducts(updatedCategorizedProducts);
-  };
+    // const updatedCategorizedProducts = [];
+    // categories?.forEach(category => {
+    //   const productsInCategory = order_detail?.products?.filter(product => product.category_id === category.id);
+    //   if (productsInCategory.length > 0) {
+        
+    //     const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
+    //     const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
+
+    //     const categoryObject = {
+    //       category: category.name,
+    //       total_amt: totalAmt,
+    //       total_qty: totalQty
+    //     };
+
+    //     updatedCategorizedProducts.push(categoryObject);
+
+    //   }
+    // });
+
+    // setCategorizedProducts(updatedCategorizedProducts);
+  }
 
   const capitalize = (str) => {
     const words = str.split(" ");
@@ -177,21 +175,39 @@ const OrderInfoScreen = () => {
   };
 
   useEffect(() => {
+    fetchCategories();
     const { params } = route;
 
     const { order_id } = params;
 
-    fetchCategories();
+    fetchOrderDetail(order_id)
+    
+    listCategorizedProducts()
+    // fetchOrderDetail(order_id)
+    // navigation.setOptions({
+    //   title: order_detail?.order_no,
+    //   headerBackTitle: "Back",    
+    // });
 
-    fetchOrderDetail(order_id);
+    // const unsubscribe = navigation.addListener("focus", () => {
+    //   const { params } = route;
 
-    listCategorizedProducts();
+    //   const { order_id } = params;
+  
+    //   fetchCategories();
+  
+    //   fetchOrderDetail(order_id)
 
-    navigation.setOptions({
-      title: order_detail?.order_no,
-      headerBackTitle: "Back",
-    });
+    //   listCategorizedProducts()
+  
+    //   navigation.setOptions({
+    //     title: order_detail?.order_no,
+    //     headerBackTitle: "Back",    
+    //   });
+    // });
+    // return () => unsubscribe();
   }, []);
+
 
   const renderItem = ({ item }) => (
     <VStack>
@@ -258,9 +274,9 @@ const OrderInfoScreen = () => {
           </Box>
         </Box>
         <Box>
-          <FlatList
-            data={categorizedProducts}
-            renderItem={renderItem}
+          <FlatList 
+            data={categorizedProducts} 
+            renderItem={renderItem} 
             contentContainerStyle={{ padding: 10 }}
             keyExtractor={(item) => item}
           />
