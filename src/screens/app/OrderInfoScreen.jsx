@@ -134,11 +134,12 @@ const OrderInfoScreen = () => {
     dispatch(getOrderDetail(orderId));
   };
 
-  const listCategorizedProducts = async () => {
+  const listCategorizedProducts = () => {
+    console.log('rendered');
     const updatedCategorizedProducts = [];
     categories?.forEach(category => {
       const productsInCategory = order_detail?.products?.filter(product => product.category_id === category.id);
-      if (productsInCategory.length > 0) {
+      if (productsInCategory?.length > 0) {
         
         const totalAmt = productsInCategory.reduce((acc, curr) => acc + curr.total_amt, 0);
         const totalQty = productsInCategory.reduce((acc, curr) => acc + curr.qty, 0);
@@ -168,24 +169,19 @@ const OrderInfoScreen = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      const { params } = route;
+    const { params } = route;
+    const { order_id } = params;
 
-      const { order_id } = params;
-  
-      fetchCategories();
-  
-      fetchOrderDetail(order_id)
+    fetchCategories();
+    fetchOrderDetail(order_id);
 
-      listCategorizedProducts()
-  
-      navigation.setOptions({
+    listCategorizedProducts();
+
+    navigation.setOptions({
         title: order_detail?.order_no,
         headerBackTitle: "Back",    
-      });
     });
-    return () => unsubscribe();
-  }, []);
+}, []);
 
 
   const renderItem = ({ item }) => (
