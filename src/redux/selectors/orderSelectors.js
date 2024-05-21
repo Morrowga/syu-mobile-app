@@ -33,6 +33,5 @@ export const selectCategorizedProducts = createSelector(
     console.log(categorizedProducts);
 
     return categorizedProducts;
-    // return [];
   }
 );
