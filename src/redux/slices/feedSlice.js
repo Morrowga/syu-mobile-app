@@ -31,6 +31,14 @@ export const feedSlice = createSlice({
       state.categories = [];
       state.next_page = 1;
     },
+    toggleWishlist: (state, action) => {
+      const { product_id } = action.payload;
+      const index = state.feeds.findIndex((item) => item.id === product_id);
+      if (index !== -1) {
+        const item = state.feeds[index];
+        item.isWishlist = !item.isWishlist;
+      }
+    },
   },
   extraReducers: (builder) => {
     // getCategories
@@ -64,5 +72,11 @@ export const feedSlice = createSlice({
       });
   },
 });
-export const { startLoading, clearError, clearFeedData,clearCategoryData } = feedSlice.actions;
+export const {
+  startLoading,
+  clearError,
+  clearFeedData,
+  clearCategoryData,
+  toggleWishlist,
+} = feedSlice.actions;
 export default feedSlice.reducer;

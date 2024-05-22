@@ -1,6 +1,6 @@
 // wishlistSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getWishlists } from "../../api/wishlist";
+import { addWishlist, getWishlists, removeWishlist } from "../../api/wishlist";
 
 const initialState = {
   isLoading: false,
@@ -41,7 +41,40 @@ export const wishlistSlice = createSlice({
         state.isError = true;
         state.error_message = payload;
       });
+
+    builder
+      .addCase(addWishlist.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(addWishlist.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(addWishlist.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error_message = payload;
+      });
+
+    builder
+      .addCase(removeWishlist.pending, (state) => {
+        state.isLoading = true;
+
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(removeWishlist.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(removeWishlist.rejected, (state, { payload }) => {
+        state.isLoading = false;
+
+        state.isError = true;
+        state.error_message = payload;
+      });
   },
 });
-export const { startLoading, clearError,clearWishlistData } = wishlistSlice.actions;
+export const { startLoading, clearError, clearWishlistData } =
+  wishlistSlice.actions;
 export default wishlistSlice.reducer;

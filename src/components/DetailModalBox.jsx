@@ -23,6 +23,8 @@ import {
   setCartData,
   updateCartQty,
 } from "../redux/slices/cartSlice";
+import { addWishlist, removeWishlist } from "../api/wishlist";
+import { toggleWishlist } from "../redux/slices/feedSlice";
 
 const DetailModalBox = ({
   isOpen,
@@ -139,7 +141,21 @@ const DetailModalBox = ({
       ...prevState,
       isWishlist: !prevState.isWishlist,
     }));
+    dispatch(addWishlist({ product_id: id }));
+    dispatch(toggleWishlist({ product_id: id }));
   };
+
+  const removeFromWishlist = () => {
+    if (isWishlist) {
+      setCartDetail((prevState) => ({
+        ...prevState,
+        isWishlist: !prevState.isWishlist,
+      }));
+      dispatch(removeWishlist({ product_id: id }));
+      dispatch(toggleWishlist({ product_id: id }));
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <Modal.Content>
@@ -243,7 +259,7 @@ const DetailModalBox = ({
           <IconButton
             rounded="full"
             variant="solid"
-            onPress={() => addToWishlist()}
+            onPress={isWishlist ? removeFromWishlist : addToWishlist}
             icon={
               cartDetail?.isWishlist ? (
                 <Icon name="heart" color="#fff" size={20} />

@@ -73,7 +73,7 @@ const ProductListScreen = () => {
       category_id: category.id,
       category_name: category.name,
       price: 0,
-      isWishlist: data?.wishlist ? true : false,
+      isWishlist: data?.isWishlist,
     });
   };
 
