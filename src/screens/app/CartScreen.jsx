@@ -31,7 +31,7 @@ const CartScreen = () => {
     navigation.navigate("Cart Product List", { category_id, category_name });
   };
   const goCheckout = () => {
-    navigation.navigate("Checkout");
+    navigation.navigate("Shipping Address Screen");
   };
   const renderItem = ({ item }) => (
     <Box

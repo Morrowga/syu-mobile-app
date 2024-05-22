@@ -3,7 +3,7 @@ import { HTTP } from "./http";
 
 export const getPaymentMethods = createAsyncThunk(
   "payment/getPaymentMethods",
-  async (data, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       let response = await HTTP.get("/orders/payment-methods");
       return response.data.data;
@@ -29,6 +29,30 @@ export const updatePayment = createAsyncThunk(
       } else {
         return rejectWithValue(error.message);
       }
+    }
+  }
+);
+
+export const getShippingCities = createAsyncThunk(
+  "payment/getShippingCities",
+  async (_, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.get("/shipping-cities");
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getCurrentUserProfile = createAsyncThunk(
+  "payment/getCurrentUserProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.get("/users/profile");
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
