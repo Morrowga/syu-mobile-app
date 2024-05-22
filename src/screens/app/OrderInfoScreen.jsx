@@ -185,6 +185,7 @@ const OrderInfoScreen = () => {
                 onPress={() =>
                   navigation.navigate("Order Category Detail", {
                     category_name: capitalize(item.category),
+                    category_id: item.category_id,
                     order_name: order_detail?.order_no,
                     order_id: order_detail?.id,
                   })

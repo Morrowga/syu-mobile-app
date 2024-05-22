@@ -22,6 +22,7 @@ export const selectCategorizedProducts = createSelector(
 
           return {
             category: category.name,
+            category_id: category.id,
             total_amt: totalAmt,
             total_qty: totalQty,
           };

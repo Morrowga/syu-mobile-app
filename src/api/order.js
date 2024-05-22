@@ -37,3 +37,15 @@ export const getOrderDetail = createAsyncThunk(
     }
   }
 );
+
+export const getProductDetail = createAsyncThunk(
+  "app/product-detail",
+  async (filter, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.get("orders/order-product-detail/" + filter?.order_id + '?category_id=' + filter?.category_id);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);

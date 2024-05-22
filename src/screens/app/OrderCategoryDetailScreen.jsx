@@ -16,28 +16,32 @@ import {
   CheckIcon,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderDetail } from "../../api/order";
+import { getProductDetail } from "../../api/order";
 
 const OrderCategoryDetailScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { order_detail, isLoading } = useSelector((state) => state.order);
+  const { product_detail, isLoading } = useSelector((state) => state.order);
 
   const route = useRoute();
 
-  const fetchOrderDetail = (orderId) =>
-    {
-      dispatch(getOrderDetail(orderId))
+  const fetchProductDetail = (orderId, categoryId) =>
+  {
+    const filter = {
+      order_id: orderId,
+      category_id: categoryId
     }
+    dispatch(getProductDetail(filter))
+  }
   
 
   useEffect(() => {
 
     const { params } = route;
 
-    const { category_name, order_name, order_id } = params;
+    const { category_name, order_name, order_id, category_id } = params;
 
-    fetchOrderDetail(order_id)
+    fetchProductDetail(order_id, category_id)
 
     navigation.setOptions({
       title: `${order_name} (${category_name})`,
@@ -84,10 +88,10 @@ const OrderCategoryDetailScreen = () => {
     },
   ];
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <TouchableOpacity>
       <Box
-        key={item.id}
+        key={index}
         flex={1}
         width="100%"
         mt={3}
@@ -134,7 +138,7 @@ const OrderCategoryDetailScreen = () => {
   return (
     <View style={styles.container}>
        <FlatList
-        data={order_detail?.products}
+        data={product_detail}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
         keyExtractor={(item) => item.id}

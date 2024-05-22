@@ -1,12 +1,13 @@
 // wishlistSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrders, getOrderDetail, createOrder } from "../../api/order";
+import { getOrders, getOrderDetail, createOrder, getProductDetail } from "../../api/order";
 
 const initialState = {
   isLoading: false,
   isError: false,
   orders: [],
   order_detail: [],
+  product_detail: [],
   next_page: 1,
   error_message: "",
 };
@@ -55,6 +56,21 @@ export const orderSlice = createSlice({
         state.order_detail = payload?.data;
       })
       .addCase(getOrderDetail.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.error_message = payload;
+      });
+
+      // getProductDetail
+      builder
+      .addCase(getProductDetail.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+      })
+      .addCase(getProductDetail.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.product_detail = payload?.data;
+      })
+      .addCase(getProductDetail.rejected, (state, { payload }) => {
         state.isError = true;
         state.error_message = payload;
       });
