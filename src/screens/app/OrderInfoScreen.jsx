@@ -164,7 +164,7 @@ const OrderInfoScreen = () => {
   const renderItem = ({ item }) => (
     <VStack>
       <Box
-        key={item}
+        key={item.id}
         flex={1}
         width="100%"
         overflow="hidden"
@@ -232,7 +232,7 @@ const OrderInfoScreen = () => {
             data={categorizedProducts}
             renderItem={renderItem}
             contentContainerStyle={{ padding: 10 }}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.id}
           />
         </Box>
         <Box display="grid" px={5} justifyContent="end" w="full">
