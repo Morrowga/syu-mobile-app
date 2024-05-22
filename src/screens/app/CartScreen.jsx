@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryFromState,
   selectTotalPrice,
@@ -17,6 +17,7 @@ import {
   View,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { deleteAllCartData } from "../../redux/slices/cartSlice";
 
 const CartScreen = () => {
   const { cartData } = useSelector((state) => state.cart);
@@ -24,6 +25,7 @@ const CartScreen = () => {
   const navigation = useNavigation();
   const totalQty = useSelector(selectTotalQuantity);
   const totalPrice = useSelector(selectTotalPrice);
+  const dispatch = useDispatch();
 
   const goCartProductList = (category_id, category_name) => {
     navigation.navigate("Cart Product List", { category_id, category_name });
@@ -106,6 +108,10 @@ const CartScreen = () => {
     </View>
   );
 
+  const clearCart = () => {
+    dispatch(deleteAllCartData());
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -122,9 +128,22 @@ const CartScreen = () => {
             <Heading size="sm">Total Count ({totalQty})</Heading>
             <Text>{totalPrice} Ks</Text>
           </Box>
-          <Box p={4} flexDirection="row" justifyContent="center" w="full">
-            <Button w="full" rounded="full" onPress={goCheckout}>
+          <Box
+            p={4}
+            flexDirection="row"
+            justifyContent="space-between"
+            w="full"
+          >
+            <Button w="50%" rounded="full" onPress={goCheckout}>
               Proceed To Checkout
+            </Button>
+            <Button
+              w="45%"
+              rounded="full"
+              onPress={clearCart}
+              background="red.500"
+            >
+              Clear Cart
             </Button>
           </Box>
         </View>
