@@ -96,7 +96,7 @@ const OrderListScreen = () => {
     <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: item.id})}>
     <VStack>
         <Box
-          key={item}
+          key={item.id}
           flex={1}
           mt={4}
           width="100%"
@@ -166,7 +166,7 @@ const OrderListScreen = () => {
                 ))}
               </View>
             </View>
-            <Box flexDirection="row" justifyContent="space-between">
+            <Box flexDirection="row" mt={2} justifyContent="space-between">
                 <Text fontWeight={500}>
                   Order expire in <Text color="red.300">{formatTimeDifference(item.order_expired_date)}</Text>
                 </Text>

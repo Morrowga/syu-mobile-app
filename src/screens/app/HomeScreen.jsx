@@ -41,7 +41,7 @@ const HomeScreen = ({ navigate }) => {
     {
       id: 2,
       name: "Customization",
-      url: "https://i.pinimg.com/originals/f8/f0/14/f8f014a118438355626a816430c701cb.gif",
+      url: "https://i.pinimg.com/originals/62/82/0a/62820a3251082ac356b5fd45c8cc324f.gif",
       route: "Customization",
     },
   ];
