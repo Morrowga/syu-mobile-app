@@ -65,8 +65,12 @@ const OrderListScreen = () => {
     const hours = duration.hours();
     const minutes = duration.minutes();
 
-    return `${days} days ${hours} hours ${minutes} minutes`;
-};
+    if (hours === 0) {
+        return `${days} days ${minutes} minutes`;
+    } else {
+        return `${days} days ${hours} hours ${minutes} minutes`;
+    }
+}
 
   const fetchOrder = (initial_page) =>
   {
