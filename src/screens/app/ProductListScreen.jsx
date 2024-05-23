@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
+  useWindowDimensions,
   LogBox,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
@@ -16,6 +17,7 @@ import {
   FlatList,
   Button,
   Input,
+  Skeleton,
   Fab,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -51,6 +53,9 @@ const ProductListScreen = () => {
   const { category } = params;
   const navigation = useNavigation();
   const totalQty = useSelector(selectTotalQuantity);
+
+  const windowWidth = useWindowDimensions().width;
+  const itemWidth = (windowWidth - 30) / 2;
 
   const handleSearchInputChange = (value) => {
     setSearch(value);
@@ -124,7 +129,7 @@ const ProductListScreen = () => {
     <TouchableOpacity onPress={() => openModal(item)} key={item.id}>
       <Box
         key={item}
-        maxW="180"
+        width={itemWidth}
         mt={3}
         rounded="lg"
         overflow="hidden"
@@ -143,13 +148,15 @@ const ProductListScreen = () => {
         }}
       >
         <Box>
-          <AspectRatio w="100%" ratio={16 / 16}>
-            <Image
-              source={{ uri: item.image_url ?? null }}
-              alt="image"
-              resizeMode="cover"
-            />
-          </AspectRatio>
+          <Skeleton isLoaded={item.image_url !== undefined || item.image_url !== ''} startColor="#f3f3f3" w="100%" height={200} endColor="#d9d9d9">
+            <AspectRatio w="100%" ratio={16 / 16}>
+              <Image
+                source={{ uri: item.image_url ?? null }}
+                alt="image"
+                resizeMode="cover"
+              />
+            </AspectRatio>
+          </Skeleton>
         </Box>
       </Box>
     </TouchableOpacity>

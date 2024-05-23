@@ -10,6 +10,7 @@ import {
   VStack,
   Image,
   Divider,
+  Skeleton
 } from "native-base";
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -116,15 +117,16 @@ const OrderListScreen = () => {
           }}
         >
         <Stack p="4" space={3}>
+        <Skeleton isLoaded={item !== undefined} startColor="#f3f3f3" endColor="#d9d9d9">
           <Stack flexDirection="row" justifyContent="space-between" space={2}>
-            <Box>
-              <Heading size="sm">
-                {item.order_no}
-              </Heading>
-              <Badge colorScheme={getColorScheme(item.order_status)} fontSize={10} alignSelf="left" mt={3} rounded="full" variant="solid">
-                  <Text color="#fff" textTransform="capitalize" fontSize={12}>{item.order_status}</Text> 
-              </Badge>
-            </Box>
+              <Box>
+                  <Heading size="sm">
+                    {item.order_no}
+                  </Heading>
+                <Badge colorScheme={getColorScheme(item.order_status)} fontSize={10} alignSelf="left" mt={3} rounded="full" variant="solid">
+                    <Text color="#fff" textTransform="capitalize" fontSize={12}>{item.order_status}</Text> 
+                </Badge>
+              </Box>
             <Box>
               <Text mt={1} textAlign="right">
                   {item.overall_price} MMK
@@ -134,6 +136,7 @@ const OrderListScreen = () => {
               </Text>
             </Box>
           </Stack>
+          </Skeleton>
           <Box display="grid" justifyContent="end" w="full">
             <Divider
               my="2"
@@ -142,29 +145,33 @@ const OrderListScreen = () => {
               _dark={{ bg: "gray.50" }}
             />
           </Box>
-          <View
-            style={{
-              position: 'relative',
-            }}
-          >
-            <View>
-              {limitImages(item.products).map((product, index) => (
-                <AspectRatio key={index} ratio={16 / 3}>
-                  <Image
-                    source={{ uri: product.image_url }}
-                    alt={product.name}
-                    style={styles.image}
-                    resizeMode="cover"
-                  />
-                </AspectRatio>
-              ))}
+          <Skeleton isLoaded={item !== undefined} startColor="#f3f3f3" height={120} endColor="#d9d9d9">
+            <View
+              style={{
+                position: 'relative',
+              }}
+            >
+              <View>
+                {limitImages(item.products).map((product, index) => (
+                <Skeleton isLoaded={product.image_url !== undefined} startColor="#f3f3f3" height={100} endColor="#d9d9d9">
+                  <AspectRatio key={index} ratio={16 / 3}>
+                    <Image
+                      source={{ uri: product.image_url }}
+                      alt={product.name}
+                      style={styles.image}
+                      resizeMode="cover"
+                    />
+                  </AspectRatio>
+                </Skeleton>
+                ))}
+              </View>
             </View>
-          </View>
-          <Box flexDirection="row" justifyContent="space-between">
-              <Text fontWeight={500}>
-                Order expire in <Text color="red.300">{formatTimeDifference(item.order_expired_date)}</Text>
-              </Text>
-          </Box>
+            <Box flexDirection="row" justifyContent="space-between">
+                <Text fontWeight={500}>
+                  Order expire in <Text color="red.300">{formatTimeDifference(item.order_expired_date)}</Text>
+                </Text>
+            </Box>
+          </Skeleton>
         </Stack>
       </Box>
       </VStack>

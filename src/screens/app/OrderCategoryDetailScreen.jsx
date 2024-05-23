@@ -12,6 +12,7 @@ import {
   Input,
   Heading,
   Select,
+  Skeleton,
   Spacer,
   CheckIcon,
 } from "native-base";
@@ -90,48 +91,50 @@ const OrderCategoryDetailScreen = () => {
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity>
-      <Box
-        key={index}
-        flex={1}
-        width="100%"
-        mt={3}
-        rounded="lg"
-        overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: "gray.50",
-        }}
-      >
-        <Stack p="4" space={3}>
-          <HStack flexDirection="row" alignItems="center" space={2}>
-            <Image
-              source={{ uri: item.image_url }}
-              alt="image"
-              resizeMode="cover"
-              w={50}
-              h={50}
-            />
-            <Stack>
-              <Text>QTY: {item.qty} x {item.per_amt} </Text>
-              <Heading mt={1} size="xs">({item.total_amt}) KS</Heading>
+        <Box
+          key={index}
+          flex={1}
+          width="100%"
+          mt={3}
+          rounded="lg"
+          overflow="hidden"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          _dark={{
+            borderColor: "coolGray.600",
+            backgroundColor: "gray.700",
+          }}
+          _web={{
+            shadow: 2,
+            borderWidth: 0,
+          }}
+          _light={{
+            backgroundColor: "gray.50",
+          }}
+        >
+          <Skeleton isLoaded={item !== undefined} startColor="#f3f3f3" height={90} endColor="#d9d9d9">
+            <Stack p="4" space={3}>
+              <HStack flexDirection="row" alignItems="center" space={2}>
+                <Image
+                  source={{ uri: item.image_url }}
+                  alt="image"
+                  resizeMode="cover"
+                  w={50}
+                  h={50}
+                />
+                <Stack>
+                  <Text>QTY: {item.qty} x {item.per_amt} </Text>
+                  <Heading mt={1} size="xs">({item.total_amt}) KS</Heading>
+                </Stack>
+                <Spacer />
+                <Stack>
+                  <Heading textAlign="right" size="xs">{item?.quality?.name + ' ( ' + item?.size?.name + ' )'}</Heading>
+                  <Heading textAlign="right" size="xs" mt={1}> {item?.size?.size} </Heading>
+                </Stack>
+              </HStack>
             </Stack>
-            <Spacer />
-            <Stack>
-              <Heading textAlign="right" size="xs">{item?.quality?.name + ' ( ' + item?.size?.name + ' )'}</Heading>
-              <Heading textAlign="right" size="xs" mt={1}> {item?.size?.size} </Heading>
-            </Stack>
-          </HStack>
-        </Stack>
-      </Box>
+          </Skeleton>
+        </Box>
     </TouchableOpacity>
   );
 

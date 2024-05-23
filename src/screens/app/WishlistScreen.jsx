@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
+  useWindowDimensions,
   Text,
 } from "react-native";
 import {
@@ -12,6 +13,7 @@ import {
   FlatList,
   Input,
   Select,
+  Skeleton,
   CheckIcon,
 } from "native-base";
 import { useEffect, useState, useRef } from "react";
@@ -31,6 +33,9 @@ const WishlistScreen = () => {
   const { wishlists, next_page, isLoading } = useSelector(
     (state) => state.wishlist
   );
+
+  const windowWidth = useWindowDimensions().width;
+  const itemWidth = (windowWidth - 30) / 2;
 
   const fetchCategories = () => {
     const filter = {
@@ -93,7 +98,7 @@ const WishlistScreen = () => {
     <TouchableOpacity onPress={() => console.log("pressed...")}>
       <Box
         key={item}
-        maxW="180"
+        width={itemWidth}
         mt={3}
         rounded="lg"
         overflow="hidden"
@@ -112,13 +117,15 @@ const WishlistScreen = () => {
         }}
       >
         <Box>
-          <AspectRatio w="100%" ratio={16 / 16}>
-            <Image
-              source={{ uri: item.image_url }}
-              alt="image"
-              resizeMode="cover"
-            />
-          </AspectRatio>
+          <Skeleton isLoaded={item.image_url !== undefined || item.image_url !== ''} startColor="#f3f3f3" w="100%" height={200} endColor="#d9d9d9">
+            <AspectRatio w="100%" ratio={16 / 16}>
+                <Image
+                  source={{ uri: item.image_url }}
+                  alt="image"
+                  resizeMode="cover"
+                />
+              </AspectRatio>
+          </Skeleton>
         </Box>
       </Box>
     </TouchableOpacity>
