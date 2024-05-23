@@ -93,11 +93,11 @@ const OrderListScreen = () => {
         <Box
           key={item}
           flex={1}
-          mt={2}
+          mt={4}
           width="100%"
           rounded="lg"
           overflow="hidden"
-          borderColor="coolGray.350"
+          borderColor="coolGray.300"
           borderWidth="1"
           _dark={{
             borderColor: "coolGray.600",
