@@ -4,6 +4,7 @@ import {
   getPaymentMethods,
   getShippingCities,
   updatePayment,
+  updateProfile,
 } from "../../api/payment";
 
 const initialState = {
@@ -12,7 +13,9 @@ const initialState = {
   isLoading: false,
   isError: false,
   error_message: "",
-  errors: [],
+  be_errors: {},
+  isFormError: false,
+  isFormLoading: false,
 };
 
 export const paymentSlice = createSlice({
@@ -73,6 +76,22 @@ export const paymentSlice = createSlice({
         state.isError = true;
         state.isLoading = false;
         state.error_message = payload;
+      });
+
+    builder
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.be_errors = {};
+      })
+      .addCase(updateProfile.fulfilled, (state, { payload }) => {
+        state.isError = false;
+        state.isLoading = false;
+      })
+      .addCase(updateProfile.rejected, (state, { payload }) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.be_errors = payload;
       });
   },
 });

@@ -46,6 +46,7 @@ const CheckoutScreen = () => {
     return {
       product_id: cart.id,
       size_id: cart.size,
+      category_id: cart.category_id,
       quality_id: cart.quality,
       qty: cart.qty,
       total_price: cart.totalPrice,
@@ -73,7 +74,6 @@ const CheckoutScreen = () => {
       overall_price: totalPrice,
       note: note,
       products: JSON.stringify(orderCartItems),
-      waiting_days: 10,
     };
 
     await dispatch(createOrder(formData)).then((resp) => {

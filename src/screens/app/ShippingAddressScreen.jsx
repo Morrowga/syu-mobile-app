@@ -11,12 +11,20 @@ import {
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUserProfile, getShippingCities } from "../../api/payment";
+import {
+  getCurrentUserProfile,
+  getShippingCities,
+  updatePayment,
+  updateProfile,
+} from "../../api/payment";
 
 const ShippingAddressScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { shipping_cities } = useSelector((state) => state.payment);
+  const { shipping_cities, isError, be_errors, isLoading } = useSelector(
+    (state) => state.payment
+  );
+  const [errors, setErrors] = useState({});
 
   const [shippingForm, setShippingForm] = useState({
     name: "",
@@ -24,9 +32,10 @@ const ShippingAddressScreen = () => {
     delivery_fees: 0,
     shipping_address: "",
     gender: "",
+    msisdn: "",
   });
-  const [errors, setErrors] = useState({});
-  const genders = ["Male", "Female", "Other"];
+  const genders = ["male", "female", "other", "empty"];
+  // console.log(shipping_cities);
 
   const handleChange = (field, value) => {
     setShippingForm({
@@ -51,33 +60,27 @@ const ShippingAddressScreen = () => {
     }
   };
 
-  const submitForm = async () => {
-    setErrors({
-      name: ["Name field is required!"],
-      shipping_city_id: ["City field is required!"],
-      delivery_fees: ["Delivery fees field is required!"],
-      shipping_address: ["Shipping address field is required!"],
-      gender: ["Gender field is required!"],
-    });
-
-    // navigation.navigate("Checkout");
-    //   if (error.response && error.response.data) {
-    //     setErrors(error.response.data.errors);
-    //   }
+  const submitForm = () => {
+    dispatch(updateProfile(shippingForm))
+      .unwrap()
+      .then((resp) => {
+        navigation.navigate("Checkout");
+      })
+      .catch((error) => {
+        if (isError && Object.keys(be_errors)?.length != 0) {
+          setErrors(be_errors);
+        }
+      });
   };
   const getUserInfo = () => {
     dispatch(getCurrentUserProfile()).then((resp) => {
       let current_user = resp.payload;
-      let current_delivery_fee = 0;
-      if (current_user?.shipping_city_id) {
-        current_delivery_fee = shipping_cities.find(
-          (city) => city.id == current_user.shipping_city_id
-        )?.cost;
-      }
+
       setShippingForm((prevState) => ({
-        delivery_fees: current_delivery_fee,
+        msisdn: current_user?.msisdn,
+        delivery_fees: current_user?.shippingcity.cost,
         name: current_user?.name,
-        shipping_city_id: current_user?.shipping_city_id,
+        shipping_city_id: current_user?.shippingcity.id,
         shipping_address: current_user?.shipping_address,
         gender: current_user?.gender,
       }));
@@ -123,7 +126,7 @@ const ShippingAddressScreen = () => {
               editable={false}
               readOnly
             >
-              {shipping_cities?.map((city) => (
+              {shipping_cities.map((city) => (
                 <Select.Item
                   label={city.name_en}
                   value={city.id}
@@ -142,7 +145,7 @@ const ShippingAddressScreen = () => {
             <FormControl.Label>Delivery Fees</FormControl.Label>
             <Input
               readOnly
-              value={shippingForm.delivery_fees.toString()}
+              value={shippingForm.delivery_fees}
               onChangeText={(value) => handleChange("delivery_fees", value)}
             />
             {/* {errors.delivery_fees && (
@@ -194,7 +197,7 @@ const ShippingAddressScreen = () => {
           </FormControl>
         </VStack>
       </ScrollView>
-      <Button mt={4} onPress={submitForm}>
+      <Button mt={4} onPress={() => submitForm()} isLoading={isLoading}>
         Submit
       </Button>
     </KeyboardAvoidingView>

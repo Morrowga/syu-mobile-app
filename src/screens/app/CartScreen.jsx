@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryFromState,
@@ -25,13 +25,17 @@ const CartScreen = () => {
   const navigation = useNavigation();
   const totalQty = useSelector(selectTotalQuantity);
   const totalPrice = useSelector(selectTotalPrice);
+  const { categories } = useSelector((state) => state.feed);
   const dispatch = useDispatch();
 
   const goCartProductList = (category_id, category_name) => {
     navigation.navigate("Cart Product List", { category_id, category_name });
   };
   const goCheckout = () => {
-    navigation.navigate("Shipping Address Screen");
+    let isValid = limitQty();
+    if (isValid) {
+      navigation.navigate("Shipping Address Screen");
+    }
   };
   const renderItem = ({ item }) => (
     <Box
@@ -112,6 +116,28 @@ const CartScreen = () => {
     dispatch(deleteAllCartData());
   };
 
+  const limitQty = () => {
+    let category_ids = cartCategories.map((cart) => cart.category_id);
+    let error_message = [];
+    category_ids.forEach((category_id) => {
+      let limitation = categories.find(
+        (category) => category.id == category_id
+      )?.limitation;
+      let current_category = cartCategories.find(
+        (cart) => cart.category_id == category_id
+      );
+      if (current_category.qty < limitation) {
+        let message = `${current_category.category_name} need to add at least ${limitation} pcs \n`;
+        error_message.push(message);
+      }
+    });
+    if (error_message.length > 0) {
+      const message = error_message.join("\n");
+      Alert.alert("Alert", message, [{ text: "OK" }]);
+      return false;
+    }
+    return true;
+  };
   return (
     <View style={styles.container}>
       <FlatList
