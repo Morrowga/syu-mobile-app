@@ -1,18 +1,22 @@
 import { StyleSheet, View,TouchableOpacity,RefreshControl } from "react-native";
 import { 
+  AspectRatio,
   Heading, 
   Box,
   FlatList,
   Stack, 
   Text, 
   Badge, 
-  VStack
+  VStack,
+  Image,
+  Divider,
 } from "native-base";
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../../api/order";
 import { clearOrderData } from "../../redux/slices/orderSlice";
+import moment from 'moment';
 
 const OrderListScreen = () => {
   const dispatch = useDispatch();
@@ -48,6 +52,21 @@ const OrderListScreen = () => {
     }
   };
 
+  const limitImages = (products) => {
+    return products.slice(0, 2)
+  }
+
+  const formatTimeDifference = (expirationDate) => {
+    const expiration = moment(expirationDate);
+    const current = moment();
+    const duration = moment.duration(expiration.diff(current));
+    
+    const days = duration.days();
+    const hours = duration.hours();
+    const minutes = duration.minutes();
+
+    return `${days} days ${hours} hours ${minutes} minutes`;
+};
 
   const fetchOrder = (initial_page) =>
   {
@@ -71,9 +90,6 @@ const OrderListScreen = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: item.id})}>
     <VStack>
-        {/* <Badge colorScheme="danger" alignSelf="flex-end" rounded="full" variant="solid" mb={-3} mt={2} mr={2} zIndex={1} >
-          {item.count}
-        </Badge> */}
         <Box
           key={item}
           flex={1}
@@ -81,7 +97,7 @@ const OrderListScreen = () => {
           width="100%"
           rounded="lg"
           overflow="hidden"
-          borderColor="coolGray.200"
+          borderColor="coolGray.350"
           borderWidth="1"
           _dark={{
             borderColor: "coolGray.600",
@@ -107,13 +123,44 @@ const OrderListScreen = () => {
             </Box>
             <Box>
               <Text mt={1} textAlign="right">
-                  {item.overall_price}
+                  {item.overall_price} MMK
               </Text>
               <Text mt={3} opacity={0.3} textAlign="right">
                   {formatDate(item.created_at)}
               </Text>
             </Box>
           </Stack>
+          <Box display="grid" justifyContent="end" w="full">
+            <Divider
+              my="2"
+              px={5}
+              _light={{ bg: "gray.300" }}
+              _dark={{ bg: "gray.50" }}
+            />
+          </Box>
+          <View
+            style={{
+              position: 'relative',
+            }}
+          >
+            <View>
+              {limitImages(item.products).map((product, index) => (
+                <AspectRatio key={index} ratio={16 / 3}>
+                  <Image
+                    source={{ uri: product.image_url }}
+                    alt={product.name}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                </AspectRatio>
+              ))}
+            </View>
+          </View>
+          <Box flexDirection="row" justifyContent="space-between">
+              <Text fontWeight={500}>
+                Order expire in <Text color="red.300">{formatTimeDifference(item.order_expired_date)}</Text>
+              </Text>
+          </Box>
         </Stack>
       </Box>
       </VStack>
@@ -138,5 +185,6 @@ const OrderListScreen = () => {
   )
 };
 const styles = StyleSheet.create({
+  
 });
 export default OrderListScreen;
