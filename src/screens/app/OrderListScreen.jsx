@@ -114,7 +114,7 @@ const OrderListScreen = () => {
         <Stack p="4" space={3}>
           <Stack flexDirection="row" justifyContent="space-between" space={2}>
             <Box>
-              <Heading size="md">
+              <Heading size="sm">
                 {item.order_no}
               </Heading>
               <Badge colorScheme={getColorScheme(item.order_status)} fontSize={10} alignSelf="left" mt={3} rounded="full" variant="solid">
