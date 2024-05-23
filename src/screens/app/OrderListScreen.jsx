@@ -15,7 +15,7 @@ import {
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
-import { getOrders } from "../../api/order";
+import { getOrders, checkOrders } from "../../api/order";
 import { clearOrderData } from "../../redux/slices/orderSlice";
 import moment from 'moment';
 
@@ -66,12 +66,17 @@ const OrderListScreen = () => {
     const hours = duration.hours();
     const minutes = duration.minutes();
 
-    if (hours === 0) {
+    if(days === 0 && hours === 0)
+    {
+      return `${minutes} minutes`;
+    } else if(days === 0){
+      return `${hours} hours ${minutes} minutes`;
+    }else if (hours === 0) {
         return `${days} days ${minutes} minutes`;
     } else {
         return `${days} days ${hours} hours ${minutes} minutes`;
     }
-}
+  }
 
   const fetchOrder = (initial_page) =>
   {
@@ -88,6 +93,7 @@ const OrderListScreen = () => {
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(clearOrderData())
       fetchOrder(1)
+      dispatch(checkOrders())
     });
     return () => unsubscribe();
   },[]); 
@@ -117,25 +123,25 @@ const OrderListScreen = () => {
           }}
         >
         <Stack p="4" space={3}>
-        <Skeleton isLoaded={item !== undefined} startColor="#f3f3f3" endColor="#d9d9d9">
-          <Stack flexDirection="row" justifyContent="space-between" space={2}>
+          <Skeleton isLoaded={item !== undefined} startColor="#f3f3f3" endColor="#d9d9d9">
+            <Stack flexDirection="row" justifyContent="space-between" space={2}>
+                <Box>
+                    <Heading size="sm">
+                      {item.order_no}
+                    </Heading>
+                  <Badge colorScheme={getColorScheme(item.order_status)} fontSize={10} alignSelf="left" mt={3} rounded="full" variant="solid">
+                      <Text color="#fff" textTransform="capitalize" fontSize={12}>{item.order_status}</Text> 
+                  </Badge>
+                </Box>
               <Box>
-                  <Heading size="sm">
-                    {item.order_no}
-                  </Heading>
-                <Badge colorScheme={getColorScheme(item.order_status)} fontSize={10} alignSelf="left" mt={3} rounded="full" variant="solid">
-                    <Text color="#fff" textTransform="capitalize" fontSize={12}>{item.order_status}</Text> 
-                </Badge>
+                <Text mt={1} textAlign="right">
+                    {item.overall_price} MMK
+                </Text>
+                <Text mt={3} opacity={0.3} textAlign="right">
+                    {formatDate(item.created_at)}
+                </Text>
               </Box>
-            <Box>
-              <Text mt={1} textAlign="right">
-                  {item.overall_price} MMK
-              </Text>
-              <Text mt={3} opacity={0.3} textAlign="right">
-                  {formatDate(item.created_at)}
-              </Text>
-            </Box>
-          </Stack>
+            </Stack>
           </Skeleton>
           <Box display="grid" justifyContent="end" w="full">
             <Divider

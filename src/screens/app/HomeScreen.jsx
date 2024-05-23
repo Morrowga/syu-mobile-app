@@ -20,6 +20,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
 import { useDispatch, useSelector } from "react-redux";
 import { getThemeData } from "../../api/theme";
+import { checkOrders } from "../../api/order";
 const { width: viewportWidth } = Dimensions.get("window");
 
 const HomeScreen = ({ navigate }) => {
@@ -49,6 +50,7 @@ const HomeScreen = ({ navigate }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       dispatch(getThemeData());
+      dispatch(checkOrders())
     });
 
     return () => unsubscribe();

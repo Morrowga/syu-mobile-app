@@ -14,11 +14,25 @@ export const createOrder = createAsyncThunk(
   }
 );
 
+export const checkOrders = createAsyncThunk(
+  "order/checkOrders",
+  async (data, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("/orders/check", data);
+      return response.data.data;
+    } catch {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getOrders = createAsyncThunk(
   "app/order",
   async (page, { rejectWithValue }) => {
     try {
       let response = await HTTP.get("orders?page=" + page);
+
+      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
