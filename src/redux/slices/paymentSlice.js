@@ -82,7 +82,6 @@ export const paymentSlice = createSlice({
       .addCase(updateProfile.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
-        state.be_errors = {};
       })
       .addCase(updateProfile.fulfilled, (state, { payload }) => {
         state.isError = false;
@@ -91,7 +90,6 @@ export const paymentSlice = createSlice({
       .addCase(updateProfile.rejected, (state, { payload }) => {
         state.isError = true;
         state.isLoading = false;
-        state.be_errors = payload;
       });
   },
 });

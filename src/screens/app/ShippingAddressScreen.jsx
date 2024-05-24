@@ -67,8 +67,8 @@ const ShippingAddressScreen = () => {
         navigation.navigate("Checkout");
       })
       .catch((error) => {
-        if (isError && Object.keys(be_errors)?.length != 0) {
-          setErrors(be_errors);
+        if (Object.keys(error)?.length != 0) {
+          setErrors(error);
         }
       });
   };

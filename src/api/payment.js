@@ -64,7 +64,6 @@ export const updateProfile = createAsyncThunk(
       let response = await HTTP.post("/users/update-profile", data);
       return response.data;
     } catch (error) {
-      console.log(error);
       if (error.response && error.response.data) {
         return rejectWithValue(error.response.data.errors);
       } else {
