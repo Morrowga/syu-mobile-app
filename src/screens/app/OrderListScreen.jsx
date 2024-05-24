@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders, checkOrders } from "../../api/order";
 import { clearOrderData } from "../../redux/slices/orderSlice";
+import LazyLoadImage from "../../components/LazyLoadImage";
 import moment from 'moment';
 
 const OrderListScreen = () => {
@@ -161,12 +162,7 @@ const OrderListScreen = () => {
                 {limitImages(item.products).map((product, index) => (
                 <Skeleton isLoaded={product.image_url !== undefined} startColor="#f3f3f3" height={100} endColor="#d9d9d9">
                   <AspectRatio key={index} ratio={16 / 3}>
-                    <Image
-                      source={{ uri: product.image_url }}
-                      alt={product.name}
-                      style={styles.image}
-                      resizeMode="cover"
-                    />
+                    <LazyLoadImage source={product.image_url} alt="image" />
                   </AspectRatio>
                 </Skeleton>
                 ))}

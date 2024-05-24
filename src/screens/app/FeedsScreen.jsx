@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../api/feed";
+import LazyLoadImage from "../../components/LazyLoadImage";
 
 const FeedsScreen = () => {
   const dispatch = useDispatch();
@@ -71,11 +72,7 @@ const FeedsScreen = () => {
         <Box>
           <Skeleton isLoaded={item.image_url !== undefined} startColor="#f3f3f3" height={120} endColor="#d9d9d9">
             <AspectRatio w="100%" ratio={16 / 5}>
-              <Image
-                source={{ uri: item.image_url ?? 'https://i.pinimg.com/564x/a5/a3/6a/a5a36a233e62dffa9855e193ca1b0d2a.jpg' }}
-                alt="image"
-                fallbackSource="https://i.pinimg.com/564x/a5/a3/6a/a5a36a233e62dffa9855e193ca1b0d2a.jpg"
-              />
+              <LazyLoadImage source={item.image_url} alt="image" />
             </AspectRatio>
           </Skeleton>
         </Box>

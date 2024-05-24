@@ -15,12 +15,15 @@ import {
   FlatList,
   ScrollView,
 } from "native-base";
+import React from 'react';
 import { useRef, useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SuccessBox from "../../components/SuccessBox";
+import LazyLoadImage from "../../components/LazyLoadImage";
 import { useDispatch, useSelector } from "react-redux";
 import { getThemeData } from "../../api/theme";
 import { checkOrders } from "../../api/order";
+
 const { width: viewportWidth } = Dimensions.get("window");
 
 const HomeScreen = ({ navigate }) => {
@@ -82,7 +85,7 @@ const HomeScreen = ({ navigate }) => {
         >
           <Box>
             <AspectRatio w="100%" ratio={16 / 5}>
-              <Image source={{ uri: item.url }} alt="image" />
+              <LazyLoadImage source={item.url} alt="image" />
             </AspectRatio>
           </Box>
           <Stack p="4" space={3}>

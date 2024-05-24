@@ -26,6 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectTotalQuantity } from "../../redux/selectors/cartSelectors";
 import { getFeeds } from "../../api/feed";
 import { clearFeedData } from "../../redux/slices/feedSlice";
+import LazyLoadImage from "../../components/LazyLoadImage";
 
 const ProductListScreen = () => {
   const [modalInfo, setModalInfo] = useState({
@@ -148,15 +149,9 @@ const ProductListScreen = () => {
         }}
       >
         <Box>
-          <Skeleton isLoaded={item.image_url !== undefined || item.image_url !== ''} startColor="#f3f3f3" w="100%" height={200} endColor="#d9d9d9">
-            <AspectRatio w="100%" ratio={16 / 16}>
-              <Image
-                source={{ uri: item.image_url ?? null }}
-                alt="image"
-                resizeMode="cover"
-              />
-            </AspectRatio>
-          </Skeleton>
+          <AspectRatio w="100%" ratio={16 / 16}>
+            <LazyLoadImage source={item.image_url} alt="image" />
+          </AspectRatio>
         </Box>
       </Box>
     </TouchableOpacity>
