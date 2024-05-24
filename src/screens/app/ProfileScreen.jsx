@@ -4,7 +4,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
-  LogBox
+  LogBox,
 } from "react-native";
 import {
   Stack,
@@ -16,129 +16,140 @@ import {
   FormControl,
   Button,
 } from "native-base";
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getCurrentUserProfile,
+  getShippingCities,
+  updatePayment,
+  updateProfile,
+} from "../../api/payment";
 
 const ProfileScreen = () => {
-  const [formData, setFormData] = useState({
-    username: "",
+  const dispatch = useDispatch();
+  const { shipping_cities, isError, be_errors, isLoading } = useSelector(
+    (state) => state.payment
+  );
+  const [errors, setErrors] = useState({});
+  const genders = ["male", "female", "other", "empty"];
+
+  const [shippingForm, setShippingForm] = useState({
+    name: "",
     email: "",
-    phone: "",
-    city: "",
-    address: "",
+    msisdn: "",
+    shipping_city_id: "",
+    shipping_address: "",
     gender: "",
   });
 
-  const handleInputChange = (key, value) => {
-    setFormData({
-      ...formData,
-      [key]: value,
+  const handleChange = (field, value) => {
+    setShippingForm({
+      ...shippingForm,
+      [field]: value,
     });
-  };
 
-  const handleSubmit = () => {
-    // Basic validation
-    if (
-      formData.username === "" ||
-      formData.email === "" ||
-      formData.phone === "" ||
-      formData.city === "" ||
-      formData.address === "" ||
-      formData.gender === ""
-    ) {
-      Alert.alert("Validation Error", "Please fill in all fields.");
-    } else {
-      console.log("Form data:", formData);
+    if (errors[field]) {
+      setErrors({
+        ...errors,
+        [field]: null,
+      });
     }
   };
 
+  // useEffect(() => {
+  //   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  // }, []);
+
+  const submitForm = () => {
+    dispatch(updateProfile(shippingForm))
+      .unwrap()
+      .then((resp) => {
+        Alert.alert("Success", "Profile is updated!");
+      })
+      .catch((error) => {
+        if (Object.keys(error)?.length != 0) {
+          setErrors(error);
+        }
+      });
+  };
+  const getUserInfo = () => {
+    dispatch(getCurrentUserProfile()).then((resp) => {
+      let current_user = resp.payload;
+
+      setShippingForm((prevState) => ({
+        msisdn: current_user?.msisdn,
+        name: current_user?.name,
+        shipping_city_id: current_user?.shippingcity.id,
+        shipping_address: current_user?.shipping_address,
+        gender: current_user?.gender,
+      }));
+    });
+  };
+
   useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-}, [])
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    dispatch(getShippingCities());
+    getUserInfo();
+  }, []);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <Box m={5} textAlign="center" height="100%" rounded="xl">
-          <Heading>Profile Details</Heading>
-          <Box mt={10}>
-            <Stack space={2} w="85%" maxW="300px" mx="auto">
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.username === ""}
-              >
-                <FormControl.Label>Username</FormControl.Label>
+          <Box>
+            <Stack space={2} w="90%" maxW="350px" mx="auto">
+              <FormControl isInvalid={!!errors.name} w="full">
+                <FormControl.Label>User Name</FormControl.Label>
                 <Input
-                  size="lg"
-                  placeholder="Username"
-                  rounded="full"
-                  onChangeText={(text) => handleInputChange("username", text)}
+                  placeholder="Enter Name"
+                  value={shippingForm.name}
+                  onChangeText={(value) => handleChange("name", value)}
                 />
+                {errors.name && (
+                  <FormControl.ErrorMessage>
+                    {errors.name[0]}
+                  </FormControl.ErrorMessage>
+                )}
               </FormControl>
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.email === ""}
-              >
+              <FormControl isInvalid={!!errors.email} w="full">
                 <FormControl.Label>Email Address</FormControl.Label>
                 <Input
-                  size="lg"
-                  placeholder="Email"
-                  rounded="full"
-                  onChangeText={(text) => handleInputChange("email", text)}
+                  placeholder="Enter Email"
+                  value={shippingForm.email}
+                  onChangeText={(value) => handleChange("email", value)}
                 />
+                {errors.email && (
+                  <FormControl.ErrorMessage>
+                    {errors.email[0]}
+                  </FormControl.ErrorMessage>
+                )}
               </FormControl>
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.phone === ""}
-              >
+              <FormControl isInvalid={!!errors.msisdn} w="full">
                 <FormControl.Label>Phone</FormControl.Label>
                 <Input
-                  size="lg"
-                  placeholder="Phone"
-                  rounded="full"
-                  onChangeText={(text) => handleInputChange("phone", text)}
+                  placeholder="Enter Phone"
+                  value={shippingForm.msisdn}
+                  onChangeText={(value) => handleChange("msisdn", value)}
                 />
+                {errors.msisdn && (
+                  <FormControl.ErrorMessage>
+                    {errors.msisdn[0]}
+                  </FormControl.ErrorMessage>
+                )}
               </FormControl>
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.city === ""}
-              >
-                <FormControl.Label>City</FormControl.Label>
-                <Input
-                  size="lg"
-                  placeholder="City"
-                  rounded="full"
-                  onChangeText={(text) => handleInputChange("city", text)}
-                />
-              </FormControl>
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.address === ""}
-              >
-                <FormControl.Label>Shipping Address</FormControl.Label>
-                <Input
-                  size="lg"
-                  placeholder="Shipping Address"
-                  rounded="full"
-                  onChangeText={(text) => handleInputChange("address", text)}
-                />
-              </FormControl>
-              <FormControl
-                maxW="300"
-                isRequired
-                isInvalid={formData.gender === ""}
-              >
-                <FormControl.Label>Gender</FormControl.Label>
+
+              <FormControl isInvalid={!!errors.shipping_city_id} w="full">
+                <FormControl.Label>Shipping City</FormControl.Label>
                 <Select
                   minWidth="200"
-                  accessibilityLabel="Gender"
-                  size="lg"
-                  placeholder="Gender"
+                  accessibilityLabel="Choose City"
+                  placeholder="Choose City"
+                  selectedValue={shippingForm.shipping_city_id}
+                  onValueChange={(value) =>
+                    handleChange("shipping_city_id", value)
+                  }
                   _selectedItem={{
                     bg: "teal.600",
                     endIcon: <CheckIcon size={5} />,
@@ -146,21 +157,68 @@ const ProfileScreen = () => {
                   mt="1"
                   editable={false}
                   readOnly
-                  rounded="full"
-                  onValueChange={(itemValue) =>
-                    handleInputChange("gender", itemValue)
-                  }
                 >
-                  <Select.Item label="Male" value="male" />
-                  <Select.Item label="Female" value="female" />
-                  <Select.Item label="Others" value="others" />
+                  {shipping_cities.map((city) => (
+                    <Select.Item
+                      label={city.name_en}
+                      value={city.id}
+                      key={city.id}
+                    />
+                  ))}
                 </Select>
+                {errors.shipping_city_id && (
+                  <FormControl.ErrorMessage>
+                    {errors.shipping_city_id[0]}
+                  </FormControl.ErrorMessage>
+                )}
               </FormControl>
 
+              <FormControl isInvalid={!!errors.shipping_address} w="full">
+                <FormControl.Label>Shipping Address</FormControl.Label>
+                <Input
+                  placeholder="Enter shipping address"
+                  value={shippingForm.shipping_address}
+                  onChangeText={(value) =>
+                    handleChange("shipping_address", value)
+                  }
+                />
+                {errors.shipping_address && (
+                  <FormControl.ErrorMessage>
+                    {errors.shipping_address[0]}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.gender} w="full">
+                <FormControl.Label>Gender</FormControl.Label>
+                <Select
+                  minWidth="200"
+                  accessibilityLabel="Choose Gender"
+                  placeholder="Choose Gender"
+                  selectedValue={shippingForm.gender}
+                  onValueChange={(value) => handleChange("gender", value)}
+                  _selectedItem={{
+                    bg: "teal.600",
+                    endIcon: <CheckIcon size={5} />,
+                  }}
+                  mt="1"
+                  editable={false}
+                  readOnly
+                >
+                  {genders.map((gender) => (
+                    <Select.Item label={gender} value={gender} key={gender} />
+                  ))}
+                </Select>
+                {errors.gender && (
+                  <FormControl.ErrorMessage>
+                    {errors.gender[0]}
+                  </FormControl.ErrorMessage>
+                )}
+              </FormControl>
               <Button
-                onPress={handleSubmit}
+                isLoading={isLoading}
+                onPress={() => submitForm()}
                 variant="outline"
-                rounded="full"
                 style={{ marginTop: 10 }}
               >
                 Submit
