@@ -78,9 +78,9 @@ const ShippingAddressScreen = () => {
 
       setShippingForm((prevState) => ({
         msisdn: current_user?.msisdn,
-        delivery_fees: current_user?.shippingcity.cost,
+        delivery_fees: current_user?.shippingcity?.cost,
         name: current_user?.name,
-        shipping_city_id: current_user?.shippingcity.id,
+        shipping_city_id: current_user?.shippingcity?.id,
         shipping_address: current_user?.shipping_address,
         gender: current_user?.gender,
       }));

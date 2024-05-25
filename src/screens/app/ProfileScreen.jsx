@@ -81,7 +81,7 @@ const ProfileScreen = () => {
       setShippingForm((prevState) => ({
         msisdn: current_user?.msisdn,
         name: current_user?.name,
-        shipping_city_id: current_user?.shippingcity.id,
+        shipping_city_id: current_user?.shippingcity?.id,
         shipping_address: current_user?.shipping_address,
         gender: current_user?.gender,
       }));
