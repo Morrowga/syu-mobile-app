@@ -33,7 +33,7 @@ const ProfileScreen = () => {
     (state) => state.payment
   );
   const [errors, setErrors] = useState({});
-  const genders = ["male", "female", "other", "empty"];
+  const genders = ["male", "female", "other"];
 
   const [shippingForm, setShippingForm] = useState({
     name: "",

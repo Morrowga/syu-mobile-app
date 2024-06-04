@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { getUserData } from "../api/auth";
 import OrderConfirmScreen from "../screens/app/OrderConfirmScreen";
 import ShippingAddressScreen from "../screens/app/ShippingAddressScreen";
+import SuccessScreen from "../screens/app/SuccessScreen";
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,12 @@ const AppStack = () => {
         name="Shipping Address Screen"
         component={ShippingAddressScreen}
         options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="Success Screen"
+        component={SuccessScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
