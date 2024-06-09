@@ -45,6 +45,7 @@ export const getShippingCities = createAsyncThunk(
     }
   }
 );
+
 export const getCurrentUserProfile = createAsyncThunk(
   "payment/getCurrentUserProfile",
   async (_, { rejectWithValue }) => {

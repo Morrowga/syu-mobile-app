@@ -100,7 +100,7 @@ const OrderListScreen = () => {
   },[]); 
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Order Info', { order_id: item.id})}>
+    <TouchableOpacity key={item.id} onPress={() => navigation.navigate('Order Info', { order_id: item.id})}>
     <VStack>
         <Box
           key={item.id}
@@ -136,7 +136,7 @@ const OrderListScreen = () => {
                 </Box>
               <Box>
                 <Text mt={1} textAlign="right">
-                    {item.overall_price} MMK
+                    {item.total_price} MMK
                 </Text>
                 <Text mt={3} opacity={0.3} textAlign="right">
                     {formatDate(item.created_at)}
