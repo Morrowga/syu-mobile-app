@@ -61,6 +61,7 @@ const ShippingAddressScreen = () => {
   };
 
   const submitForm = () => {
+    console.log(shippingForm);
     dispatch(updateProfile(shippingForm))
       .unwrap()
       .then((resp) => {

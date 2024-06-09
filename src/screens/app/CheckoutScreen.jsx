@@ -72,6 +72,7 @@ const CheckoutScreen = () => {
     const formData = {
       total_price: totalPrice,
       overall_price: totalPrice,
+      used_points: 0,
       note: note,
       products: JSON.stringify(orderCartItems),
     };
