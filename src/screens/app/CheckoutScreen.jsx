@@ -27,11 +27,13 @@ import { useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createOrder } from "../../api/order";
 import { deleteAllCartData } from "../../redux/slices/cartSlice";
+import PointModalBox from "../../components/PointModalBox";
 
 const CheckoutScreen = () => {
   const dispatch = useDispatch();
   const cartCategories = useSelector(getCategoryFromState);
   const { cartData } = useSelector((state) => state.cart);
+  const { points } = useSelector((state) => state.auth);
   const { isLoading, isError, error_message } = useSelector(
     (state) => state.order
   );
@@ -41,6 +43,10 @@ const CheckoutScreen = () => {
   const totalPrice = useSelector(selectTotalPrice);
   const [toggleNote, setToggleNote] = useState(false);
   const [note, setNote] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [totalPointPrice, setTotalPointPrice] = useState(totalPrice);
+  const [isUsedPoints, setIsUsedPoints] = useState(false);
+  const [usedPoints, setUsedPoints] = useState(0);
 
   const orderCartItems = cartData.map((cart) => {
     return {
@@ -71,10 +77,9 @@ const CheckoutScreen = () => {
   const orderConfirm = async () => {
     const formData = {
       total_price: totalPrice,
-      overall_price: totalPrice,
-      used_points: 0,
       note: note,
       products: JSON.stringify(orderCartItems),
+      used_points:usedPoints
     };
 
     await dispatch(createOrder(formData)).then((resp) => {
@@ -83,6 +88,13 @@ const CheckoutScreen = () => {
       // navigation.navigate("Order Confirm Screen", { order_id: order_id });
       navigation.navigate("Success Screen", { order_id: order_id });
     });
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+  const userCancelPoints = () => {
+    setIsUsedPoints(false);
+    setIsOpen(false);
   };
   const renderItem = ({ item }) => (
     <Box
@@ -159,6 +171,16 @@ const CheckoutScreen = () => {
     </View>
   );
 
+  const userUsedPoints = (used_points) => {
+    if (used_points && used_points != 0) {
+      setTotalPointPrice((totalPointPrice) => totalPointPrice - used_points);
+      setUsedPoints(used_points);
+      setIsUsedPoints(true);
+    } else {
+      setIsUsedPoints(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -212,6 +234,36 @@ const CheckoutScreen = () => {
             <Heading size="sm">Total Count ({totalQty})</Heading>
             <Text>{totalPrice} Ks</Text>
           </Box>
+
+          <Box
+            px={4}
+            pt={2}
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Heading size="sm">Your Points ({Number(points)})</Heading>
+            <Button size="xs" width="20%" onPress={() => setIsOpen(true)}>
+              Use
+            </Button>
+            <PointModalBox
+              isOpen={isOpen}
+              onClose={closeModal}
+              points={points}
+              onSubmit={userUsedPoints}
+              onCancel={userCancelPoints}
+            />
+          </Box>
+
+          {isUsedPoints ? (
+            <Box px={4} pt={2} flexDirection="row" justifyContent="flex-end">
+              <Text>
+                {totalPointPrice} KS (- {usedPoints} points used)
+              </Text>
+            </Box>
+          ) : (
+            ""
+          )}
 
           <Box p={4} flexDirection="row" justifyContent="center" w="full">
             <Button

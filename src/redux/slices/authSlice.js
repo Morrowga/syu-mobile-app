@@ -10,6 +10,7 @@ const initialState = {
   msisdn: "",
   isApiRun: false,
   error_message: "",
+  points: 0,
 };
 
 export const authSlice = createSlice({
@@ -22,6 +23,9 @@ export const authSlice = createSlice({
     clearError: (state) => {
       state.isError = false;
       state.error_message = "";
+    },
+    addUserPoints: (state, { payload }) => {
+      state.points = payload;
     },
   },
   extraReducers: (builder) => {
@@ -100,5 +104,5 @@ export const authSlice = createSlice({
       });
   },
 });
-export const { startLoading, clearError } = authSlice.actions;
+export const { startLoading, clearError, addUserPoints } = authSlice.actions;
 export default authSlice.reducer;

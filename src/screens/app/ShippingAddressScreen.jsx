@@ -17,6 +17,7 @@ import {
   updatePayment,
   updateProfile,
 } from "../../api/payment";
+import { addUserPoints } from "../../redux/slices/authSlice";
 
 const ShippingAddressScreen = () => {
   const navigation = useNavigation();
@@ -85,6 +86,9 @@ const ShippingAddressScreen = () => {
         shipping_address: current_user?.shipping_address,
         gender: current_user?.gender,
       }));
+      if(current_user?.points){
+        dispatch(addUserPoints(current_user?.points));
+      }
     });
   };
 
