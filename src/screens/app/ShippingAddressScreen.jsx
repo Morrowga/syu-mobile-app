@@ -34,7 +34,7 @@ const ShippingAddressScreen = () => {
     gender: "",
     msisdn: "",
   });
-  const genders = ["male", "female", "other", "empty"];
+  const genders = ["male", "female", "other"];
   // console.log(shipping_cities);
 
   const handleChange = (field, value) => {
