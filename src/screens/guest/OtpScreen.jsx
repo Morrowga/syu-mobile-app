@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { Button, Box } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
-import { authSuccess } from "../../redux/slices/authSlice";
-import OTPTextView from "react-native-otp-textinput";
 import { resendOtp, verifyOtp } from "../../api/auth";
+import OTPTextView from "react-native-otp-textinput";
 import { useNavigation } from "@react-navigation/native";
+import MainStyles from "../../components/styles/MainStyle";
 
 const OtpScreen = () => {
   const [disabled, setDisabled] = useState(true);
@@ -23,7 +23,7 @@ const OtpScreen = () => {
   const dispatch = useDispatch();
 
   const handleOtpChange = (index, value) => {
-    if (value.length == 4) {
+    if (value.length === 4) {
       Keyboard.dismiss();
       dispatch(verifyOtp({ msisdn: msisdn, otp: value }));
     }
@@ -32,7 +32,7 @@ const OtpScreen = () => {
   const startCountdown = () => {
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
-        if (prevCountdown === 1) {
+        if (prevCountdown <= 1) {
           clearInterval(interval);
           setDisabled(false);
           return 0;
@@ -52,34 +52,39 @@ const OtpScreen = () => {
 
   useEffect(() => {
     startCountdown();
+    return () => clearInterval(startCountdown);
   }, []);
 
   return (
-    <View style={styles.body}>
-      <Text style={styles.textStyle}>ENTER OTP CODE</Text>
+    <View style={styles.container}>
+      <View style={styles.otpContainer}>
+        <Text style={styles.textStyle}>SMS မှ OTP ကုဒ် ရိုက်ထည့်ပါ။</Text>
 
-      <OTPTextView
-        handleTextChange={(val) => handleOtpChange(0, val)}
-        containerStyle={styles.textInputContainer}
-        textInputStyle={styles.roundedTextInput}
-        tintColor="#000"
-        inputCount={4}
-      />
-      {isError ? <Text style={styles.error_message}>{error_message}</Text> : ""}
+        <OTPTextView
+          handleTextChange={(val) => handleOtpChange(0, val)}
+          containerStyle={styles.textInputContainer}
+          textInputStyle={styles.roundedTextInput}
+          tintColor="#000"
+          inputCount={4}
+        />
+        {isError ? <Text style={styles.error_message}>လူကြီးမင်း ထည့်သွင်းထားသည့် ကုဒ်မမှန်ကန်ပါ။ ပြန်လည်စစ်ဆေး၍ ရိုက်ထည့်ပါ။</Text> : ""}
 
-      <Box alignSelf="flex-end" p={10}>
-        <TouchableOpacity>
-          <Button
-            w="200"
-            rounded="full"
-            variant="outline"
-            onPress={handleResendClick}
-            isDisabled={disabled}
-          >
-            {countdown > 0 ? "Resend in " + countdown + " seconds" : "Resend"}
-          </Button>
-        </TouchableOpacity>
-      </Box>
+        <Box alignSelf="flex-end" p={2} marginTop={5}>
+          <TouchableOpacity>
+            <Button
+              w="250"
+              rounded="full"
+              variant="outline"
+              onPress={handleResendClick}
+              isDisabled={disabled}
+            >
+              <Text style={{...MainStyles.normalFont, color: '#000'}}>
+                {countdown > 0 ? `ကုဒ်ထပ်မံရယူရန် ${countdown} စက္ကန့် ` : "ကုဒ်ပြန်တောင်းမည်။"}
+              </Text>
+            </Button>
+          </TouchableOpacity>
+        </Box>
+      </View>
     </View>
   );
 };
@@ -87,18 +92,35 @@ const OtpScreen = () => {
 export default OtpScreen;
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
+  container: {
+    marginTop: '30%',
+    justifyContent: "center",
     alignItems: "center",
-    top: 100,
+    padding: 40,
+  },
+  otpContainer: {
+    alignItems: "center",
+    width: "100%",
   },
   textStyle: {
     paddingBottom: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   textInputContainer: {
     marginBottom: 20,
+    width: "100%",
+  },
+  roundedTextInput: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    fontSize: 18,
+    textAlign: 'center',
+    color: "#000",
   },
   error_message: {
-    color: "red",
+    color: "red.500",
+    marginTop: 10,
   },
 });

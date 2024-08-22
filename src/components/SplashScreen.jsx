@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, ActivityIndicator, StyleSheet, StatusBar } from "react-native";
 
-const SplashScreen = ({ navigation }) => {
+const LoadingScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default LoadingScreen;

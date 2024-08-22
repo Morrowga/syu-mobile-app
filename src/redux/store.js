@@ -9,6 +9,7 @@ import themeSlice from "./slices/themeSlice";
 import wishlistSlice from "./slices/wishlistSlice";
 import paymentSlice from "./slices/paymentSlice";
 import orderSlice from "./slices/orderSlice";
+import notificationSlice from "./slices/notificationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -21,5 +22,6 @@ export const store = configureStore({
     cart: cartSlice,
     theme: themeSlice,
     payment: paymentSlice,
+    notification: notificationSlice,
   },
 });

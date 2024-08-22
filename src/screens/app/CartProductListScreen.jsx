@@ -1,5 +1,4 @@
 import {
-  AspectRatio,
   Box,
   FlatList,
   Image,
@@ -15,8 +14,8 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
 import UpdateCartModalBox from "../../components/UpdateCartModalBox";
+import MainStyles from "../../components/styles/MainStyle";
 
 const CartProductListScreen = () => {
   const route = useRoute();
@@ -25,6 +24,7 @@ const CartProductListScreen = () => {
   const navigation = useNavigation();
   const { cartData } = useSelector((state) => state.cart);
   const { categories } = useSelector((state) => state.feed);
+  const theme = useSelector((state) => state.theme);
   const productList = cartData.filter(
     (cart) => cart.category_id == category_id
   );
@@ -57,7 +57,7 @@ const CartProductListScreen = () => {
   const openModal = (data) => {
     setModalInfo({
       isOpen: true,
-      id: data.id,
+      id: data.uniqueId,
       imageSrc: data.imageSrc,
     });
   };
@@ -72,15 +72,16 @@ const CartProductListScreen = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: category_name,
+      headerTitle: () => <Heading style={MainStyles.titleFont} textTransform='capitalize'>{category_name}</Heading>,
       headerBackTitle: "Back",
     });
+
   }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => openModal(item)}>
       <Box
-        key={item}
+        key={item.id}
         flex={1}
         width="100%"
         mt={3}
@@ -114,9 +115,9 @@ const CartProductListScreen = () => {
               <Text>QTY: {item.qty} </Text>
             </Stack>
             <Spacer />
-            <Stack>
-              <Heading size="xs">{getSelectedQuality(item?.quality)}</Heading>
-              <Text> {getSelectedSize(item?.size)} </Text>
+            <Stack alignItems="flex-end">
+                <Heading size="xs">{getSelectedQuality(item?.quality)}</Heading>
+                <Text> {getSelectedSize(item?.size)} </Text>
             </Stack>
           </HStack>
         </Stack>
@@ -125,8 +126,8 @@ const CartProductListScreen = () => {
   );
 
   const renderEmptyComponent = () => (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>No data available!Please go back.</Text>
+    <View style={{...styles.emptyContainer, ...MainStyles.normalFont}}>
+      <Text>No Items in your cart</Text>
     </View>
   );
 
@@ -136,13 +137,14 @@ const CartProductListScreen = () => {
         data={productList}
         renderItem={renderItem}
         ListEmptyComponent={renderEmptyComponent}
-        contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ flexGrow: 1, padding: 10 }}
+        keyExtractor={(item) => item.uniqueId}
       />
       <UpdateCartModalBox
         isOpen={modalInfo.isOpen}
         id={modalInfo.id}
         imageSrc={modalInfo.imageSrc}
+        theme={theme}
         onClose={closeModal}
         sizes={categorySizes}
         qualities={categoryQualities}
@@ -153,6 +155,11 @@ const CartProductListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default CartProductListScreen;

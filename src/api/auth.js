@@ -62,12 +62,42 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const setAge = createAsyncThunk(
+  "users/age",
+  async (is_above_eighteen, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("users/age", {
+        is_above_eighteen: is_above_eighteen,
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const resendOtp = createAsyncThunk(
   "auth/resend_otp",
   async (data, { rejectWithValue }) => {
     try {
       let response = await HTTP.post("send-otp", {
         msisdn: data.msisdn,
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const checkToken = createAsyncThunk(
+  "auth/checkToken",
+  async (token, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("check-token", {
+        token: token ?? '',
       });
 
       return response.data;

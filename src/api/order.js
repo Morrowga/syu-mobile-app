@@ -6,7 +6,18 @@ export const createOrder = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       let response = await HTTP.post("/orders", data);
-      console.log(response.data);
+      return response.data.data;
+    } catch {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const cancelOrder = createAsyncThunk(
+  "order/cancelOrder",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      let response = await HTTP.post("/orders/cancel/" + orderId, []);
       return response.data.data;
     } catch {
       return rejectWithValue(error.message);
@@ -18,7 +29,7 @@ export const checkOrders = createAsyncThunk(
   "order/checkOrders",
   async (data, { rejectWithValue }) => {
     try {
-      let response = await HTTP.post("/orders/check", data);
+      let response = await HTTP.get("/orders/check", data);
       return response.data.data;
     } catch {
       return rejectWithValue(error.message);
@@ -32,7 +43,6 @@ export const getOrders = createAsyncThunk(
     try {
       let response = await HTTP.get("orders?page=" + page);
 
-      console.log(response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);

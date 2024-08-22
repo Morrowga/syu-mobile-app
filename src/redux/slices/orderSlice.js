@@ -1,6 +1,6 @@
 // wishlistSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrders, getOrderDetail, createOrder,checkOrders, getProductDetail } from "../../api/order";
+import { getOrders, getOrderDetail, createOrder,checkOrders, getProductDetail, cancelOrder } from "../../api/order";
 
 const initialState = {
   isLoading: false,
@@ -10,6 +10,7 @@ const initialState = {
   product_detail: [],
   next_page: 1,
   error_message: "",
+  outOfArea: []
 };
 
 export const orderSlice = createSlice({
@@ -26,6 +27,9 @@ export const orderSlice = createSlice({
     clearOrderData: (state, { payload }) => {
       state.orders = [];
       state.next_page = 1;
+    },
+    setOutOfArea: (state, { payload }) => {
+      state.outOfArea = payload;
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +63,20 @@ export const orderSlice = createSlice({
         state.error_message = payload;
       });
 
+    //cancelOrder
+    builder
+    .addCase(cancelOrder.pending, (state) => {
+      state.isError = false;
+      state.error_message = "";
+    })
+    .addCase(cancelOrder.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+    })
+    .addCase(cancelOrder.rejected, (state, { payload }) => {
+      state.isError = true;
+      state.error_message = payload;
+    });
+
     // getOrderDetail
     builder
       .addCase(getOrderDetail.pending, (state) => {
@@ -90,5 +108,5 @@ export const orderSlice = createSlice({
       });
   },
 });
-export const { startLoading, clearError, clearOrderData } = orderSlice.actions;
+export const { startLoading, clearError, clearOrderData,setOutOfArea } = orderSlice.actions;
 export default orderSlice.reducer;

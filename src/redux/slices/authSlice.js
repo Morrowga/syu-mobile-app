@@ -1,6 +1,8 @@
 // authSlice.jsx
 import { createSlice } from "@reduxjs/toolkit";
-import { getUserData, login, logout, verifyOtp } from "../../api/auth";
+import { checkToken, getUserData, login, logout, setAge, verifyOtp } from "../../api/auth";
+import storage from "../../storage/storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   isAuth: false,
@@ -10,6 +12,7 @@ const initialState = {
   msisdn: "",
   isApiRun: false,
   error_message: "",
+  tokenStatus: 'idle',
   points: 0,
 };
 
@@ -27,6 +30,11 @@ export const authSlice = createSlice({
     addUserPoints: (state, { payload }) => {
       state.points = payload;
     },
+    logoutUser: (state) => {
+      state.isAuth = false;
+      state.authData = null;
+      state.tokenStatus = 'idle';
+    },
   },
   extraReducers: (builder) => {
     // login
@@ -41,6 +49,22 @@ export const authSlice = createSlice({
         state.isApiRun = false;
       })
       .addCase(login.rejected, (state, { payload }) => {
+        state.isApiRun = false;
+        state.isError = true;
+        state.error_message = payload;
+      });
+
+      builder
+      .addCase(setAge.pending, (state) => {
+        state.isError = false;
+        state.error_message = "";
+        state.isApiRun = true;
+      })
+      .addCase(setAge.fulfilled, (state, { payload }) => {
+        state.is_above_eighteen = payload?.is_above_eighteen;
+        state.isApiRun = false;
+      })
+      .addCase(setAge.rejected, (state, { payload }) => {
         state.isApiRun = false;
         state.isError = true;
         state.error_message = payload;
@@ -102,7 +126,26 @@ export const authSlice = createSlice({
         state.isError = true;
         state.error_message = payload;
       });
+
+    //check token
+    builder
+    .addCase(checkToken.pending, (state) => {
+      state.tokenStatus = 'loading';
+      state.isError = false;
+      state.error_message = null;
+    })
+    .addCase(checkToken.fulfilled, (state, action) => {
+      state.tokenStatus = 'succeeded';
+      state.isAuth = true;
+      state.isError = false;
+    })
+    .addCase(checkToken.rejected, (state, { payload }) => {
+      state.tokenStatus = 'failed';
+      state.isError = true;
+      state.isAuth = false;
+      state.error_message = payload;
+    })
   },
 });
-export const { startLoading, clearError, addUserPoints } = authSlice.actions;
+export const { startLoading, clearError, addUserPoints,logoutUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -54,6 +54,7 @@ export const paymentSlice = createSlice({
       })
       .addCase(updatePayment.fulfilled, (state, { payload }) => {
         state.isLoading = false;
+        state.isError = false;
       })
       .addCase(updatePayment.rejected, (state, { payload }) => {
         state.isError = true;

@@ -1,6 +1,8 @@
 import axios from "axios";
 import storage from "../storage/storage";
 import { BASE_URL } from "../../env";
+import { store } from "../redux/store";
+import { logoutUser } from "../redux/slices/authSlice";
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -38,8 +40,12 @@ axios.interceptors.request.use(async (config) => {
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log(error.response);
     if (error.response && error.response.status === 401) {
-      storage.remove({ key: "authState" });
+
+      storage.remove({ key: 'authState' });
+
+      store.dispatch(logoutUser());
     }
     return Promise.reject(error);
   }

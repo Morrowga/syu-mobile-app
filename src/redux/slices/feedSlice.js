@@ -58,15 +58,18 @@ export const feedSlice = createSlice({
     // getFeeds
     builder
       .addCase(getFeeds.pending, (state) => {
+        state.isLoading = true;
         state.isError = false;
         state.error_message = "";
       })
       .addCase(getFeeds.fulfilled, (state, { payload }) => {
-        state.next_page += 1;
+        state.isLoading = false;
         state.feeds = state.feeds.concat(payload.data.data);
         state.feed_last_page = payload?.data.last_page;
+        state.next_page = state.next_page + 1;
       })
       .addCase(getFeeds.rejected, (state, { payload }) => {
+        state.isLoading = false;
         state.isError = true;
         state.error_message = payload;
       });

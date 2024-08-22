@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Modal,
   Button,
   Image,
   View,
   Input,
-  HStack,
   IconButton,
   Text,
-  KeyboardAvoidingView,
   InputRightAddon,
   InputGroup,
   Select,
   CheckIcon,
+  Box,
+  Divider,
 } from "native-base";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { throttle } from "lodash";
 import {
   decreaseCartQty,
   deleteItem,
   increaseCartQty,
-  updateCartQty,
   updateCartQtyByInput,
   updateQuality,
   updateSize,
 } from "../redux/slices/cartSlice";
+import LazyLoadImage from "./LazyLoadImage";
+import MainStyles from "./styles/MainStyle";
 
 const UpdateCartModalBox = ({
   id,
@@ -34,28 +34,29 @@ const UpdateCartModalBox = ({
   onClose,
   imageSrc,
   sizes,
+  theme,
   qualities,
 }) => {
   const dispatch = useDispatch();
   const { cartData } = useSelector((state) => state.cart);
-  const cartDetail = cartData.find((cart) => cart.id == id);
+  const cartDetail = cartData.find((cart) => cart.uniqueId == id);
 
-  const decreaseQty = (id) => {
-    if (id) {
-      dispatch(decreaseCartQty(id));
+  const decreaseQty = (uniqueId) => {
+    if (uniqueId) {
+      dispatch(decreaseCartQty(uniqueId));
       if (cartDetail?.qty === 1) {
         onClose();
       }
     }
   };
 
-  const increaseQty = (id) => {
-    dispatch(increaseCartQty(id));
+  const increaseQty = (uniqueId) => {
+    dispatch(increaseCartQty(uniqueId));
   };
 
-  const handleInputChange = (value, product_id) => {
+  const handleInputChange = (value, uniqueId) => {
     const newQuantity = parseInt(value, 10);
-    dispatch(updateCartQtyByInput({ id: product_id, qty: newQuantity }));
+    dispatch(updateCartQtyByInput({ id: uniqueId, qty: newQuantity }));
   };
 
   const handleQualitySelectBox = (value) => {
@@ -65,10 +66,12 @@ const UpdateCartModalBox = ({
   const handleSizeSelectBox = (value) => {
     dispatch(updateSize({ id, size: value, sizes, qualities }));
   };
-  const deleteProduct = async (id) => {
-    dispatch(deleteItem(id));
+
+  const deleteProduct = async (uniqueId) => {
+    dispatch(deleteItem(uniqueId));
     onClose();
   };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -81,44 +84,61 @@ const UpdateCartModalBox = ({
       }}
     >
       <Modal.Content>
-        <Modal.Header>Item Detail</Modal.Header>
+        <Modal.Header style={{ borderBottomWidth: 0 }}>
+          <Box style={{ flexDirection: "row", justifyContent: 'start' }}>
+            <Box marginY={0.9} marginX={1}>
+              <Icon name="help-circle-outline" size={22} />
+            </Box>
+            <Text style={{ lineHeight: 28 }}>
+              အသေးစိတ်ကြည့်ရန်
+            </Text>
+          </Box>
+        </Modal.Header>
         <Modal.Body>
-          {imageSrc ? (
-            <Image
-              source={{ uri: imageSrc }}
+          {imageSrc
+            ?
+            <LazyLoadImage
+              source={imageSrc}
+              height={300}
               alt="Preview"
-              style={{ width: "100%", height: 300 }}
+              style={styles.image}
             />
-          ) : (
-            ""
-          )}
+            :
+            <Image
+              source={{uri: theme?.app_logo_img}}
+              alt="Preview"
+              style={styles.image}
+            />
+          }
 
           <View style={styles.modalBody}>
-            <View style={styles.cartInput}>
+            <View style={{...styles.cartInput,...MainStyles.flexRowCenter}}>
               <IconButton
                 variant="solid"
+                style={{ backgroundColor: theme?.app_button_color }}
                 icon={<Icon name="remove" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={() => decreaseQty(cartDetail?.id)}
+                onPress={() => decreaseQty(cartDetail?.uniqueId)}
               />
               <Input
                 size={"xs"}
                 value={String(cartDetail?.qty)}
-                style={styles.input}
+                style={[styles.input, MainStyles.normalFont]}
                 w="15%"
                 mx={2}
                 keyboardType="number-pad"
-                onChangeText={(e) => handleInputChange(e, cartDetail.id)}
+                onChangeText={(e) => handleInputChange(e, cartDetail.uniqueId)}
               />
               <IconButton
                 variant="solid"
+                style={{ backgroundColor: theme?.app_button_color }}
                 icon={<Icon name="add" color="#fff" />}
                 rounded="full"
                 width="10"
                 height="10"
-                onPress={() => increaseQty(cartDetail.id)}
+                onPress={() => increaseQty(cartDetail.uniqueId)}
               />
 
               <View style={styles.totalPrice}>
@@ -128,21 +148,24 @@ const UpdateCartModalBox = ({
                     h={10}
                     value={String(cartDetail?.totalPrice)}
                     minW={70}
+                    style={[MainStyles.normalFont]}
                     placeholder="nativebase"
                   />
-                  <InputRightAddon children={"KS"} />
+                  <InputRightAddon style={[MainStyles.normalFont]} children={"Ks"} />
                 </InputGroup>
               </View>
             </View>
             <View style={styles.selectBox}>
               <Select
+                rounded="30"
                 selectedValue={cartDetail?.quality}
                 minW={130}
                 h={10}
                 placeholder="Quality"
+                style={[MainStyles.normalFont]}
                 _selectedItem={{
-                  bg: "teal.600",
-                  endIcon: <CheckIcon size="5" />,
+                  bg: "transparent",
+                  endIcon: <CheckIcon style={{ color: '#000' }} size="5" />,
                 }}
                 mt={1}
                 size={"sm"}
@@ -150,6 +173,7 @@ const UpdateCartModalBox = ({
               >
                 {qualities.map((size) => (
                   <Select.Item
+                    style={[MainStyles.normalFont, { borderRadius: 30 }]}
                     label={size.name}
                     value={size.id}
                     key={size.id}
@@ -157,11 +181,13 @@ const UpdateCartModalBox = ({
                 ))}
               </Select>
               <Select
+                rounded="30"
                 selectedValue={cartDetail?.size}
+                style={[MainStyles.normalFont]}
                 placeholder="Size"
                 _selectedItem={{
-                  bg: "teal.600",
-                  endIcon: <CheckIcon size="5" />,
+                  bg: "transparent",
+                  endIcon: <CheckIcon style={{ color: '#000' }} size="5" />,
                 }}
                 mt={1}
                 h={10}
@@ -170,6 +196,7 @@ const UpdateCartModalBox = ({
               >
                 {sizes.map((size) => (
                   <Select.Item
+                    style={[MainStyles.normalFont, { borderRadius: 30 }]}
                     label={size.name + " (" + size.size + ")"}
                     value={size.id}
                     key={size.id}
@@ -179,16 +206,33 @@ const UpdateCartModalBox = ({
             </View>
           </View>
         </Modal.Body>
-        <Modal.Footer style={styles.footer}>
-          <Button onPress={onClose} rounded="full">
-            Confirm
+        <Box style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+          <Divider width={'50%'} style={{ opacity: 0.3 }} />
+        </Box>
+        <Modal.Footer style={{...styles.footer, ...MainStyles.flexRowCenter}}>
+          <Button width="50%" bg={theme.app_button_color} style={MainStyles.normalFont} onPress={onClose} rounded="full">
+            <Box style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Box style={{ marginTop: 5, marginRight: 4 }}>
+                <Icon name="checkmark-circle-outline" style={{ color: '#fff' }} size={20} />
+              </Box>
+              <Text style={{ lineHeight: 30, color: '#fff' }}>
+                အတည်ပြုမည်။
+              </Text>
+            </Box>
           </Button>
           <Button
-            backgroundColor="red.500"
-            onPress={() => deleteProduct(cartDetail.id)}
+            background="red.500"
+            onPress={() => deleteProduct(cartDetail.uniqueId)}
             rounded="full"
           >
-            Remove From Cart
+            <Box style={{ flexDirection: 'row', justifyContent: 'center' }}>
+              <Box style={{ marginTop: 5, marginRight: 4 }}>
+                <Icon name="trash-outline" style={{ color: '#fff' }} size={20} />
+              </Box>
+              <Text style={{ lineHeight: 30, color: '#fff' }}>
+                စာရင်းဖယ်မည်။
+              </Text>
+            </Box>
           </Button>
         </Modal.Footer>
       </Modal.Content>
@@ -205,17 +249,14 @@ const styles = StyleSheet.create({
   },
   cartInput: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
     gap: 10,
   },
   input: {
     textAlign: "center",
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "center",
     gap: 10,
+    borderTopWidth: 0
   },
   selectBox: {
     flex: 1,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 const CustomizationScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Customization Screen</Text>
+      <Text>Coming Soon...</Text>
     </View>
   )
 };

@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   ActivityIndicator,
   StyleSheet,
   StatusBar,
-  Text,
 } from "react-native";
 
 const LoadingScreen = () => {

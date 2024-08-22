@@ -8,17 +8,15 @@ import {
   LogBox,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import {
   AspectRatio,
-  Image,
   Box,
   FlatList,
-  Button,
   Input,
-  Skeleton,
   Fab,
+  Heading,
 } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import DetailModalBox from "../../components/DetailModalBox";
@@ -27,6 +25,7 @@ import { selectTotalQuantity } from "../../redux/selectors/cartSelectors";
 import { getFeeds } from "../../api/feed";
 import { clearFeedData } from "../../redux/slices/feedSlice";
 import LazyLoadImage from "../../components/LazyLoadImage";
+import MainStyles from "../../components/styles/MainStyle";
 
 const ProductListScreen = () => {
   const [modalInfo, setModalInfo] = useState({
@@ -49,6 +48,8 @@ const ProductListScreen = () => {
     isLoading,
     next_page,
   } = useSelector((state) => state.feed);
+  const theme = useSelector((state) => state.theme);
+  
   const route = useRoute();
   const { params } = route;
   const { category } = params;
@@ -72,14 +73,17 @@ const ProductListScreen = () => {
   };
 
   const openModal = (data) => {
-    setModalInfo({
-      isOpen: true,
-      id: data.id,
-      imageSrc: data.image_url,
-      category_id: category.id,
-      category_name: category.name,
-      price: 0,
-      isWishlist: data?.isWishlist,
+    setModalInfo(prevState => {
+      const updatedInfo = {
+        isOpen: true,
+        id: data?.id,
+        imageSrc: data?.image_url,
+        category_id: category?.id,
+        category_name: category?.name,
+        price: 0,
+        isWishlist: data?.isWishlist,
+      };
+      return updatedInfo;
     });
   };
 
@@ -104,11 +108,11 @@ const ProductListScreen = () => {
     fetchFeeds(1);
   };
 
-  const onEndReached = () => {
-    if (!isLoading && next_page > 1) {
-      fetchFeeds();
+  const onEndReached = useCallback(() => {
+    if (!isLoading && next_page <= feed_last_page) {
+      fetchFeeds(next_page);
     }
-  };
+  }, [isLoading, next_page, feed_last_page]);
 
   const searchFeed = () => {
     dispatch(clearFeedData());
@@ -116,7 +120,7 @@ const ProductListScreen = () => {
   };
   useEffect(() => {
     navigation.setOptions({
-      title: category.name,
+      headerTitle: () => <Heading style={MainStyles.titleFont} textTransform='capitalize'>{category.name}</Heading>,
       headerBackTitle: "Back",
     });
     dispatch(clearFeedData());
@@ -134,35 +138,25 @@ const ProductListScreen = () => {
         mt={3}
         rounded="lg"
         overflow="hidden"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: "coolGray.600",
-          backgroundColor: "gray.700",
-        }}
-        _web={{
-          shadow: 2,
-          borderWidth: 0,
-        }}
-        _light={{
-          backgroundColor: "gray.50",
-        }}
+        bg="transparent"
+        shadow={0} 
+        elevation={0} 
+        borderWidth={0}
       >
-        <Box>
           <AspectRatio w="100%" ratio={16 / 16}>
             <LazyLoadImage source={item.image_url} alt="image" />
           </AspectRatio>
-        </Box>
       </Box>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Box alignItems="center" pl={5} pr={5} pt={5} flexDirection="row">
+      <Box alignItems="center" px={2}  pt={5} flexDirection="row">
         <Input
           variant="rounded"
           size="lg"
+          height={45}
           mx="3"
           onChangeText={(value) => handleSearchInputChange(value)}
           backgroundColor="#fff"
@@ -206,18 +200,20 @@ const ProductListScreen = () => {
         price={modalInfo.price}
         qualities={category?.qualities}
         sizes={category?.sizes}
+        theme={theme}
         isWishlist={modalInfo.isWishlist}
       />
       {totalQty > 0 ? (
         <Fab
           placement="bottom-right"
           onPress={goToCart}
+          style={MainStyles.fabStyle}
           icon={<Icon color="white" name="cart" size={20} />}
           label={
-            <Text color="white" fontSize="sm">
+            <Text style={{color: '#fff'}} fontSize="sm">
               {totalQty}
             </Text>
-          }
+          } 
         />
       ) : (
         ""

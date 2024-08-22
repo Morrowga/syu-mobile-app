@@ -1,10 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../screens/guest/LoginScreen";
 import OtpScreen from "../screens/guest/OtpScreen";
-import LoadingScreen from "../components/LoadingScreen";
 import { useSelector } from "react-redux";
 import { View } from "native-base";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import LoadingOverlay from "../components/LoadingOverLay";
 
 const Stack = createStackNavigator();
 const AuthStack = () => {
@@ -25,9 +25,7 @@ const AuthStack = () => {
         />
       </Stack.Navigator>
       {isApiRun && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
+        <LoadingOverlay />
       )}
     </View>
   );

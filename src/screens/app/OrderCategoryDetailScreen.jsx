@@ -1,23 +1,19 @@
 import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import { useRoute } from '@react-navigation/native';
 import {
-  AspectRatio,
   Image,
   HStack,
   Stack,
   Box,
   FlatList,
-  Input,
   Heading,
-  Select,
   Skeleton,
-  Spacer,
-  CheckIcon,
 } from "native-base";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetail } from "../../api/order";
+import MainStyles from "../../components/styles/MainStyle";
 
 const OrderCategoryDetailScreen = () => {
   const dispatch = useDispatch();
@@ -45,7 +41,7 @@ const OrderCategoryDetailScreen = () => {
     fetchProductDetail(order_id, category_id)
 
     navigation.setOptions({
-      title: `${order_name} (${category_name})`,
+      headerTitle: () => <Heading style={[MainStyles.titleFont, {fontSize: 17}]} textTransform='capitalize'>{`${order_name} (${category_name})`}</Heading>,
       headerBackTitle: "Back",
     });
 
@@ -123,13 +119,9 @@ const OrderCategoryDetailScreen = () => {
                   h={50}
                 />
                 <Stack>
-                  <Text>QTY: {item.qty} x {item.per_amt} </Text>
-                  <Heading mt={1} size="xs">({item.total_amt}) KS</Heading>
-                </Stack>
-                <Spacer />
-                <Stack>
-                  <Heading textAlign="right" size="xs">{item?.quality?.name + ' ( ' + item?.size?.name + ' )'}</Heading>
-                  <Heading textAlign="right" size="xs" mt={1}> {item?.size?.size} </Heading>
+                  <Heading textAlign="left" size="xs" style={{...MainStyles.normalFont}}>{item?.quality?.name + ' ( ' + item?.size?.name + ' )'} </Heading>
+                  <Heading textAlign="left" size="xs" my={2} style={{...MainStyles.normalFont}}>{item?.size?.size} </Heading>
+                  <Text style={{marginTop: 5,...MainStyles.normalFont}}>QTY: {item.qty} x {item.per_amt} = {item.total_amt} </Text>
                 </Stack>
               </HStack>
             </Stack>
@@ -144,7 +136,7 @@ const OrderCategoryDetailScreen = () => {
         data={product_detail}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 10 }}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item,index) => index}
       />
     </View>
   );
@@ -152,6 +144,6 @@ const OrderCategoryDetailScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-},
+  },
 });
 export default OrderCategoryDetailScreen;

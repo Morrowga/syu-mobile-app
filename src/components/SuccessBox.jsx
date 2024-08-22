@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { View, Button } from "react-native";
 import { Modal, Text, Button as NBButton } from "native-base";
 
 const SuccessBox = ({ isOpen }) => {

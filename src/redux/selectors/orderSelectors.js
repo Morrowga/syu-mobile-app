@@ -31,7 +31,6 @@ export const selectCategorizedProducts = createSelector(
         }
       })
       .filter(Boolean);
-    console.log(categorizedProducts);
 
     return categorizedProducts;
   }

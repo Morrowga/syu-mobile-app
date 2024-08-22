@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../api/feed";
-import LazyLoadImage from "../../components/LazyLoadImage";
+import MainStyles from "../../components/styles/MainStyle";
 
 const FeedsScreen = () => {
   const dispatch = useDispatch();
@@ -72,15 +72,21 @@ const FeedsScreen = () => {
         <Box>
           <Skeleton isLoaded={item.image_url !== undefined} startColor="#f3f3f3" height={120} endColor="#d9d9d9">
             <AspectRatio w="100%" ratio={16 / 5}>
-              <LazyLoadImage source={item.image_url} alt="image" />
+              <Image
+                  source={{ uri: item.image_url }}
+                  alt={'test'}
+                  style={{ width: '100%', height: '100%' }}
+              />
+              {/* <LazyLoadImage source={item.image_url} alt="image" /> */}
             </AspectRatio>
           </Skeleton>
         </Box>
         <Stack p="4" space={3}>
           <Skeleton isLoaded={item.name !== undefined} height={6}>
-            <Stack flexDirection="row" justifyContent="space-between" space={2}>
-                <Heading size="md">{item.name}</Heading>
+            <Stack style={{...MainStyles.flexRowBetween}} space={2}>
+                <Heading size="md" style={{...MainStyles.titleFont, ...MainStyles.textShadow}} textTransform='capitalize'>{item.name}</Heading>
                 <Text
+                  style={MainStyles.normalFont}
                   fontSize="xs"
                   _light={{ color: "violet.500" }}
                   _dark={{ color: "violet.400" }}

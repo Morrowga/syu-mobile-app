@@ -1,4 +1,7 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid';
+
 const initialState = {
   cartData: [],
   total_qty: 0,
@@ -9,12 +12,14 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     setCartData: (state, action) => {
-      state.cartData.push(action.payload);
+      const { id, size, quality, ...rest } = action.payload;
+      const uniqueId = `${id}-${size}-${quality}-${uuidv4()}`;
+      state.cartData.push({ ...rest, id, size, quality, uniqueId });
     },
 
     updateCartQty: (state, action) => {
-      const { id, qty } = action.payload;
-      const index = state.cartData.findIndex((item) => item.id === id);
+      const { uniqueId, qty } = action.payload;
+      const index = state.cartData.findIndex((item) => item.uniqueId === uniqueId);
       if (index !== -1) {
         state.cartData[index].qty += qty;
         state.cartData[index].totalPrice =
@@ -23,9 +28,8 @@ export const cartSlice = createSlice({
     },
 
     increaseCartQty: (state, action) => {
-      const index = state.cartData.findIndex(
-        (item) => item.id === action.payload
-      );
+      const uniqueId = action.payload;
+      const index = state.cartData.findIndex((item) => item.uniqueId === uniqueId);
       if (index !== -1) {
         state.cartData[index].qty += 1;
         state.cartData[index].totalPrice =
@@ -34,9 +38,8 @@ export const cartSlice = createSlice({
     },
 
     decreaseCartQty: (state, action) => {
-      const index = state.cartData.findIndex(
-        (item) => item.id === action.payload
-      );
+      const uniqueId = action.payload;
+      const index = state.cartData.findIndex((item) => item.uniqueId === uniqueId);
 
       if (index !== -1 && state.cartData[index].qty > 1) {
         state.cartData[index].qty -= 1;
@@ -48,8 +51,8 @@ export const cartSlice = createSlice({
     },
 
     updateCartQtyByInput: (state, action) => {
-      const { id, qty } = action.payload;
-      const index = state.cartData.findIndex((item) => item.id === id);
+      const { uniqueId, qty } = action.payload;
+      const index = state.cartData.findIndex((item) => item.uniqueId === uniqueId);
       if (index !== -1 && qty >= 1) {
         state.cartData[index].qty = qty;
         state.cartData[index].totalPrice = state.cartData[index].price * qty;
@@ -58,7 +61,7 @@ export const cartSlice = createSlice({
 
     updateSize: (state, action) => {
       const { id, size, sizes, qualities } = action.payload;
-      const index = state.cartData.findIndex((item) => item.id === id);
+      const index = state.cartData.findIndex((item) => item.uniqueId === id);
       if (index !== -1) {
         const currentSize = sizes.find((s) => s.id === size);
         if (currentSize) {
@@ -71,9 +74,10 @@ export const cartSlice = createSlice({
         }
       }
     },
+
     updateQuality: (state, action) => {
       const { id, quality, sizes, qualities } = action.payload;
-      const index = state.cartData.findIndex((item) => item.id === id);
+      const index = state.cartData.findIndex((item) => item.uniqueId === id);
       if (index !== -1) {
         const currentQuality = qualities.find((q) => q.id === quality);
         if (currentQuality) {
@@ -87,9 +91,8 @@ export const cartSlice = createSlice({
     },
 
     deleteItem: (state, action) => {
-      const index = state.cartData.findIndex(
-        (item) => item.id === action.payload
-      );
+      const uniqueId = action.payload;
+      const index = state.cartData.findIndex((item) => item.uniqueId === uniqueId);
       if (index !== -1) {
         state.cartData.splice(index, 1);
       }
@@ -98,12 +101,17 @@ export const cartSlice = createSlice({
     deleteAllCartData: (state) => {
       state.cartData = [];
     },
+
+    deleteCategory: (state, action) => {
+      const categoryId = action.payload;
+      state.cartData = state.cartData.filter(item => item.category_id !== categoryId);
+    }
   },
 });
+
 export const {
   setCartData,
   updateCartQty,
-  calculateTotalQty,
   increaseCartQty,
   decreaseCartQty,
   updateCartQtyByInput,
@@ -111,5 +119,7 @@ export const {
   updateQuality,
   deleteItem,
   deleteAllCartData,
+  deleteCategory
 } = cartSlice.actions;
+
 export default cartSlice.reducer;

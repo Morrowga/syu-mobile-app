@@ -6,6 +6,8 @@ import { useNavigation } from "@react-navigation/native";
 const NotificationIcon = ({ notificationCount, color }) => {
   const navigation = useNavigation();
 
+  console.log(notificationCount)
+
   return (
     <View style={styles.container}>
       <Icon
