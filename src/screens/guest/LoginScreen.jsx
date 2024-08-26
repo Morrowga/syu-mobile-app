@@ -1,7 +1,7 @@
 // Login.jsx
 import React from "react";
 import { View, StyleSheet, ImageBackground, Keyboard } from "react-native";
-import { Button, Box, FormControl, Input, Text } from "native-base";
+import { Button, Box, FormControl, Input, Text, StatusBar } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,77 +56,80 @@ const Login = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../../assets/bgsample.png")}
-      style={styles.background}
-    >
-      <View style={styles.container}>
-        <Box
-          width="90%"
-          bg="transparent"
-          p={10}
-          rounded="xl"
-          flexDirection="column"
-        >
-          <FormControl
-            maxW="300"
-            isRequired
-            isInvalid={submitted && (msisdn === "" || validationError !== "")}
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
+      <ImageBackground
+        source={require("../../../assets/bgsample.png")}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          <Box
+            width="90%"
+            bg="transparent"
+            p={10}
+            rounded="xl"
+            flexDirection="column"
           >
-            {submitted && validationError && (
-              <FormControl.ErrorMessage mt={2} width='100%'>
-                <Box>
-                  <Text style={styles.errorText} color={'#fff'}>{validationError}</Text>
-                </Box>
-              </FormControl.ErrorMessage>
-            )}
-            <Input
-              color="#fff"
-              size="xl"
-              my={2}
-              borderWidth={1}
-              p={3}
-              InputLeftElement={<Icon name="phone-portrait-outline" size={20} marginLeft={10} color="#16998c" />}
-              keyboardType="number-pad"
-              placeholder="09 xxx xxx xxx"
-              rounded="full"
-              _input={MainStyles.normalFont}
-              _focus={{
-                borderColor: "#fff",
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-              }}
-              onChangeText={(value) => handleInputChange(value)}
-              borderColor={
-                submitted && (msisdn === "" || validationError)
-                  ? "red.500"
-                  : "white"
-              }
-            />
-          </FormControl>
-
-          {/* {isError && (
-            <Text style={styles.error_message}>{error_message}</Text>
-          )} */}
-          <Button
-            width="full"
-            variant="outline"
-            rounded="full"
-            color="#fff"
-            onPress={sendOtp}
-            style={{ marginTop: 10, width: '100%' }}
-          > 
-            <Box style={{ ...MainStyles.flexRowCenter }}>
-                  <Box style={{marginTop: 5, marginRight: 4}}>
-                    <Icon name="sync-outline" style={{color: '#fff'}} size={20} />
+            <FormControl
+              maxW="300"
+              isRequired
+              isInvalid={submitted && (msisdn === "" || validationError !== "")}
+            >
+              {submitted && validationError && (
+                <FormControl.ErrorMessage mt={2} width='100%'>
+                  <Box>
+                    <Text style={styles.errorText} color={'#fff'}>{validationError}</Text>
                   </Box>
-                  <Text style={{ lineHeight: 30, color: "#fff" }}>
-                    အကောင့်၀င်မည်
-                  </Text>
-                </Box>
-          </Button>
-        </Box>
-      </View>
-    </ImageBackground>
+                </FormControl.ErrorMessage>
+              )}
+              <Input
+                color="#fff"
+                size="xl"
+                my={2}
+                borderWidth={1}
+                p={3}
+                InputLeftElement={<Icon name="phone-portrait-outline" size={20} marginLeft={10} color="#16998c" />}
+                keyboardType="number-pad"
+                placeholder="09 xxx xxx xxx"
+                rounded="full"
+                _input={MainStyles.normalFont}
+                _focus={{
+                  borderColor: "#fff",
+                  backgroundColor: "rgba(0, 0, 0, 0.1)",
+                }}
+                onChangeText={(value) => handleInputChange(value)}
+                borderColor={
+                  submitted && (msisdn === "" || validationError)
+                    ? "red.500"
+                    : "white"
+                }
+              />
+            </FormControl>
+
+            {/* {isError && (
+              <Text style={styles.error_message}>{error_message}</Text>
+            )} */}
+            <Button
+              width="full"
+              variant="outline"
+              rounded="full"
+              color="#fff"
+              onPress={sendOtp}
+              style={{ marginTop: 10, width: '100%' }}
+            > 
+              <Box style={{ ...MainStyles.flexRowCenter }}>
+                    <Box style={{marginTop: 5, marginRight: 4}}>
+                      <Icon name="sync-outline" style={{color: '#fff'}} size={20} />
+                    </Box>
+                    <Text style={{ lineHeight: 30, color: "#fff" }}>
+                      အကောင့်၀င်မည်
+                    </Text>
+                  </Box>
+            </Button>
+          </Box>
+        </View>
+      </ImageBackground>
+    </>
   );
 };
 

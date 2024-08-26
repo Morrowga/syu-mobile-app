@@ -27,6 +27,8 @@ const FeedsScreen = () => {
     }
     
     dispatch(getCategories(filter))
+
+    console.log(categories);
   }
   
   useEffect(() => {
@@ -73,8 +75,12 @@ const FeedsScreen = () => {
           <Skeleton isLoaded={item.image_url !== undefined} startColor="#f3f3f3" height={120} endColor="#d9d9d9">
             <AspectRatio w="100%" ratio={16 / 5}>
               <Image
-                  source={{ uri: item.image_url }}
-                  alt={'test'}
+                  source={
+                    item.image_url
+                        ? { uri: item.image_url }
+                        : ''
+                  }
+                  alt={''}
                   style={{ width: '100%', height: '100%' }}
               />
               {/* <LazyLoadImage source={item.image_url} alt="image" /> */}

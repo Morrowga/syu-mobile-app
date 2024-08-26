@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "sticker",
-    "slug": "sticker",
+    "name": "SYU",
+    "slug": "stickerinyangonuniverse",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/syuicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash2.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"  
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -35,12 +35,12 @@
         "expo-font",
         {
           "fonts": [
-            "./assets/fonts/BonaNovaSC-Regular.ttf",
-            "./assets/fonts/BonaNovaSC-Bold.ttf",
-            "./assets/fonts/Overpass-Regular.ttf"
+            "./assets/fonts/Overpass-Regular.ttf",
+            "./assets/fonts/Matemasie-Regular.ttf"
           ]
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "eas": {

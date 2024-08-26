@@ -141,7 +141,8 @@ const ProductListScreen = () => {
         bg="transparent"
         shadow={0} 
         elevation={0} 
-        borderWidth={0}
+        borderColor="#000"
+        borderWidth={1.5}
       >
           <AspectRatio w="100%" ratio={16 / 16}>
             <LazyLoadImage source={item.image_url} alt="image" />

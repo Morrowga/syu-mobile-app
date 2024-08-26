@@ -104,7 +104,7 @@ const ProfileScreen = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <Box m={5} textAlign="center" height={screenHeight * 0.75} backgroundColor="#fff" rounded="xl">
+        <Box m={5} textAlign="center" height={'auto'} backgroundColor="#fff" rounded="xl">
           <Stack space={2} w="90%" maxW="350px" mx="auto">
             <FormControl isInvalid={!!errors.name} w="full" marginY={1}>
               <FormControl.Label>

@@ -1,13 +1,16 @@
 // MainStyle.jsx
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 const MainStyles = StyleSheet.create({
   titleFont: {
-    fontFamily: 'BonaNovaSC-Bold',
+    fontFamily: Platform.select({
+      android: 'MatemasieRegular',
+      ios: 'MatemasieRegular',
+    }),
     fontWeight: 700, 
   },
   normalFont: {
-    fontFamily: 'Overpass-Regular',
+    fontFamily: 'Overpass',
     fontWeight: '400', 
   },
   fabStyle: {

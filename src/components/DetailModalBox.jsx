@@ -49,11 +49,13 @@ const DetailModalBox = ({
 
   useEffect(() => {
     let initial_price =
-      qualities.length > 0 && sizes.length > 0
-        ? Number(qualities[0].price) + Number(sizes[0].price)
+    qualities.length > 0 && sizes.length > 0
+        ? Number((qualities.find(q => q.is_default) || qualities[0]).price) +
+          Number((sizes.find(s => s.is_default) || sizes[0]).price)
         : 0;
-    let quality_id = qualities.length > 0 ? qualities[0].id : null;
-    let size_id = sizes.length > 0 ? sizes[0].id : null;
+    let quality_id = qualities.length > 0 ? (qualities.find(q => q.is_default) || qualities[0]).id : null;
+    let size_id = sizes.length > 0 ? (sizes.find(s => s.is_default) || sizes[0]).id : null;
+        
     setCartDetail({
       id,
       category_id,

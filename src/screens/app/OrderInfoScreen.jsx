@@ -93,7 +93,7 @@ const OrderInfoScreen = () => {
     const { status } = await MediaLibrary.requestPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert("Permission required", "Permission to access media library is required to save images.");
-      return false;
+    return false;
     }
     return true;
   };

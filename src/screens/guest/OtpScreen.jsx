@@ -58,7 +58,7 @@ const OtpScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.otpContainer}>
-        <Text style={styles.textStyle}>SMS မှ OTP ကုဒ် ရိုက်ထည့်ပါ။</Text>
+        <Text style={{...styles.textStyle, ...MainStyles.normalFont}}>SMS မှ OTP ကုဒ် ရိုက်ထည့်ပါ။</Text>
 
         <OTPTextView
           handleTextChange={(val) => handleOtpChange(0, val)}

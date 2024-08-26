@@ -38,6 +38,7 @@ export const orderSlice = createSlice({
       .addCase(getOrders.pending, (state) => {
         state.isError = false;
         state.error_message = "";
+        state.isLoading = true;
       })
       .addCase(getOrders.fulfilled, (state, { payload }) => {
         state.isLoading = false;

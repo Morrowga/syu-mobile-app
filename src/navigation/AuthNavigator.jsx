@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { View } from "native-base";
 import { StyleSheet } from "react-native";
 import LoadingOverlay from "../components/LoadingOverLay";
+import MainStyles from "../components/styles/MainStyle";
 
 const Stack = createStackNavigator();
 const AuthStack = () => {
@@ -12,7 +13,12 @@ const AuthStack = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Stack.Navigator>
+      <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: MainStyles.titleFont,
+        headerShown: false,
+      }}
+      >
         <Stack.Screen
           name="Login"
           component={LoginScreen}
