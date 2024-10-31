@@ -21,6 +21,12 @@ module.exports = function(api) {
           allowUndefined: true,
         },
       ],
+      [
+        '@babel/plugin-transform-runtime', // Add this line to include the runtime plugin
+        {
+          regenerator: true, // Enable regeneratorRuntime support
+        },
+      ],
     ],
   };
 };

@@ -58,8 +58,7 @@ const Login = () => {
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
-      <ImageBackground
-        source={require("../../../assets/bgsample.png")}
+      <Box
         style={styles.background}
       >
         <View style={styles.container}>
@@ -88,7 +87,7 @@ const Login = () => {
                 my={2}
                 borderWidth={1}
                 p={3}
-                InputLeftElement={<Icon name="phone-portrait-outline" size={20} marginLeft={10} color="#16998c" />}
+                // InputLeftElement={<Icon name="phone-portrait-outline" size={20} marginLeft={10} color="#16998c" />}
                 keyboardType="number-pad"
                 placeholder="09 xxx xxx xxx"
                 rounded="full"
@@ -128,7 +127,7 @@ const Login = () => {
             </Button>
           </Box>
         </View>
-      </ImageBackground>
+      </Box>
     </>
   );
 };
@@ -143,6 +142,7 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
+    backgroundColor: '#000',
     resizeMode: "cover",
     justifyContent: "center",
   },

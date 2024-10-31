@@ -3,7 +3,7 @@ import storage from "../storage/storage";
 import { store } from "../redux/store";
 import { logoutUser } from "../redux/slices/authSlice";
 
-axios.defaults.baseURL = 'http://10.201.45.149:8000/api';
+axios.defaults.baseURL = 'http://localhost:8000/api';
 
 const setAuthHeaders = (config, authToken) => {
   let contentType = "application/json";

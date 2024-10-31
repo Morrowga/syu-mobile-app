@@ -5,6 +5,8 @@ import Main from './src/main/Main';
 import { useFonts } from 'expo-font';
 import { NetworkStatusProvider } from './src/contexts/NetworkStatusProvider';
 import { Asset } from 'expo-asset';
+import regeneratorRuntime from "regenerator-runtime";
+
 
 export default function App() {
   const [fontsLoaded] = useFonts({
